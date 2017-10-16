@@ -1,0 +1,73 @@
+<%- partial('partials/_nav', {nav: 'list'})%>
+
+<div class="container" style="max-width: 100rem;">
+  <nav class="nav nav-tabs justify-content-center my-3 detail-tab" id="infoTab" role="tablist">
+    <a class="nav-item nav-link active" id="nav-bachelorAdmissionSelection-tab" data-toggle="tab" href="#nav-bachelorAdmissionSelection" role="tab" aria-controls="nav-bachelorAdmissionSelection" aria-expanded="true" onclick="app.changeTab(this.hash)">
+      <span class="d-block">學士班 個人申請</span>
+    </a>
+    <a class="nav-item nav-link" id="nav-bachelorAdmissionPlacement-tab" data-toggle="tab" href="#nav-bachelorAdmissionPlacement" role="tab" aria-controls="nav-bachelorAdmissionPlacement" aria-expanded="true" onclick="app.changeTab(this.hash)">
+      <span class="d-block">學士班 聯合分發</span>
+    </a>
+    <a class="nav-item nav-link" id="nav-chiShenBu-tab" data-toggle="tab" href="#nav-chiShenBu" role="tab" aria-controls="nav-chiShenBu" aria-expanded="true" onclick="app.changeTab(this.hash)">
+      <span class="d-block">僑先部</span>
+    </a>
+    <a class="nav-item nav-link" id="nav-master-tab" data-toggle="tab" href="#nav-master" role="tab" aria-controls="nav-master" aria-expanded="true" onclick="app.changeTab(this.hash)">
+      <span class="d-block">碩士班</span>
+    </a>
+    <a class="nav-item nav-link" id="nav-phd-tab" data-toggle="tab" href="#nav-phd" role="tab" aria-controls="nav-phd" aria-expanded="true" onclick="app.changeTab(this.hash)">
+      <span class="d-block">博士班</span>
+    </a>
+  </nav>
+
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-bachelorAdmissionSelection" role="tabpanel" aria-labelledby="nav-bachelorAdmissionSelection-tab">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>序號</th>
+            <th>收件時間</th>
+            <th>報名序號</th>
+            <th>姓名</th>
+            <th>性別</th>
+            <th>生日</th>
+            <th>成績採計方式</th>
+            <th>身份別代碼</th>
+            <th>僑生編號</th>
+            <th>備註</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>1</th>
+            <td>2017-10-16 14:24:46</td>
+            <td>3345678</td>
+            <td>黃薏帆 Evan-E</td>
+            <td>女</td>
+            <td>1996/02/30</td>
+            <td>上底加下底乘以高除以二</td>
+            <td>港澳</td>
+            <td>3345678</td>
+            <td>我覺得不行</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <div class="tab-pane fade" id="nav-bachelorAdmissionPlacement" role="tabpanel" aria-labelledby="nav-bachelorAdmissionPlacement-tab">
+
+    </div>
+
+    <div class="tab-pane fade" id="nav-chiShenBu" role="tabpanel" aria-labelledby="nav-chiShenBu-tab">
+
+    </div>
+
+    <div class="tab-pane fade" id="nav-master" role="tabpanel" aria-labelledby="nav-master-tab">
+
+    </div>
+
+    <div class="tab-pane fade" id="nav-phd" role="tabpanel" aria-labelledby="nav-phd-tab">
+
+    </div>
+  </div>
+</div>
