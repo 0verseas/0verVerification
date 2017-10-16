@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="navbar-brand mx-auto mx-sm-0">
+    <img src="https://api.overseas.ncnu.edu.tw/img/0verseas-logo.png" class="d-inline-block" style="width: 100px; height: auto;" alt="海外聯招會標誌">
+  </div>
+
+  <div class="d-inline-flex flex-column mx-auto mx-sm-0 mr-sm-auto pl-sm-3">
+    <span class="navbar-nav">海外聯合招生委員會</span>
+    <span class="navbar-nav"><%= headline %></span>
+    <span class="navbar-nav"><%= subline %></span>
+  </div>
+
+<%
+  const nav = 'validate';
+%>
+
+  <ul class="nav nav-pills nav-fill mx-auto mx-lg-0 p-3">
+    <% for (item of navs) { %>
+      <li class="nav-item">
+        <a class="nav-link <%- nav == item.nav ? 'active' : '' %>" href="<%= item.link %><%= item.link.split(":")[0] == 'http' || item.link.split(":")[0] == 'https' ? '' : '.html' %>">
+          <%= item.title %> <span class="sr-only">(current)</span>
+        </a>
+      </li>
+    <% } %>
+  </ul>
+
+</nav>
