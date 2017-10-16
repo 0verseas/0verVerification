@@ -1,0 +1,44 @@
+{
+	"globals": {
+		"meta": {
+			"siteName": "臺灣海外聯合招生委員會",
+			"title": "臺灣海外聯招會・應繳資料審核系統",
+			"description": "",
+			"keywords": [],
+			"author": "臺灣海外聯合招募委員會 University Entrance Committee For Overseas Chinese Students",
+			"copyright": "©20017 University Entrance Committee For Overseas Chinese Students. All rights reserved.",
+			"imageUrl": "",
+			"imageAlt": "",
+			"url": "https://office.overseas.ncnu.edu.tw/"
+		},
+		"title": "應繳資料審核系統｜臺灣海外聯招會",
+		"headline": "應繳資料審核系統",
+		"subline": "2018 年秋季入學",
+		"systems": [
+			{
+				"title": "學士班",
+				"headline": "學士班名額查詢",
+				"link": "index",
+				"system": "bachelor"
+			},
+			{
+				"title": "香港二年學士班",
+				"headline": "香港二年學士班名額查詢",
+				"link": "two-year",
+				"system": "twoYear"
+			},
+			{
+				"title": "碩士班",
+				"headline": "碩士班名額查詢",
+				"link": "master",
+				"system": "master"
+			},
+			{
+				"title": "博士班",
+				"headline": "博士班名額查詢",
+				"link": "phd",
+				"system": "phd"
+			}
+		]
+	}
+}
