@@ -1,24 +1,29 @@
 <%- partial('partials/_nav', {nav: 'list'})%>
 
 <div class="container" style="max-width: 100rem;">
-  <nav class="nav nav-tabs justify-content-center my-3 detail-tab" id="infoTab" role="tablist">
-    <a class="nav-item nav-link active" id="nav-bachelorAdmissionSelection-tab" data-toggle="tab" href="#nav-bachelorAdmissionSelection" role="tab" aria-controls="nav-bachelorAdmissionSelection" aria-expanded="true" onclick="app.changeTab(this.hash)">
-      <span class="d-block">學士班 個人申請</span>
-    </a>
-    <a class="nav-item nav-link" id="nav-bachelorAdmissionPlacement-tab" data-toggle="tab" href="#nav-bachelorAdmissionPlacement" role="tab" aria-controls="nav-bachelorAdmissionPlacement" aria-expanded="true" onclick="app.changeTab(this.hash)">
-      <span class="d-block">學士班 聯合分發</span>
-    </a>
-    <a class="nav-item nav-link" id="nav-chiShenBu-tab" data-toggle="tab" href="#nav-chiShenBu" role="tab" aria-controls="nav-chiShenBu" aria-expanded="true" onclick="app.changeTab(this.hash)">
-      <span class="d-block">僑先部</span>
-    </a>
-    <a class="nav-item nav-link" id="nav-master-tab" data-toggle="tab" href="#nav-master" role="tab" aria-controls="nav-master" aria-expanded="true" onclick="app.changeTab(this.hash)">
-      <span class="d-block">碩士班</span>
-    </a>
-    <a class="nav-item nav-link" id="nav-phd-tab" data-toggle="tab" href="#nav-phd" role="tab" aria-controls="nav-phd" aria-expanded="true" onclick="app.changeTab(this.hash)">
-      <span class="d-block">博士班</span>
-    </a>
-  </nav>
+  <div class="row">
+    <nav class="nav nav-tabs justify-content-center my-3 detail-tab col" id="infoTab" role="tablist">
+      <a class="nav-item nav-link active" id="nav-bachelorAdmissionSelection-tab" data-toggle="tab" href="#nav-bachelorAdmissionSelection" role="tab" aria-controls="nav-bachelorAdmissionSelection" aria-expanded="true" onclick="app.changeTab(this.hash)">
+        <span class="d-block">學士班 個人申請</span>
+      </a>
+      <a class="nav-item nav-link" id="nav-bachelorAdmissionPlacement-tab" data-toggle="tab" href="#nav-bachelorAdmissionPlacement" role="tab" aria-controls="nav-bachelorAdmissionPlacement" aria-expanded="true" onclick="app.changeTab(this.hash)">
+        <span class="d-block">學士班 聯合分發</span>
+      </a>
+      <a class="nav-item nav-link" id="nav-chiShenBu-tab" data-toggle="tab" href="#nav-chiShenBu" role="tab" aria-controls="nav-chiShenBu" aria-expanded="true" onclick="app.changeTab(this.hash)">
+        <span class="d-block">僑先部</span>
+      </a>
+      <a class="nav-item nav-link" id="nav-master-tab" data-toggle="tab" href="#nav-master" role="tab" aria-controls="nav-master" aria-expanded="true" onclick="app.changeTab(this.hash)">
+        <span class="d-block">碩士班</span>
+      </a>
+      <a class="nav-item nav-link" id="nav-phd-tab" data-toggle="tab" href="#nav-phd" role="tab" aria-controls="nav-phd" aria-expanded="true" onclick="app.changeTab(this.hash)">
+        <span class="d-block">博士班</span>
+      </a>
+    </nav>
 
+    <div class="p-3">
+      <button class="btn btn-success">下載審核清單</button>
+    </div>
+  </div>
   <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active" id="nav-bachelorAdmissionSelection" role="tabpanel" aria-labelledby="nav-bachelorAdmissionSelection-tab">
       <table class="table">
