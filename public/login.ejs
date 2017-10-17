@@ -1,28 +1,27 @@
 <%- partial('partials/_nav', {nav: 'nothing'})%>
 
-<div class="container" style="max-width: 30rem;">
-  <div class="card my-3">
-    <label class="card-header bg-primary text-white">登入</label>
-    <div class="card-body">
-      <form onsubmit="event.preventDefault(); app.login(this.elements.namedItem('username').value, this.elements.namedItem('password').value);">
-        <div class="form-group row">
-          <label class="col-3 col-form-label">帳號：</label>
-          <div class="col-9">
-            <input type="text" id="username" class="form-control" placeholder="username" name="username">
-          </div>
-        </div>
-
-        <div class="form-group row">
-          <label class="col-3 col-form-label">密碼：</label>
-          <div class="col-9">
-            <input type="password" id="password" class="form-control" placeholder="password" name="password">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <input type="submit" class="btn-success form-control" value="登入">
-        </div>
-      </form>
+<div class="container px-5">
+  <form class="mx-auto mt-5" style="max-width: 23rem;" onsubmit="event.preventDefault(); app.login(this.elements.namedItem('username').value, this.elements.namedItem('password').value);">
+    <div class="form-group row">
+      <h4>登入系統</h4>
     </div>
-  </div>
+
+    <div class="form-group row">
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1"><span class="oi oi-person"></span></span>
+        <input class="form-control" id="username" name="username" type="email" placeholder="Username">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1"><span class="oi oi-key"></span></span>
+        <input class="form-control" id="password" name="password" type="password" placeholder="Password">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <button class="btn btn-primary form-control" type="submit">登入</button>
+    </div>
+  </form>
 </div>
