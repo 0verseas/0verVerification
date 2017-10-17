@@ -57,7 +57,7 @@ const app = (function () {
     $verificationDesc.html('');
   }
 
-  // 搜尋學生資料
+  // 用報名序號搜尋學生資料
   function searchUserId(userId) {
     // 判斷是不是空的
     if (userId.trim() == '') {

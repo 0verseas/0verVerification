@@ -57,7 +57,7 @@ const app = (function () {
     $verificationDesc.html('');
   }
 
-  // 用搜尋學生資料
+  // 用報名序號搜尋學生資料
   function searchUserId(userId) {
     // 判斷是不是空的
     if (userId.trim() == '') {
@@ -74,6 +74,8 @@ const app = (function () {
   function _renderStudentInfo(studentInfo) {
 
   }
+
+  // 可能要有 delete, add img 的 function
 
   return {
     searchUserId
