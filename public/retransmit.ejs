@@ -2,11 +2,12 @@
 
 <div class="container" style="max-width: 57rem;">
   <div class="my-3">
-    <form onsubmit="event">
+    <form onsubmit="event.preventDefault(); app.searchUserId(this.elements.namedItem('userId').value);">
       <div class="form-group row">
-        <label for="staticEmail" class="col-2 col-form-label">報名序號：</label>
+        <label class="col-2 col-form-label">報名序號：</label>
         <div class="col-8">
-          <input type="text" class="form-control" id="" value="3345678">
+          <input type="text" class="form-control" name="userId"
+          placeholder="3345678" id="userIdForm">
         </div>
         <div class="col-2">
           <button type="submit" class="btn-success form-control">查詢</button>
@@ -19,7 +20,7 @@
       <dd class="col-3" id="userId">3345678</dd>
 
       <dt class="col-3">僑生編號：</dt>
-      <dd class="col-3 text-danger" id="overseas_student_id">尚未審核</dd>
+      <dd class="col-3 text-danger" id="overseasStudentId">尚未審核</dd>
 
       <dt class="col-3">中文姓名：</dt>
       <dd class="col-3" id="name">黄薏帆</dd>
@@ -34,34 +35,31 @@
       <dd class="col-3" id="birthday">1997/02/30</dd>
 
       <dt class="col-3">出生地國別：</dt>
-      <dd class="col-3" id="">北韓</dd>
+      <dd class="col-3" id="birthLocation">北韓</dd>
 
       <dt class="col-3">僑居地國別：</dt>
-      <dd class="col-3" id="">北韓</dd>
+      <dd class="col-3" id="residentLocation">北韓</dd>
 
       <dt class="col-3">申請身份別：</dt>
-      <dd class="col-3" id="">gangster</dd>
+      <dd class="col-3" id="identity">gangster</dd>
 
       <dt class="col-3">身份別代碼：</dt>
-      <dd class="col-3" id="">港澳</dd>
+      <dd class="col-3" id="ruleCodeOfOverseasStudentId">港澳</dd>
 
       <dt class="col-3">學校國別：</dt>
-      <dd class="col-3" id="">中國</dd>
+      <dd class="col-3" id="schoolCountry">中國</dd>
 
       <dt class="col-3">畢業學校：</dt>
-      <dd class="col-3" id="">中國有嘻哈</dd>
+      <dd class="col-3" id="schoolName">中國有嘻哈</dd>
 
       <dt class="col-3">報名狀態：</dt>
-      <div class="col-9">
-        <dd>確認上傳資料 <span class="oi oi-check"></span></dd>
-        <dd>確認報名資料 <span class="oi oi-x"></span></dd>
-      </div>
+      <dd class="col-9">確認上傳及報名資料 <span class="oi oi-check"></span></dd>
 
       <dt class="col-3">成績採計方式：</dt>
-      <dd class="col-9" id="">上底加下底乘以高除以二</dd>
+      <dd class="col-9" id="applyWay">上底加下底乘以高除以二</dd>
 
       <dt class="col-3">收件備註：</dt>
-      <textarea class="col-9" id="" cols="60" rows="3" readonly>It's VAVA.</textarea>
+      <textarea class="col-9" id="verificationDesc" cols="60" rows="3" readonly>It's VAVA.</textarea>
     </dl>
 
     <hr>
