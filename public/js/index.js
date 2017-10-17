@@ -4,7 +4,7 @@ const app = (function () {
    * cache DOM
    */
 
-  const $test = $('#test');
+
 
   /**
    * init
