@@ -81,10 +81,10 @@
 
     <hr>
 
-    <form onsubmit="event">
+    <form onsubmit="event.preventDefault(); app.verifyStudentInfo(this.elements.namedItem('verificationDesc').value);">
       <div class="form-group row">
         <label for="staticEmail" class="col-3 col-form-label">審核備註：</label>
-        <textarea class="col-9" id="verificationDesc" cols="60" rows="3">It's VAVA.</textarea>
+        <textarea class="col-9" id="verificationDesc" name="verificationDesc" cols="60" rows="3">It's VAVA.</textarea>
       </div>
 
       <div class="row">
