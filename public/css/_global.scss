@@ -1,3 +1,13 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 250px;
+}
+
 @include media-breakpoint-up(sm) {}
 @include media-breakpoint-up(md) {}
 @include media-breakpoint-up(lg) {}

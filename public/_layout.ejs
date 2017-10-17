@@ -26,6 +26,7 @@
 <body>
 
   <%- yield %>
+  <%- partial('partials/_footer') %>
 
   <script src="https://cdn.polyfill.io/v2/polyfill.js?features=default,fetch,es6,console,~viewport"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -37,6 +38,5 @@
   <script src="js/env.js"></script>
   <script src="js/api.js"></script>
   <script src="js/<%= current.source %>.js"></script>
-  <%- partial('partials/_footer')%>
 </body>
 </html>
