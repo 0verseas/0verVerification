@@ -32,13 +32,59 @@ const app = (function () {
    * functions
    */
 
+  // init
   function _init() {
+    _initStudentInfo();
+  }
+
+  // init student info 把所有欄位清空
+  function _initStudentInfo() {
+    $userId.html('');
+    $overseasStudentId.html('');
+    $name.html('');
+    $engName.html('');
+    $gender.html('');
+    $birthday.html('');
+    $birthLocation.html('');
+    $residentLocation.html('');
+    $identity.html('');
+    $ruleCodeOfOverseasStudentId.html('');
+    $schoolCountry.html('');
+    $schoolName.html('');
+    $applyWay.html('');
+    // $diplomaDiv.html('');
+    // $transcriptDiv.html('');
+    $verificationDesc.html('');
+  }
+
+  // 搜尋學生資料
+  function searchUserId(userId) {
+    // 判斷是不是空的
+    if (userId.trim() == '') {
+      $userIdForm.val('');
+      return alert('請填入正確的報名序號');
+    }
+    console.log(userId);
+    // 有無查到學生資料
+    // 有的話 _renderStudentInfo
+    // 沒有的話 alert 無此報名序號 _initStudentInfo
+  }
+
+  // render 學生資料 含 成績單、學歷證明
+  function _renderStudentInfo(studentInfo) {
 
   }
 
+  function verifyStudentInfo(verificationDesc) {
+    console.log($userId.val() + verificationDesc);
+    // 確認是否已經有僑生編號
+    // 有的話 alert 已經審查
+    // 沒有的話 送 審查備註、報名序號 then _renderStudentInfo
+  }
 
   return {
-
+    searchUserId,
+    verifyStudentInfo
   }
 
 })();
