@@ -1,27 +1,30 @@
-<%- partial('partials/_nav', {nav: 'nothing'})%>
+<%- partial('partials/_nav', {navs: []})%>
 
 <div class="container px-5">
   <form class="mx-auto mt-5" style="max-width: 23rem;" onsubmit="event.preventDefault(); app.login(this.elements.namedItem('username').value, this.elements.namedItem('password').value);">
-    <div class="form-group row">
+    <div class="row">
       <h4>登入系統</h4>
-    </div>
-
-    <div class="form-group row">
-      <div class="input-group">
-        <span class="input-group-addon" id="basic-addon1"><span class="oi oi-person"></span></span>
-        <input class="form-control" id="username" name="username" type="email" placeholder="Username">
+      <div class="alert alert-danger show fade col-12" id="login-alert" role="alert" hidden>
+        <span class="oi oi-warning"></span> 帳號或密碼錯誤
       </div>
     </div>
 
     <div class="form-group row">
       <div class="input-group">
-        <span class="input-group-addon" id="basic-addon1"><span class="oi oi-key"></span></span>
-        <input class="form-control" id="password" name="password" type="password" placeholder="Password">
+        <div class="input-group-addon" id="basic-addon1"><span class="oi oi-person"></span></div>
+        <input class="form-control" id="username" name="username" type="text" autocorrect="off" spellcheck="false" autocapitalize="off" placeholder="Username" required>
       </div>
     </div>
 
     <div class="form-group row">
-      <button class="btn btn-primary form-control" type="submit">登入</button>
+      <div class="input-group">
+        <div class="input-group-addon" id="basic-addon1"><span class="oi oi-key"></span></div>
+        <input class="form-control" id="password" name="password" type="password" autocorrect="off" spellcheck="false" autocapitalize="off" placeholder="Password" required>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <button class="btn btn-primary form-control" id="login-btn" type="submit">登入</button>
     </div>
   </form>
 </div>
