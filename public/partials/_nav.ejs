@@ -17,6 +17,14 @@
         </a>
       </li>
     <% } %>
+      <li class="nav-item">
+        <a class="nav-link" href="javascript: API.logout().then(() => {
+          alert('登出成功！');
+          window.location.href = './login.html';
+        });">
+          登出 <span class="sr-only">(current)</span>
+        </a>
+      </li>
   </ul>
 
 </nav>
