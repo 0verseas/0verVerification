@@ -47,19 +47,9 @@
 				"nav": "validate"
 			},
 			{
-				"title": "資料重傳",
-				"link": "retransmit",
-				"nav": "retransmit"
-			},
-			{
-				"title": "審核清單",
+				"title": "已審核清單",
 				"link": "list",
 				"nav": "list"
-			},
-			{
-				"title": "登出",
-				"link": "logout",
-				"nav": "logout"
 			}
 		]
 	}
