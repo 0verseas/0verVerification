@@ -3,25 +3,30 @@ const app = (function () {
   /**
    * cache DOM
    */
-  const $studentInfoDiv = $('#studentInfoDiv');
+
+  const $studentInfoDiv = $('#student-info-div');
   const $userIdForm = $('#userIdForm'); // 填入報名序號
-  const $userId = $('#userId'); // 報名序號
-  const $overseasStudentId = $('#overseasStudentId'); // 僑生編號
+  const $userId = $('#id'); // 報名序號
+  const $overseasStudentId = $('#overseas-student-id'); // 僑生編號
   const $name = $('#name'); // 姓名
-  const $engName = $('#engName'); // 英文姓名
+  const $engName = $('#eng-name'); // 英文姓名
   const $gender = $('#gender'); // 性別
   const $birthday = $('#birthday'); // 生日
-  const $birthLocation = $('#birthLocation'); // 出生地
-  const $residentLocation = $('#residentLocation'); // 僑居地
+  const $birthLocation = $('#birth-location'); // 出生地
+  const $residentLocation = $('#resident-location'); // 僑居地
   const $identity = $('#identity'); // 申請身份別
-  const $ruleCodeOfOverseasStudentId = $('#ruleCodeOfOverseasStudentId'); // 規則馬（身份別代碼）
-  const $schoolCountry = $('#schoolCountry'); // 畢業學校國家
-  const $schoolName = $('#schoolName'); // 畢業學校
-  const $checkStatus = $('#checkStatus') // 確認上傳及報名資料
-  const $applyWay = $('#applyWay'); // 成績採計方式
-  const $diplomaDiv = $('#diplomaDiv'); // 學歷證明 div
-  const $transcriptDiv = $('#transcriptDiv'); // 成績單 div
-  const $verificationDesc = $('#verificationDesc'); // 審核備註
+  const $ruleCodeOfOverseasStudentId = $('#rule-code-of-overseas-student-id'); // 規則碼（身份別代碼）
+  const $schoolCountry = $('#graduate-school-country'); // 畢業學校國家
+  const $schoolName = $('#graduate-school-name'); // 畢業學校
+  const $confirmedStatus = $('#confirmed-status') // 確認上傳及報名資料
+  const $admissionPlacementApplyWayTitle = $('#admission-placement-apply-way-title'); // 聯合分發成績採計方式 title
+  const $admissionPlacementApplyWay = $('#admission-placement-apply-way'); // 聯合分發成績採計方式
+  const $diplomaDiv = $('#diploma-div'); // 學歷證明 div
+  const $transcriptDiv = $('#transcript-div'); // 成績單 div
+  const $verifiedStatus = $('#verified-status'); // 審核狀態
+  const $verificationDesc = $('#verification-desc'); // 審核備註
+  const $submitBtn = $('#submit-btn'); // 送出審核按鈕
+
   // 圖片原圖 modal
   const $originalImgModal = $('#original-img-modal');
   const $originalImg = $('#original-img');
@@ -31,8 +36,7 @@ const app = (function () {
    * init
    */
 
-  // const baseUrl = env.baseUrl;
-  const baseUrl = 'https://yuer.tw';
+  const baseUrl = env.baseUrl;
 
   _init();
 
@@ -45,7 +49,7 @@ const app = (function () {
     // API.isLogin().then(({data, statusCode}) => {
     //   if (statusCode == 200) {
     //     // 確認有登入，init 頁面
-    //     _initStudentInfo();
+    //     _resetStudentInfo();
     //   } else if (statusCode == 401) {
     //     // 若沒有登入，跳轉登入頁面
     //     window.location.href = './login.html';
@@ -55,11 +59,11 @@ const app = (function () {
     // }).catch((error) => {
     //   console.log(error);
     // });
-    _initStudentInfo();
+    _resetStudentInfo();
   }
 
   // init student info 把所有欄位清空
-  function _initStudentInfo() {
+  function _resetStudentInfo() {
     $userId.html('');
     $overseasStudentId.html('');
     $name.html('');
@@ -72,53 +76,95 @@ const app = (function () {
     $ruleCodeOfOverseasStudentId.html('');
     $schoolCountry.html('');
     $schoolName.html('');
-    $checkStatus.html('');
-    $applyWay.html('');
+    $confirmedStatus.html('');
+    $admissionPlacementApplyWay.html('');
     $diplomaDiv.html('');
     $transcriptDiv.html('');
     $verificationDesc.html('');
   }
 
   // 用報名序號搜尋學生資料
-  function searchUserId(userId) {
-    // 判斷是不是空的
+  function searchUserId(userId = '') {
+    // 清空學生資料的顯示畫面並隱藏
+    $studentInfoDiv.prop('hidden', true);
+    _resetStudentInfo();
+
+    // 判斷輸入是否為空
     if (userId.trim() == '') {
-      $userIdForm.val('');
-      _initStudentInfo();
-      $studentInfoDiv.prop('hidden', true);
       return alert('請填入正確的報名序號');
     }
-    console.log(userId);
-    $studentInfoDiv.prop('hidden', false);
 
+    // 取得學生資料
+    API.getStudentData(userId).then((response) => {
+      // 重置輸入框
+      $userIdForm.prop('value', '');
 
-    // 有無查到學生資料
-    // 有的話 _renderStudentInfo
+      // render 學生資料
+      _renderStudentInfo(response.data);
 
-    _renderStudentInfo({
-      diplomas: [
-        {
-          filename: 'sunnyworm.png'
-        },
-        {
-          filename: 'avatar.jpg'
-        },
-        {
-          filename: 'avatar2.jpg'
-        },
-      ]
+      // 顯示資料
+      $studentInfoDiv.prop('hidden', false);
     });
-    // 沒有的話 alert 無此報名序號 _initStudentInfo
+
+    // 沒有的話 alert 無此報名序號 _resetStudentInfo
   }
 
   // render 學生資料 含 成績單、學歷證明
   function _renderStudentInfo(studentInfo) {
+    // 學生資料
+    $userId.html(studentInfo.id.toString().padStart(6, '0'));
+    $overseasStudentId.html(studentInfo.student_misc_data.overseas_student_id);
+    $name.html(studentInfo.name);
+    $engName.html(studentInfo.eng_name);
+    $gender.html(studentInfo.student_personal_data.gender);
+    $birthday.html(studentInfo.student_personal_data.birthday);
+    $birthLocation.html(studentInfo.student_personal_data.birth_location_data.country);
+    $residentLocation.html(studentInfo.student_personal_data.resident_location_data.country);
+    $identity.html(studentInfo.student_qualification_verify.identity);
+    $ruleCodeOfOverseasStudentId.html(studentInfo.student_misc_data.rule_code_of_overseas_student_id);
+    $schoolCountry.html(studentInfo.student_personal_data.school_country_data.country);
+    $schoolName.html(studentInfo.student_personal_data.school_name);
+    $confirmedStatus.html(studentInfo.student_misc_data.confirmed_at !== null ? '已' : '未' + '確認上傳及報名資料');
 
-    for (let diploma of studentInfo.diplomas) {
+    // 學士班才有「聯合分發成績採計方式」
+    if (studentInfo.student_qualification_verify.system_id == 1) {
+      // 置放「聯合分發成績採計方式」
+      $admissionPlacementApplyWay.html(studentInfo.student_misc_data.admission_placement_apply_way_data.description);
+    } else {
+      // 把「聯合分發成績採計方式」藏起來
+      $admissionPlacementApplyWayTitle.hide();
+      $admissionPlacementApplyWay.hide();
+    }
+
+    // 學歷證明文件
+    for (let filename of studentInfo.student_diploma) {
       $diplomaDiv.append(`
-        <img src="${baseUrl}/${diploma.filename}" alt="學歷證明文件" data-filetype="學歷證明文件" class="img-thumbnail doc-thumbnail" onclick="app.loadOriginalImgModal(this.src, this.dataset.filetype)">
+        <img src="${baseUrl}/office/students/${studentInfo.id}/diploma/${filename}" alt="學歷證明文件" data-filetype="學歷證明文件" class="img-thumbnail doc-thumbnail" onclick="app.loadOriginalImgModal(this.src, this.dataset.filetype)">
       `)
     }
+
+    // 成績單
+    for (let filename of studentInfo.student_transcripts) {
+      $transcriptDiv.append(`
+        <img src="${baseUrl}/office/students/${studentInfo.id}/transcripts/${filename}" alt="成績單文件" data-filetype="成績單文件" class="img-thumbnail doc-thumbnail" onclick="app.loadOriginalImgModal(this.src, this.dataset.filetype)">
+      `)
+    }
+
+    // 確認是否已審核
+    if (studentInfo.verified_at != null) {
+      // 封印審核按鈕
+      $submitBtn.prop('disabled', true);
+      // 封印審核備註編輯
+      $verificationDesc.prop('readonly', true);
+      // 擺上審核備註
+      $verificationDesc.html(studentInfo.verification_desc);
+      // 擺上審核狀態
+      $verifiedStatus.html('已審核');
+    } else {
+      // 擺上審核狀態
+      $verifiedStatus.html('未審核');
+    }
+
   }
 
   function verifyStudentInfo(verificationDesc) {

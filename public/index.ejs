@@ -5,9 +5,9 @@
     <div>
       <form onsubmit="event.preventDefault(); app.searchUserId(this.elements.namedItem('userId').value);">
         <div class="form-group row">
-          <label class="col-2 col-form-label">報名序號：</label>
+          <label class="col-2 col-form-label">報名序號</label>
           <div class="col-8">
-            <input type="text" class="form-control" name="userId" placeholder="3345678" id="userIdForm">
+            <input type="text" class="form-control" name="userId" placeholder="000001" id="userIdForm">
           </div>
           <div class="col-2">
             <button type="submit" class="btn-success form-control" onmousedown="event.preventDefault()">查詢</button>
@@ -16,59 +16,60 @@
       </form>
     </div>
     <hr>
-    <div id="studentInfoDiv" hidden>
+    <div id="student-info-div" hidden>
       <dl class="row ">
-        <dt class="col-3">報名序號：</dt>
-        <dd class="col-3" id="userId"></dd>
+        <dt class="col-5 col-md-3">報名序號</dt>
+        <dd class="col-12 col-md-3" id="id"></dd>
 
-        <dt class="col-3">僑生編號：</dt>
-        <dd class="col-3 text-danger" id="overseasStudentId">尚未審核</dd>
+        <dt class="col-5 col-md-3">僑生編號</dt>
+        <dd class="col-12 col-md-3" id="overseas-student-id"></dd>
 
-        <dt class="col-3">中文姓名：</dt>
-        <dd class="col-3" id="name">黄薏帆</dd>
+        <dt class="col-5 col-md-3">中文姓名</dt>
+        <dd class="col-12 col-md-3" id="name"></dd>
 
-        <dt class="col-3">英文姓名：</dt>
-        <dd class="col-3" id="engName">Evan-E</dd>
+        <dt class="col-5 col-md-3">英文姓名</dt>
+        <dd class="col-12 col-md-3" id="eng-name"></dd>
 
-        <dt class="col-3">性別：</dt>
-        <dd class="col-3" id="gender">女</dd>
+        <dt class="col-5 col-md-3">性別</dt>
+        <dd class="col-12 col-md-3" id="gender"></dd>
 
-        <dt class="col-3">出生日期（年/月/日）：</dt>
-        <dd class="col-3" id="birthday">1997/02/30</dd>
+        <dt class="col-12 col-md-3">出生日期（年/月/日）</dt>
+        <dd class="col-12 col-md-3" id="birthday"></dd>
 
-        <dt class="col-3">出生地國別：</dt>
-        <dd class="col-3" id="birthLocation">北韓</dd>
+        <dt class="col-5 col-md-3">出生地國別</dt>
+        <dd class="col-12 col-md-3" id="birth-location"></dd>
 
-        <dt class="col-3">僑居地國別：</dt>
-        <dd class="col-3" id="residentLocation">北韓</dd>
+        <dt class="col-5 col-md-3">僑居地國別</dt>
+        <dd class="col-12 col-md-3" id="resident-location"></dd>
 
-        <dt class="col-3">申請身份別：</dt>
-        <dd class="col-3" id="identity">gangster</dd>
+        <dt class="col-5 col-md-3">申請身份別</dt>
+        <dd class="col-12 col-md-3" id="identity"></dd>
 
-        <dt class="col-3">身份別代碼：</dt>
-        <dd class="col-3" id="ruleCodeOfOverseasStudentId">港澳</dd>
+        <dt class="col-5 col-md-3">身份別代碼</dt>
+        <dd class="col-12 col-md-3" id="rule-code-of-overseas-student-id"></dd>
 
-        <dt class="col-3">學校國別：</dt>
-        <dd class="col-3" id="schoolCountry">中國</dd>
+        <dt class="col-5 col-md-3">學校國別</dt>
+        <dd class="col-12 col-md-3" id="graduate-school-country"></dd>
 
-        <dt class="col-3">畢業學校：</dt>
-        <dd class="col-3" id="schoolName">中國有嘻哈</dd>
+        <dt class="col-5 col-md-3">畢業學校</dt>
+        <dd class="col-12 col-md-3" id="graduate-school-name"></dd>
 
-        <dt class="col-3">報名狀態：</dt>
-        <dd class="col-9" id="chcekStatus">確認上傳及報名資料 <span class="oi oi-check"></span></dd>
+        <dt class="col-5 col-md-3">報名狀態</dt>
+        <dd class="col-12 col-md-3" id="confirmed-status"></dd>
 
-        <dt class="col-3">成績採計方式：</dt>
-        <dd class="col-9" id="applyWay">上底加下底乘以高除以二</dd>
+        <dt class="col-5 col-md-3">審核狀態</dt>
+        <dd class="col-12 col-md-3" id="verified-status"></dd>
+
+        <dt class="col-5 col-md-3" id="admission-placement-apply-way-title">聯合分發成績採計方式</dt>
+        <dd class="col-12 col-md-9" id="admission-placement-apply-way"></dd>
+
       </dl>
 
       <hr>
 
       <div class="card">
         <h4 class="card-header">學歷證明文件</h4>
-        <div class="card-body" id="diplomaDiv">
-          <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" data-filetype="學歷證明文件" class="img-thumbnail doc-thumbnail" onclick="app.loadOriginalImgModal(this.src, this.dataset.filetype)">
-          <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" class="img-thumbnail img-edu" style="width:150px; height: 150px">
-          <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" class="img-thumbnail img-edu" style="width:150px; height: 150px">
+        <div class="card-body" id="diploma-div">
         </div>
       </div>
 
@@ -76,10 +77,7 @@
 
       <div class="card">
         <h4 class="card-header">成績單文件</h4>
-        <div class="card-body" id="transcriptDiv">
-          <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" data-filetype="成績單文件" class="img-thumbnail img-edu" style="width:100px; height: 100px" onclick="app.loadOriginalImgModal(this.src, this.dataset.filetype)">
-          <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" class="img-thumbnail" style="width:100px; height: 100px">
-          <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" class="img-thumbnail" style="width:100px; height: 100px">
+        <div class="card-body" id="transcript-div">
         </div>
       </div>
 
@@ -87,13 +85,13 @@
 
       <form onsubmit="event.preventDefault(); app.verifyStudentInfo(this.elements.namedItem('verificationDesc').value);">
         <div class="form-group row">
-          <label for="staticEmail" class="col-3 col-form-label">審核備註：</label>
-          <textarea class="col-9" id="verificationDesc" name="verificationDesc" cols="60" rows="3">It's VAVA.</textarea>
+          <label for="staticEmail" class="col-3 col-form-label">審核備註</label>
+          <textarea class="col-9" id="verification-desc" name="verificationDesc" cols="60" rows="3"></textarea>
         </div>
 
-      <div class="row">
-        <button type="submit" class="btn btn-success mx-auto">確認審核</button>
-      </div>
+        <div class="row">
+          <button type="submit" class="btn btn-success mx-auto" id="submit-btn">確認審核</button>
+        </div>
     </form>
   </div>
 </div>
