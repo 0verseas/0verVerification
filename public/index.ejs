@@ -2,96 +2,100 @@
 
 <div class="container" style="max-width: 57rem;">
   <div class="my-3">
-    <form onsubmit="event.preventDefault(); app.searchUserId(this.elements.namedItem('userId').value);">
-      <div class="form-group row">
-        <label class="col-2 col-form-label">報名序號：</label>
-        <div class="col-8">
-          <input type="text" class="form-control" name="userId" placeholder="3345678" id="userIdForm">
+    <div>
+      <form onsubmit="event.preventDefault(); app.searchUserId(this.elements.namedItem('userId').value);">
+        <div class="form-group row">
+          <label class="col-2 col-form-label">報名序號：</label>
+          <div class="col-8">
+            <input type="text" class="form-control" name="userId" placeholder="3345678" id="userIdForm">
+          </div>
+          <div class="col-2">
+            <button type="submit" class="btn-success form-control">查詢</button>
+          </div>
         </div>
-        <div class="col-2">
-          <button type="submit" class="btn-success form-control">查詢</button>
+      </form>
+    </div>
+    <hr>
+    <div id="studentInfoDiv" hidden>
+      <dl class="row ">
+        <dt class="col-3">報名序號：</dt>
+        <dd class="col-3" id="userId"></dd>
+
+        <dt class="col-3">僑生編號：</dt>
+        <dd class="col-3 text-danger" id="overseasStudentId">尚未審核</dd>
+
+        <dt class="col-3">中文姓名：</dt>
+        <dd class="col-3" id="name">黄薏帆</dd>
+
+        <dt class="col-3">英文姓名：</dt>
+        <dd class="col-3" id="engName">Evan-E</dd>
+
+        <dt class="col-3">性別：</dt>
+        <dd class="col-3" id="gender">女</dd>
+
+        <dt class="col-3">出生日期（年/月/日）：</dt>
+        <dd class="col-3" id="birthday">1997/02/30</dd>
+
+        <dt class="col-3">出生地國別：</dt>
+        <dd class="col-3" id="birthLocation">北韓</dd>
+
+        <dt class="col-3">僑居地國別：</dt>
+        <dd class="col-3" id="residentLocation">北韓</dd>
+
+        <dt class="col-3">申請身份別：</dt>
+        <dd class="col-3" id="identity">gangster</dd>
+
+        <dt class="col-3">身份別代碼：</dt>
+        <dd class="col-3" id="ruleCodeOfOverseasStudentId">港澳</dd>
+
+        <dt class="col-3">學校國別：</dt>
+        <dd class="col-3" id="schoolCountry">中國</dd>
+
+        <dt class="col-3">畢業學校：</dt>
+        <dd class="col-3" id="schoolName">中國有嘻哈</dd>
+
+        <dt class="col-3">報名狀態：</dt>
+        <dd class="col-9" id="chcekStatus">確認上傳及報名資料 <span class="oi oi-check"></span></dd>
+
+        <dt class="col-3">成績採計方式：</dt>
+        <dd class="col-9" id="applyWay">上底加下底乘以高除以二</dd>
+      </dl>
+
+      <hr>
+
+      <div class="card">
+        <h4 class="card-header">學歷證明文件</h4>
+        <div class="card-body" id="diplomaDiv">
+          <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" data-filetype="學歷證明文件" class="img-thumbnail doc-thumbnail" onclick="app.loadOriginalImgModal(this.src, this.dataset.filetype)">
+          <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" class="img-thumbnail img-edu" style="width:150px; height: 150px">
+          <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" class="img-thumbnail img-edu" style="width:150px; height: 150px">
         </div>
       </div>
-    </form>
-    <hr>
-    <dl class="row ">
-      <dt class="col-3">報名序號：</dt>
-      <dd class="col-3" id="userId"></dd>
 
-      <dt class="col-3">僑生編號：</dt>
-      <dd class="col-3 text-danger" id="overseasStudentId">尚未審核</dd>
+      <br>
 
-      <dt class="col-3">中文姓名：</dt>
-      <dd class="col-3" id="name">黄薏帆</dd>
-
-      <dt class="col-3">英文姓名：</dt>
-      <dd class="col-3" id="engName">Evan-E</dd>
-
-      <dt class="col-3">性別：</dt>
-      <dd class="col-3" id="gender">女</dd>
-
-      <dt class="col-3">出生日期（年/月/日）：</dt>
-      <dd class="col-3" id="birthday">1997/02/30</dd>
-
-      <dt class="col-3">出生地國別：</dt>
-      <dd class="col-3" id="birthLocation">北韓</dd>
-
-      <dt class="col-3">僑居地國別：</dt>
-      <dd class="col-3" id="residentLocation">北韓</dd>
-
-      <dt class="col-3">申請身份別：</dt>
-      <dd class="col-3" id="identity">gangster</dd>
-
-      <dt class="col-3">身份別代碼：</dt>
-      <dd class="col-3" id="ruleCodeOfOverseasStudentId">港澳</dd>
-
-      <dt class="col-3">學校國別：</dt>
-      <dd class="col-3" id="schoolCountry">中國</dd>
-
-      <dt class="col-3">畢業學校：</dt>
-      <dd class="col-3" id="schoolName">中國有嘻哈</dd>
-
-      <dt class="col-3">報名狀態：</dt>
-      <dd class="col-9">確認上傳及報名資料 <span class="oi oi-check"></span></dd>
-
-      <dt class="col-3">成績採計方式：</dt>
-      <dd class="col-9" id="applyWay">上底加下底乘以高除以二</dd>
-    </dl>
-
-    <hr>
-
-    <div class="card">
-      <h4 class="card-header">學歷證明文件</h4>
-      <div class="card-body" id="diplomaDiv">
-        <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" class="img-thumbnail img-edu" style="width:100px; height: 100px" onclick="app.loadOriginalImgModal(this.src)">
-        <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" class="img-thumbnail img-edu" style="width:100px; height: 100px">
-        <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" class="img-thumbnail img-edu" style="width:100px; height: 100px">
+      <div class="card">
+        <h4 class="card-header">成績單文件</h4>
+        <div class="card-body" id="transcriptDiv">
+          <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" data-filetype="成績單文件" class="img-thumbnail img-edu" style="width:100px; height: 100px" onclick="app.loadOriginalImgModal(this.src, this.dataset.filetype)">
+          <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" class="img-thumbnail" style="width:100px; height: 100px">
+          <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" class="img-thumbnail" style="width:100px; height: 100px">
+        </div>
       </div>
+
+      <hr>
+
+      <form onsubmit="event.preventDefault(); app.verifyStudentInfo(this.elements.namedItem('verificationDesc').value);">
+        <div class="form-group row">
+          <label for="staticEmail" class="col-3 col-form-label">審核備註：</label>
+          <textarea class="col-9" id="verificationDesc" name="verificationDesc" cols="60" rows="3">It's VAVA.</textarea>
+        </div>
+
+        <div class="row">
+          <button type="submit" class="btn btn-success mx-auto">確認審核</button>
+        </div>
+      </form>
     </div>
-
-    <br>
-
-    <div class="card">
-      <h4 class="card-header">成績單文件</h4>
-      <div class="card-body" id="transcriptDiv">
-        <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" class="img-thumbnail img-edu" style="width:100px; height: 100px">
-        <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" class="img-thumbnail" style="width:100px; height: 100px">
-        <img src="https://yuer.tw/sunnyworm.png" alt="和融頭" class="img-thumbnail" style="width:100px; height: 100px">
-      </div>
-    </div>
-
-    <hr>
-
-    <form onsubmit="event.preventDefault(); app.verifyStudentInfo(this.elements.namedItem('verificationDesc').value);">
-      <div class="form-group row">
-        <label for="staticEmail" class="col-3 col-form-label">審核備註：</label>
-        <textarea class="col-9" id="verificationDesc" name="verificationDesc" cols="60" rows="3">It's VAVA.</textarea>
-      </div>
-
-      <div class="row">
-        <button type="submit" class="btn btn-success mx-auto">確認審核</button>
-      </div>
-    </form>
   </div>
 </div>
 

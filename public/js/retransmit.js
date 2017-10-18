@@ -3,6 +3,7 @@ const app = (function () {
   /**
    * cache DOM
    */
+  const $studentInfoDiv = $('#studentInfoDiv');
   const $userIdForm = $('#userIdForm'); // 填入報名序號
   const $userId = $('#userId'); // 報名序號
   const $overseasStudentId = $('#overseasStudentId'); // 僑生編號
@@ -16,7 +17,7 @@ const app = (function () {
   const $ruleCodeOfOverseasStudentId = $('#ruleCodeOfOverseasStudentId'); // 規則馬（身份別代碼）
   const $schoolCountry = $('#schoolCountry'); // 畢業學校國家
   const $schoolName = $('#schoolName'); // 畢業學校
-  // 確認上傳及報名資料
+  const $checkStatus = $('#checkStatus') // 確認上傳及報名資料
   const $applyWay = $('#applyWay'); // 成績採計方式
   const $diplomaDiv = $('#diplomaDiv'); // 學歷證明 div
   const $transcriptDiv = $('#transcriptDiv'); // 成績單 div
@@ -58,6 +59,7 @@ const app = (function () {
     $ruleCodeOfOverseasStudentId.html('');
     $schoolCountry.html('');
     $schoolName.html('');
+    $checkStatus.html('');
     $applyWay.html('');
     $diplomaDiv.html('');
     $transcriptDiv.html('');
@@ -69,9 +71,13 @@ const app = (function () {
     // 判斷是不是空的
     if (userId.trim() == '') {
       $userIdForm.val('');
+      _initStudentInfo();
+      $studentInfoDiv.prop('hidden', true);
       return alert('請填入正確的報名序號');
     }
     console.log(userId);
+    $studentInfoDiv.prop('hidden', false);
+
     // 有無查到學生資料
     // 有的話 _renderStudentInfo
 
