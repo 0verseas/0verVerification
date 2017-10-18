@@ -21,6 +21,9 @@ const app = (function () {
   const $diplomaDiv = $('#diplomaDiv'); // 學歷證明 div
   const $transcriptDiv = $('#transcriptDiv'); // 成績單 div
   const $verificationDesc = $('#verificationDesc'); // 審核備註
+  // 圖片原圖 modal
+  const $originalImgModal = $('#original-img-modal');
+  const $originalImg = $('#original-img');
 
   /**
    * init
@@ -82,9 +85,18 @@ const app = (function () {
     // 沒有的話 送 審查備註、報名序號 then _renderStudentInfo
   }
 
+  // 開啟原圖
+  function loadOriginalImgModal(src) {
+    // 設定圖片網址
+    $originalImg.prop('src', src);
+    // 顯示 modal
+    $originalImgModal.modal();
+  }
+
   return {
     searchUserId,
-    verifyStudentInfo
+    verifyStudentInfo,
+    loadOriginalImg,
   }
 
 })();
