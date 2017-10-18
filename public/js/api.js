@@ -17,7 +17,16 @@ const API = (function () {
     return _requestHandle(request);
   }
 
-  /*
+  // 審核單位登出
+  function logout() {
+    const request = fetch(`${baseUrl}/office/logout`, {
+      method: 'POST',
+      credentials: 'include'
+    });
+
+    return _requestHandle(request);
+  }
+
   // 驗證審核單位是否登入
   function isLogin() {
     const request = fetch(`${baseUrl}/office/login`, {
@@ -30,7 +39,6 @@ const API = (function () {
 
     return _requestHandle(request);
   }
-  */
 
   // 取得學生報名資料
   function getStudentData(userId = '') {
@@ -66,7 +74,8 @@ const API = (function () {
 
   return {
     login,
-    //isLogin,
+    logout,
+    isLogin,
     getStudentData,
     getConfirmedStudentList,
   }
