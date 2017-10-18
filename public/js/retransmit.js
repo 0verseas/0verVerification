@@ -42,6 +42,19 @@ const app = (function () {
 
   // init
   function _init() {
+    // API.isLogin().then(({data, statusCode}) => {
+    //   if (statusCode == 200) {
+    //     // 確認有登入，init 頁面
+    //     _initStudentInfo();
+    //   } else if (statusCode == 401) {
+    //     // 若沒有登入，跳轉登入頁面
+    //     window.location.href = './login.html';
+    //   } else {
+    //     console.log('GG');
+    //   }
+    // }).catch((error) => {
+    //   console.log(error);
+    // });
     _initStudentInfo();
   }
 

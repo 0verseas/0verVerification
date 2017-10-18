@@ -15,6 +15,20 @@ const API = (function () {
     return _requestHandle(request);
   }
 
+/*
+  function isLogin() {
+    const request = fetch(`${baseUrl}/office/login`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
+
+    return _requestHandle(request);
+  }
+*/
+
   // http request 的中介處理
   function _requestHandle(request) {
     return request.then(response => {
@@ -29,5 +43,6 @@ const API = (function () {
 
   return {
     login,
+    //isLogin
   }
 })();
