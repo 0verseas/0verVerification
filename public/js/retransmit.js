@@ -21,10 +21,17 @@ const app = (function () {
   const $diplomaDiv = $('#diplomaDiv'); // 學歷證明 div
   const $transcriptDiv = $('#transcriptDiv'); // 成績單 div
   const $verificationDesc = $('#verificationDesc'); // 審核備註
+  // 圖片原圖 modal
+  const $originalImgModal = $('#original-img-modal');
+  const $originalImg = $('#original-img');
+  const $originalImgTitle = $('#original-img-title');
 
   /**
    * init
    */
+
+  // const baseUrl = env.baseUrl;
+  const baseUrl = 'https://yuer.tw';
 
   _init();
 
@@ -52,8 +59,8 @@ const app = (function () {
     $schoolCountry.html('');
     $schoolName.html('');
     $applyWay.html('');
-    // $diplomaDiv.html('');
-    // $transcriptDiv.html('');
+    $diplomaDiv.html('');
+    $transcriptDiv.html('');
     $verificationDesc.html('');
   }
 
@@ -67,18 +74,48 @@ const app = (function () {
     console.log(userId);
     // 有無查到學生資料
     // 有的話 _renderStudentInfo
+
+    _renderStudentInfo({
+      diplomas: [
+        {
+          filename: 'sunnyworm.png'
+        },
+        {
+          filename: 'avatar.jpg'
+        },
+        {
+          filename: 'avatar2.jpg'
+        },
+      ]
+    });
     // 沒有的話 alert 無此報名序號 _initStudentInfo
   }
 
   // render 學生資料 含 成績單、學歷證明
   function _renderStudentInfo(studentInfo) {
 
+    for (let diploma of studentInfo.diplomas) {
+      $diplomaDiv.append(`
+        <img src="${baseUrl}/${diploma.filename}" alt="學歷證明文件" data-filetype="學歷證明文件" class="img-thumbnail doc-thumbnail" onclick="app.loadOriginalImgModal(this.src, this.dataset.filetype)">
+      `)
+    }
+  }
+
+  // 開啟原圖
+  function loadOriginalImgModal(src, filetype) {
+    console.log(filetype);
+    // 設定圖片網址
+    $originalImg.prop('src', src);
+    $originalImgTitle.html(filetype);
+    // 顯示 modal
+    $originalImgModal.modal();
   }
 
   // 可能要有 delete, add img 的 function
 
   return {
-    searchUserId
+    searchUserId,
+    loadOriginalImgModal,
   }
 
 })();
