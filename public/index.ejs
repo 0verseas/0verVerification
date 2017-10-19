@@ -10,7 +10,7 @@
             <input type="text" class="form-control" name="userId" placeholder="000001" id="userIdForm">
           </div>
           <div class="col-2">
-            <button type="submit" class="btn-success form-control" onmousedown="event.preventDefault()">查詢</button>
+            <button type="submit" class="btn-success form-control" onmousedown="event.preventDefault()"><span class="oi oi-magnifying-glass"></span> 查詢</button>
           </div>
         </div>
       </form>
@@ -68,15 +68,28 @@
       <hr>
 
       <div class="card">
-        <h4 class="card-header">學歷證明文件</h4>
+        <div class="card-header">
+          <div class="row">
+            <div class="col-6">
+              <span style="font-size: 1.5rem">學歷證明文件</span>
+              <span class="text-muted">（點圖可放大或刪除）</span>
+            </div>
+            <button class="btn btn-success ml-auto mr-3"><span class="oi oi-cloud-upload"></span> 重傳檔案</button>
+            <!--<input class="btn btn-success ml-auto mr-3" type="file" multiple value="重傳檔案">-->
+
+          </div>
+        </div>
         <div class="card-body" id="diploma-div">
         </div>
       </div>
 
-      <br>
-
       <div class="card">
-        <h4 class="card-header">成績單文件</h4>
+        <div class="card-header">
+          <div class="row">
+            <div class="col-6"><span style="font-size: 1.5rem">成績單文件</span></div>
+            <button class="btn btn-success ml-auto mr-3"><span class="oi oi-cloud-upload"></span> 重傳檔案</button>
+          </div>
+        </div>
         <div class="card-body" id="transcript-div">
         </div>
       </div>
@@ -109,6 +122,10 @@
       </div>
       <div class="modal-body text-center">
         <img src="" class="img-fluid" alt="" id="original-img">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="btn-modalDelete"><span class="oi oi-trash"></span> 刪除</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-sign-out" aria-hidden="true"></i> 離開</button>
       </div>
     </div>
   </div>

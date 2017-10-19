@@ -42,6 +42,17 @@ const API = (function () {
     return _requestHandle(request);
   }
 
+  // 上傳
+  function addStudentEducationFile(userId = '', type = '', data) {
+    const request = fetch(`${baseUrl}/office/students/${userId}/${type}`, {
+      method: 'POST',
+      body: data,
+      credentials: 'include'
+    });
+
+    return _requestHandle(request);
+  }
+
   // 取得已審核學生清單
   function getConfirmedStudentList() {
     const request = fetch(`${baseUrl}/students?status=confirmed`, {
