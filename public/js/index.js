@@ -116,7 +116,16 @@ const app = (function () {
     $overseasStudentId.html(studentInfo.student_misc_data.overseas_student_id);
     $name.html(studentInfo.name);
     $engName.html(studentInfo.eng_name);
-    $gender.html(studentInfo.student_personal_data.gender);
+
+    // 性別判斷
+    let gender = '未提供';
+    if (studentInfo.student_personal_data.gender == 'M') {
+      gender = '男';
+    } else if (studentInfo.student_personal_data.gender == 'F') {
+      gender = '女';
+    }
+    $gender.html(gender);
+
     $birthday.html(studentInfo.student_personal_data.birthday);
     $birthLocation.html(studentInfo.student_personal_data.birth_location_data.country);
     $residentLocation.html(studentInfo.student_personal_data.resident_location_data.country);
