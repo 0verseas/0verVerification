@@ -161,8 +161,8 @@ const app = (function () {
     $schoolName.html(studentInfo.student_personal_data.school_name);
     $confirmedStatus.html((studentInfo.student_misc_data.confirmed_at !== null ? '已' : '未') + '確認上傳及報名資料');
 
-    // 學士班 & 二技班才有「成績採計方式」
-    if (studentInfo.student_qualification_verify.system_id == 1 || studentInfo.student_qualification_verify.system_id == 2) {
+    // 學士班 才有「成績採計方式」
+    if (studentInfo.student_qualification_verify.system_id == 1) {
       // 置放「成績採計方式」
       $applyWay.html(studentInfo.student_misc_data.admission_placement_apply_way_data.description);
     } else {
