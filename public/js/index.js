@@ -159,7 +159,7 @@ const app = (function () {
     $ruleCodeOfOverseasStudentId.html(studentInfo.student_misc_data.rule_code_of_overseas_student_id);
     $schoolCountry.html(studentInfo.student_personal_data.school_country_data.country);
     $schoolName.html(studentInfo.student_personal_data.school_name);
-    $confirmedStatus.html(studentInfo.student_misc_data.confirmed_at !== null ? '已' : '未' + '確認上傳及報名資料');
+    $confirmedStatus.html((studentInfo.student_misc_data.confirmed_at !== null ? '已' : '未') + '確認上傳及報名資料');
 
     // 學士班 & 二技班才有「成績採計方式」
     if (studentInfo.student_qualification_verify.system_id == 1 || studentInfo.student_qualification_verify.system_id == 2) {
