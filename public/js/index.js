@@ -129,7 +129,33 @@ const app = (function () {
     $birthday.html(studentInfo.student_personal_data.birthday);
     $birthLocation.html(studentInfo.student_personal_data.birth_location_data.country);
     $residentLocation.html(studentInfo.student_personal_data.resident_location_data.country);
-    $identity.html(studentInfo.student_qualification_verify.identity);
+
+    //  判斷申請身份別
+    let identity = '未提供';
+    switch(studentInfo.student_qualification_verify.identity) {
+      case 1:
+        identity = '港澳生';
+        break;
+      case 2:
+        identity = '港澳具外國國籍之華裔學生';
+        break;
+      case 3:
+        identity = '海外僑生';
+        break;
+      case 4:
+        identity = '在臺港澳生';
+        break;
+      case 5:
+        identity = '在臺僑生';
+        break;
+      case 6:
+        identity = '僑先部結業生';
+        break;
+      default:
+        break;
+    }
+    $identity.html(identity);
+
     $ruleCodeOfOverseasStudentId.html(studentInfo.student_misc_data.rule_code_of_overseas_student_id);
     $schoolCountry.html(studentInfo.student_personal_data.school_country_data.country);
     $schoolName.html(studentInfo.student_personal_data.school_name);
