@@ -19,8 +19,8 @@ const app = (function () {
   const $schoolCountry = $('#graduate-school-country'); // 畢業學校國家
   const $schoolName = $('#graduate-school-name'); // 畢業學校
   const $confirmedStatus = $('#confirmed-status') // 確認上傳及報名資料
-  const $admissionPlacementApplyWayTitle = $('#admission-placement-apply-way-title'); // 聯合分發成績採計方式 title
-  const $admissionPlacementApplyWay = $('#admission-placement-apply-way'); // 聯合分發成績採計方式
+  const $applyWayTitle = $('#apply-way-title'); // 聯合分發成績採計方式 title
+  const $applyWay = $('#apply-way'); // 聯合分發成績採計方式
   const $diplomaDiv = $('#diploma-div'); // 學歷證明 div
   const $transcriptDiv = $('#transcript-div'); // 成績單 div
   const $verifiedStatus = $('#verified-status'); // 審核狀態
@@ -77,7 +77,7 @@ const app = (function () {
     $schoolCountry.html('');
     $schoolName.html('');
     $confirmedStatus.html('');
-    $admissionPlacementApplyWay.html('');
+    $applyWay.html('');
     $diplomaDiv.html('');
     $transcriptDiv.html('');
     $verificationDesc.html('');
@@ -126,14 +126,14 @@ const app = (function () {
     $schoolName.html(studentInfo.student_personal_data.school_name);
     $confirmedStatus.html(studentInfo.student_misc_data.confirmed_at !== null ? '已' : '未' + '確認上傳及報名資料');
 
-    // 學士班才有「聯合分發成績採計方式」
-    if (studentInfo.student_qualification_verify.system_id == 1) {
-      // 置放「聯合分發成績採計方式」
-      $admissionPlacementApplyWay.html(studentInfo.student_misc_data.admission_placement_apply_way_data.description);
+    // 學士班 & 二技班才有「成績採計方式」
+    if (studentInfo.student_qualification_verify.system_id == 1 || studentInfo.student_qualification_verify.system_id == 2) {
+      // 置放「成績採計方式」
+      $applyWay.html(studentInfo.student_misc_data.admission_placement_apply_way_data.description);
     } else {
-      // 把「聯合分發成績採計方式」藏起來
-      $admissionPlacementApplyWayTitle.hide();
-      $admissionPlacementApplyWay.hide();
+      // 把「成績採計方式」藏起來
+      $applyWayTitle.hide();
+      $applyWay.hide();
     }
 
     // 學歷證明文件
