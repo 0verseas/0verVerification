@@ -96,6 +96,15 @@ const API = (function () {
     })
   }
 
+  // 拿到該學生的成績採計方式
+  function getApplyWays (userId) {
+
+  }
+
+  function setApplyWay (userId, applyWay) {
+
+  }
+
   return {
     login,
     logout,
@@ -103,5 +112,7 @@ const API = (function () {
     getStudentData,
     getConfirmedStudentList,
     verifyStudent,
+    getApplyWays,
+    setApplyWay
   }
 })();
