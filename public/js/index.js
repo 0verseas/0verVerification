@@ -122,19 +122,16 @@ const app = (function () {
     $overseasStudentId.html(studentInfo.student_misc_data.overseas_student_id);
     $name.html(studentInfo.name);
     $engName.html(studentInfo.eng_name);
-
-    // 性別判斷
-    let gender = '未提供';
-    if (studentInfo.student_personal_data.gender == 'M') {
-      gender = '男';
-    } else if (studentInfo.student_personal_data.gender == 'F') {
-      gender = '女';
-    }
-    $gender.html(gender);
-
     $birthday.html(studentInfo.student_personal_data.birthday);
     $birthLocation.html(studentInfo.student_personal_data.birth_location_data.country);
     $residentLocation.html(studentInfo.student_personal_data.resident_location_data.country);
+
+    // 性別判斷
+    let genderString = '未提供';
+    if (studentInfo.student_personal_data.gender != null) {
+      genderString = studentInfo.student_personal_data.gender.toLowerCase() === 'm' ? '男' : '女';
+    }
+    $gender.html(genderString);
 
     //  判斷申請身份別
     let identity = '未提供';
