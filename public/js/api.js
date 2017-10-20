@@ -71,6 +71,19 @@ const API = (function () {
     return _requestHandle(request);
   }
 
+  // 審核學生
+  function verifyStudent(userId, verificationInfo) {
+    const data = {verified_memo: verificationInfo, verified_confirmation: true};
+
+    const request = fetch(`${baseUrl}/office/students/${userId}/verified`, {
+      method: 'POST',
+      body: data,
+      credentials: 'include'
+    });
+
+    return _requestHandle(request);
+  }
+
   // http request 的中介處理
   function _requestHandle(request) {
     return request.then(response => {
@@ -89,5 +102,6 @@ const API = (function () {
     isLogin,
     getStudentData,
     getConfirmedStudentList,
+    verifyStudent,
   }
 })();

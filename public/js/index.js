@@ -209,10 +209,22 @@ const app = (function () {
   }
 
   function verifyStudentInfo(verificationDesc) {
-    console.log($userId.val() + verificationDesc);
-    // 確認是否已經有僑生編號
-    // 有的話 alert 已經審查
-    // 沒有的話 送 審查備註、報名序號 then _renderStudentInfo
+    console.log($userId.html());
+    console.log(verificationDesc);
+    API.verifyStudent($userId.html(), verificationDesc).then(({data, statusCode}) => {
+      if (statusCode == 200) {
+        alert('審核成功');
+        searchUserId(data);
+      } else if (statusCode == 401) {
+        alert('請先登入');
+      } else if (statusCode == 403) {
+        alert(message);
+      } else {
+        console.log('GG');
+      }
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 
   // 開啟原圖
