@@ -168,6 +168,20 @@ const app = (function () {
     if (studentInfo.student_qualification_verify.system_id == 1) {
       // 置放「成績採計方式」
       $applyWay.html(studentInfo.student_misc_data.admission_placement_apply_way_data.description);
+
+      /*
+      API.getApplyWays($userId.html()).then(({data, statusCode}) => {
+        if (statusCode == 200) {
+          for (applyWay of data.apply_ways) {
+
+          }
+        } else {
+          console.log(message);
+        }
+      }).catch((error) => {
+        console.log(error);
+      });
+      */
     } else {
       // 把「成績採計方式」藏起來
       $applyWayTitle.hide();
@@ -237,7 +251,7 @@ const app = (function () {
   return {
     searchUserId,
     verifyStudentInfo,
-    loadOriginalImgModal,
+    loadOriginalImgModal
   }
 
 })();
