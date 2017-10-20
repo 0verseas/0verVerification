@@ -86,12 +86,26 @@ const API = (function () {
 
   // http request 的中介處理
   function _requestHandle(request) {
-    return request.then(response => {
-      return response.json().then(data => {
+    return request.then(fetchResponse => {
+      return fetchResponse.json().then(data => {
         return {
+          ok: fetchResponse.ok,
           data,
-          statusCode: response.status
+          statusCode: fetchResponse.status
         };
+      }).then(response => {
+        // 錯誤時的處理
+
+        // 沒錯閃邊去
+        if (response.ok) {
+          return response;
+        }
+
+        // 設定兩種錯誤類型（單行 string 跟原始 string array）
+        response.singleErrorMessage = response.data.messages.join(',');
+        response.errorMessages = response.data.messages;
+
+        return response;
       });
     })
   }
@@ -102,6 +116,7 @@ const API = (function () {
     isLogin,
     getStudentData,
     getConfirmedStudentList,
+    addStudentEducationFile,
     verifyStudent,
   }
 })();
