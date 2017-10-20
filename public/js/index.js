@@ -217,7 +217,7 @@ const app = (function () {
     _appendEducationFile('diploma', studentInfo.student_diploma);
 
     // 成績單
-    _appendEducationFile('transcripts ', studentInfo.student_transcripts);
+    _appendEducationFile('transcripts', studentInfo.student_transcripts);
 
     // 確認是否已審核
     if (studentInfo.student_misc_data.verified_at != null) {
@@ -271,7 +271,7 @@ const app = (function () {
     let data = new FormData();
 
     // 將檔案一一放到 formData 中
-    for (file of files) {
+    for (let file of files) {
       data.append('files[]', file);
     }
 
