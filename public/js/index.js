@@ -192,13 +192,13 @@ const app = (function () {
     }
 
     // 確認是否已審核
-    if (studentInfo.verified_at != null) {
+    if (studentInfo.student_misc_data.verified_at != null) {
       // 封印審核按鈕
       $submitBtn.prop('disabled', true);
       // 封印審核備註編輯
       $verificationDesc.prop('readonly', true);
       // 擺上審核備註
-      $verificationDesc.html(studentInfo.verification_desc);
+      $verificationDesc.html(studentInfo.student_misc_data.verification_desc);
       // 擺上審核狀態
       $verifiedStatus.html('已審核');
     } else {
