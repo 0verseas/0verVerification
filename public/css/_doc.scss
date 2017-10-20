@@ -4,6 +4,10 @@
     max-height: 200px;
     margin: 2px;
   }
+
+  &-highlight {
+    border-width: 5px;
+  }
 }
 
 @include media-breakpoint-up(sm) {}

@@ -74,9 +74,7 @@
               <span style="font-size: 1.5rem">學歷證明文件</span>
               <span class="text-muted">（點圖可放大或刪除）</span>
             </div>
-            <button class="btn btn-success ml-auto mr-3"><span class="oi oi-cloud-upload"></span> 重傳檔案</button>
-            <!--<input class="btn btn-success ml-auto mr-3" type="file" multiple value="重傳檔案">-->
-
+            <input class="btn btn-success ml-auto mr-3" type="file" multiple value="重傳檔案" onchange="app.uploadEducationFile('diploma', this.files)" onmousedown="event.preventDefault()">
           </div>
         </div>
         <div class="card-body" id="diploma-div">
@@ -87,7 +85,7 @@
         <div class="card-header">
           <div class="row">
             <div class="col-6"><span style="font-size: 1.5rem">成績單文件</span></div>
-            <button class="btn btn-success ml-auto mr-3"><span class="oi oi-cloud-upload"></span> 重傳檔案</button>
+            <input class="btn btn-success ml-auto mr-3" type="file" multiple value="重傳檔案" onchange="app.uploadEducationFile('transcripts', this.files)" onmousedown="event.preventDefault()">
           </div>
         </div>
         <div class="card-body" id="transcript-div">

@@ -37,6 +37,7 @@ const app = (function () {
    */
 
   const baseUrl = env.baseUrl;
+  let userId = '';
 
   _init();
 
@@ -46,6 +47,10 @@ const app = (function () {
 
   // init
   function _init() {
+    // 設定上傳按鈕
+    _renderUploadFileBtn();
+
+    // 驗證登入狀態
     API.isLogin().then(({data, statusCode}) => {
       if (statusCode == 200) {
         // 確認有登入，init 頁面
@@ -60,6 +65,23 @@ const app = (function () {
     }).catch((error) => {
       console.log(error);
     });
+  }
+
+  // 設定「上傳檔案」按鈕
+  function _renderUploadFileBtn() {
+    // 使用 bootstrap-filestyle（https://github.com/markusslima/bootstrap-filestyle/）處理上傳按鈕
+
+    // 所有 type="file" 的通通 filestyle 成要求的樣子
+    $(":file").filestyle({
+      input: false, // 只留按鈕，不要 input 欄位
+      htmlIcon: '<span class="oi oi-cloud-upload"></span>',
+      text: ' 重傳檔案',
+      btnClass: 'btn-success',
+    });
+
+    // 調整按鈕排版
+    $('.bootstrap-filestyle').addClass('col ml-auto');
+    $('.group-span-filestyle').addClass('ml-auto');
   }
 
   // init student info 把所有欄位清空
@@ -84,24 +106,27 @@ const app = (function () {
   }
 
   // 用報名序號搜尋學生資料
-  function searchUserId(userId = '') {
+  function searchUserId(inputUserId = '') {
     // 清空學生資料的顯示畫面並隱藏
     $studentInfoDiv.prop('hidden', true);
     _resetStudentInfo();
 
     // 判斷輸入是否為空
-    if (userId.trim() == '') {
+    if (inputUserId.trim() == '') {
       return alert('請填入正確的報名序號');
     }
 
     // 取得學生資料
-    API.getStudentData(userId).then((response) => {
+    API.getStudentData(inputUserId).then((response) => {
       // 重置輸入框
       $userIdForm.prop('value', '');
 
       if (response.statusCode == 200) {
+        const userData = response.data;
+        // 儲存使用者
+        userId = userData.id;
         // render 學生資料
-        _renderStudentInfo(response.data);
+        _renderStudentInfo(userData);
 
         // 顯示資料
         $studentInfoDiv.prop('hidden', false);
@@ -189,18 +214,10 @@ const app = (function () {
     }
 
     // 學歷證明文件
-    for (let filename of studentInfo.student_diploma) {
-      $diplomaDiv.append(`
-        <img src="${baseUrl}/office/students/${studentInfo.id}/diploma/${filename}" alt="學歷證明文件" data-filetype="學歷證明文件" class="img-thumbnail doc-thumbnail" onclick="app.loadOriginalImgModal(this.src, this.dataset.filetype)">
-      `)
-    }
+    _appendEducationFile('diploma', studentInfo.student_diploma);
 
     // 成績單
-    for (let filename of studentInfo.student_transcripts) {
-      $transcriptDiv.append(`
-        <img src="${baseUrl}/office/students/${studentInfo.id}/transcripts/${filename}" alt="成績單文件" data-filetype="成績單文件" class="img-thumbnail doc-thumbnail" onclick="app.loadOriginalImgModal(this.src, this.dataset.filetype)">
-      `)
-    }
+    _appendEducationFile('transcripts ', studentInfo.student_transcripts);
 
     // 確認是否已審核
     if (studentInfo.student_misc_data.verified_at != null) {
@@ -217,6 +234,58 @@ const app = (function () {
       $verifiedStatus.html('未審核');
     }
 
+  }
+
+  // 將圖片依照 type append 到 DOM 上
+  function _appendEducationFile(type = '', filenames = [], highlight = false) {
+    for (let filename of filenames) {
+      if (type === 'diploma') {
+        $diplomaDiv.prepend(`
+          <img
+            src="${baseUrl}/office/students/${userId}/diploma/${filename}"
+            alt="學歷證明文件" data-filetype="學歷證明文件"
+            class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
+            onclick="app.loadOriginalImgModal(this.src, this.dataset.filetype)"
+          >
+        `)
+      }
+
+      if (type === 'transcripts') {
+        $transcriptDiv.prepend(`
+          <img
+            src="${baseUrl}/office/students/${userId}/transcripts/${filename}"
+            alt="成績單文件" data-filetype="成績單文件"
+            class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
+            onclick="app.loadOriginalImgModal(this.src, this.dataset.filetype)"
+          >
+        `)
+      }
+    }
+  }
+
+  // 上傳成績單或學歷證明文件
+  function uploadEducationFile(type = '', files = []) {
+    loading.start();
+
+    // 使用 formData
+    let data = new FormData();
+
+    // 將檔案一一放到 formData 中
+    for (file of files) {
+      data.append('files[]', file);
+    }
+
+    // 上傳囉
+    API.uploadStudentEducationFile(userId, type, data).then((response) => {
+      // 成功就把剛上傳的檔案們秀出來，不然就彈 alert
+      if (response.ok) {
+        _appendEducationFile(type, response.data, true);
+      } else {
+        alert(response.singleErrorMessage);
+      }
+
+      loading.complete();
+    })
   }
 
   function verifyStudentInfo(verificationDesc) {
@@ -250,6 +319,7 @@ const app = (function () {
 
   return {
     searchUserId,
+    uploadEducationFile,
     verifyStudentInfo,
     loadOriginalImgModal
   }

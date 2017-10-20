@@ -51,14 +51,21 @@ const API = (function () {
   }
 
   // 上傳
-  function addStudentEducationFile(userId = '', type = '', data) {
+  function uploadStudentEducationFile(userId = '', type = '', data) {
     const request = fetch(`${baseUrl}/office/students/${userId}/${type}`, {
       method: 'POST',
       body: data,
       credentials: 'include'
     });
 
-    return _requestHandle(request);
+    // 不管哪種 type，都直接存到 data 中
+    return _requestHandle(request).then(response => {
+      if (response.data[`student_${type}`]) {
+        response.data = response.data[`student_${type}`];
+      }
+
+      return response;
+    });
   }
 
   // 取得已審核學生清單
@@ -125,7 +132,7 @@ const API = (function () {
     isLogin,
     getStudentData,
     getConfirmedStudentList,
-    addStudentEducationFile,
+    uploadStudentEducationFile,
     verifyStudent,
     getApplyWays,
     setApplyWay
