@@ -99,11 +99,17 @@ const app = (function () {
       // 重置輸入框
       $userIdForm.prop('value', '');
 
-      // render 學生資料
-      _renderStudentInfo(response.data);
+      if (response.statusCode == 200) {
+        // render 學生資料
+        _renderStudentInfo(response.data);
 
-      // 顯示資料
-      $studentInfoDiv.prop('hidden', false);
+        // 顯示資料
+        $studentInfoDiv.prop('hidden', false);
+      } else if (response.statusCode == 404) {
+        alert('無此報名序號');
+      }
+    }).catch((error) => {
+      console.log(error);
     });
 
     // 沒有的話 alert 無此報名序號 _resetStudentInfo
