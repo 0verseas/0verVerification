@@ -81,10 +81,13 @@ const API = (function () {
   // 審核學生
   function verifyStudent(userId, verificationInfo) {
     const data = {verified_memo: verificationInfo, verified_confirmation: true};
-
+    console.log(data);
     const request = fetch(`${baseUrl}/office/students/${userId}/verified`, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
       method: 'POST',
-      body: data,
+      body: JSON.stringify(data),
       credentials: 'include'
     });
 
