@@ -218,7 +218,7 @@ const app = (function () {
 
     // 成績單
     _appendEducationFile('transcripts', studentInfo.student_transcripts);
-
+    console.log(studentInfo.student_misc_data);
     // 確認是否已審核
     if (studentInfo.student_misc_data.verified_at != null) {
       // 封印審核按鈕
@@ -294,12 +294,15 @@ const app = (function () {
     API.verifyStudent($userId.html(), verificationDesc).then(({data, statusCode}) => {
       if (statusCode == 200) {
         alert('審核成功');
-        searchUserId(data);
+        console.log(data);
+        _renderStudentInfo(data);
       } else if (statusCode == 401) {
         alert('請先登入');
       } else if (statusCode == 403) {
-        alert(message);
+        console.log(data);
+        alert(data.messages[0]);
       } else {
+        console.log(data);
         console.log('GG');
       }
     }).catch((error) => {
