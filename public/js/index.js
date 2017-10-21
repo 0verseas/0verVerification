@@ -51,16 +51,17 @@ const app = (function () {
     _renderUploadFileBtn();
 
     // 驗證登入狀態
-    API.isLogin().then(({data, statusCode}) => {
-      if (statusCode == 200) {
+    API.isLogin().then(response => {
+      if (response.ok) {
         // 確認有登入，init 頁面
         _resetStudentInfo();
-      } else if (statusCode == 401) {
+      } else if (response.statusCode == 401) {
         alert('請先登入');
         // 若沒有登入，跳轉登入頁面
         window.location.href = './login.html';
       } else {
-        console.log('GG');
+        // 彈出錯誤訊息
+        alert(response.singleErrorMessage);
       }
     }).catch((error) => {
       console.log(error);
@@ -289,21 +290,20 @@ const app = (function () {
   }
 
   function verifyStudentInfo(verificationDesc) {
-    console.log($userId.html());
-    console.log(verificationDesc);
-    API.verifyStudent($userId.html(), verificationDesc).then(({data, statusCode}) => {
-      if (statusCode == 200) {
+
+    API.verifyStudent($userId.html(), verificationDesc).then(response => {
+      if (response.ok) {
         alert('審核成功');
-        console.log(data);
-        _renderStudentInfo(data);
-      } else if (statusCode == 401) {
+
+        // 重新 render 學生資料
+        _renderStudentInfo(response.data);
+      } else if (response.statusCode == 401) {
         alert('請先登入');
-      } else if (statusCode == 403) {
-        console.log(data);
-        alert(data.messages[0]);
+        // 若沒有登入，跳轉登入頁面
+        window.location.href = './login.html';
       } else {
-        console.log(data);
-        console.log('GG');
+        // 彈出錯誤訊息
+        alert(response.singleErrorMessage);
       }
     }).catch((error) => {
       console.log(error);
