@@ -104,6 +104,10 @@ const app = (function () {
     $diplomaDiv.html('');
     $transcriptDiv.html('');
     $verificationDesc.html('');
+    // 重置審核按鈕
+    $submitBtn.prop('disabled', false);
+    // 重設審核備註編輯
+    $verificationDesc.prop('readonly', false);
   }
 
   // 用報名序號搜尋學生資料
@@ -214,12 +218,14 @@ const app = (function () {
       $applyWay.hide();
     }
 
-    // 學歷證明文件
+    // 重置並擺上學歷證明文件
+    $diplomaDiv.html('');
     _appendEducationFile('diploma', studentInfo.student_diploma);
 
-    // 成績單
+    // 重置並擺上成績單
+    $transcriptDiv.html('');
     _appendEducationFile('transcripts', studentInfo.student_transcripts);
-    console.log(studentInfo.student_misc_data);
+
     // 確認是否已審核
     if (studentInfo.student_misc_data.verified_at != null) {
       // 封印審核按鈕
