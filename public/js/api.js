@@ -68,6 +68,16 @@ const API = (function () {
     });
   }
 
+  // 刪除學生文件
+  function deleteStudentEducationFile(userId = '', type = '', fileName = '') {
+    const request = fetch(`${baseUrl}/office/students/${userId}/${type}/${fileName}`, {
+      method: 'DELETE',
+      credentials: 'include'
+    });
+
+    return _requestHandle(request);
+  }
+
   // 取得已審核學生清單
   function getConfirmedStudentList() {
     const request = fetch(`${baseUrl}/students?status=confirmed`, {
@@ -134,6 +144,7 @@ const API = (function () {
     logout,
     isLogin,
     getStudentData,
+    deleteStudentEducationFile,
     getConfirmedStudentList,
     uploadStudentEducationFile,
     verifyStudent,

@@ -292,9 +292,10 @@ const app = (function () {
         $diplomaDiv.prepend(`
           <img
             src="${baseUrl}/office/students/${userId}/diploma/${filename}"
-            alt="學歷證明文件" data-filetype="學歷證明文件"
+            alt="學歷證明文件"
+            data-filename="${filename}" data-filetype="diploma"
             class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
-            onclick="app.loadOriginalImgModal(this.src, this.dataset.filetype)"
+            onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
           >
         `)
       }
@@ -303,9 +304,10 @@ const app = (function () {
         $transcriptDiv.prepend(`
           <img
             src="${baseUrl}/office/students/${userId}/transcripts/${filename}"
-            alt="成績單文件" data-filetype="成績單文件"
+            alt="成績單文件"
+            data-filename="${filename}" data-filetype="transcripts"
             class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
-            onclick="app.loadOriginalImgModal(this.src, this.dataset.filetype)"
+            onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
           >
         `)
       }
@@ -333,8 +335,47 @@ const app = (function () {
         alert(response.singleErrorMessage);
       }
 
+      // 清除上傳檔案的快取
+      $(":file").filestyle('clear');
+
       loading.complete();
     })
+  }
+
+  // 刪除某成績單或學歷證明文件
+  function deleteEducationFile(filename = '', filetype = '') {
+    // 彈出確認框
+    const isConfirmedDelete = confirm('確定要刪除嗎？');
+
+    // 其實不想刪，那算了
+    if (!isConfirmedDelete) {
+      return;
+    }
+
+    // 關閉原圖 modal
+    $originalImgModal.modal('hide');
+
+    loading.start();
+
+    // 沒不想刪就刪吧
+    API.deleteStudentEducationFile(userId, filetype, filename).then(response => {
+      if (response.ok) {
+        // 確認刪除，移除該圖
+        $(`.doc-thumbnail[data-filename="${filename}"]`).remove();
+      } else if (response.statusCode == 401) {
+        alert('請先登入');
+        // 若沒有登入，跳轉登入頁面
+        window.location.href = './login.html';
+      } else {
+        $originalImgModal.modal();
+        // 彈出錯誤訊息
+        alert(response.singleErrorMessage);
+      }
+
+      loading.complete();
+    }).catch(error => {
+      console.log(error);
+    });
   }
 
   function verifyStudentInfo(verificationDesc) {
@@ -359,10 +400,12 @@ const app = (function () {
   }
 
   // 開啟原圖
-  function loadOriginalImgModal(src, filetype) {
-    // 設定圖片網址
-    $originalImg.prop('src', src);
-    $originalImgTitle.html(filetype);
+  function loadOriginalImgModal(src = '', alt = '', filename = '', filetype = '') {
+    // 設定圖片
+    $originalImg.attr('data-filename', filename);
+    $originalImg.attr('data-filetype', filetype);
+    $originalImg.prop({src, alt});
+    $originalImgTitle.html(alt);
     // 顯示 modal
     $originalImgModal.modal();
   }
@@ -371,7 +414,8 @@ const app = (function () {
     searchUserId,
     uploadEducationFile,
     verifyStudentInfo,
-    loadOriginalImgModal
+    loadOriginalImgModal,
+    deleteEducationFile,
   }
 
 })();
