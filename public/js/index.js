@@ -31,6 +31,7 @@ const app = (function () {
   const $originalImgModal = $('#original-img-modal');
   const $originalImg = $('#original-img');
   const $originalImgTitle = $('#original-img-title');
+  const $originalDeleteBtn = $('#original-delete-btn');
 
   /**
    * init
@@ -104,10 +105,14 @@ const app = (function () {
     $diplomaDiv.html('');
     $transcriptDiv.html('');
     $verificationDesc.html('');
+    // 重置上傳文件按鈕
+    $(":file").filestyle('disabled', false);
     // 重置審核按鈕
     $submitBtn.prop('disabled', false);
     // 重設審核備註編輯
     $verificationDesc.prop('readonly', false);
+    // 重設原圖刪除按鈕
+    $originalDeleteBtn.prop('disabled', false);
   }
 
   // 用報名序號搜尋學生資料
@@ -192,7 +197,6 @@ const app = (function () {
     $ruleCodeOfOverseasStudentId.html(studentInfo.student_misc_data.rule_code_of_overseas_student_id);
     $schoolCountry.html(studentInfo.student_personal_data.school_country_data.country);
     $schoolName.html(studentInfo.student_personal_data.school_name);
-    $confirmedStatus.html((studentInfo.student_misc_data.confirmed_at !== null ? '已' : '未') + '確認上傳及報名資料');
 
     // 學士班 才有「成績採計方式」
     if (studentInfo.student_qualification_verify.system_id == 1) {
@@ -225,6 +229,44 @@ const app = (function () {
     // 重置並擺上成績單
     $transcriptDiv.html('');
     _appendEducationFile('transcripts', studentInfo.student_transcripts);
+
+    // 擺上審核、確認報名狀態
+    $confirmedStatus.html((studentInfo.student_misc_data.confirmed_at !== null ? '已' : '尚未') + '確認上傳及報名資料');
+    $verifiedStatus.html((studentInfo.student_misc_data.verified_at !== null ? '已' : '尚未') + '審核');
+
+    // 審核、報名狀態對應狀況
+    if (studentInfo.student_misc_data.confirmed_at !== null) {
+      // 學生已確認報名
+
+      // 同時學生已被審核
+      if (studentInfo.student_misc_data.verified_at !== null) {
+        // TODO 不能選文憑別、身份別
+
+        // 不能重傳文件
+        $(":file").filestyle('disabled', true);
+        // 不能刪原圖
+        $originalDeleteBtn.prop('disabled', true);
+        // 不能審核
+        $submitBtn.prop('disabled', true);
+        // 不能編輯審核備註
+        $verificationDesc.prop('readonly', true);
+        // 擺上審核備註
+        $verificationDesc.html(studentInfo.student_misc_data.verification_desc);
+      }
+    } else {
+      // 學生尚未確認報名
+
+      // TODO 不能選文憑別、身份別
+
+      // 不能重傳文件
+      $(":file").filestyle('disabled', true);
+      // 不能刪原圖
+      $originalDeleteBtn.prop('disabled', true);
+      // 不能審核
+      $submitBtn.prop('disabled', true);
+      // 不能編輯審核備註
+      $verificationDesc.prop('readonly', true);
+    }
 
     // 確認是否已審核
     if (studentInfo.student_misc_data.verified_at != null) {
@@ -318,7 +360,6 @@ const app = (function () {
 
   // 開啟原圖
   function loadOriginalImgModal(src, filetype) {
-    console.log(filetype);
     // 設定圖片網址
     $originalImg.prop('src', src);
     $originalImgTitle.html(filetype);
