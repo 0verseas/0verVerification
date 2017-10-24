@@ -25,18 +25,21 @@ const app = (function () {
 
   function login(username, password) {
     $loginAlert.prop('hidden', true);
-    API.login(username, password).then(({data, statusCode}) => {
-      if (statusCode == 200) {
+    API.login(username, password).then(response => {
+      if (response.statusCode == 200) {
         // 登入成功，跳轉至首頁
         window.location.href = './index.html';
-      } else if (statusCode == 401) {
+        console.log(response);
+        alert('登入成功！');
+      } else if (response.statusCode == 401) {
         // 驗證失敗，清除密碼並顯示提示
         $password.prop('value', '');
         $username.addClass('is-invalid');
         $password.addClass('is-invalid');
         $loginAlert.prop('hidden', false);
       } else {
-        console.log('GG');
+        // 彈出錯誤訊息
+        alert(response.singleErrorMessage);
       }
     }).catch((error) => {
       console.log(error);
