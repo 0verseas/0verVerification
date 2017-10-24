@@ -1,0 +1,15 @@
+#scanner {
+  // 讓掃瞄器符合寬度
+  &-body {
+    > canvas, > video {
+      max-width: 100%;
+      width: 100%;
+      height: auto;
+    }
+  }
+}
+
+@include media-breakpoint-up(sm) {}
+@include media-breakpoint-up(md) {}
+@include media-breakpoint-up(lg) {}
+@include media-breakpoint-up(xl) {}

@@ -5,6 +5,7 @@ const app = (function () {
    */
 
   const $studentInfoDiv = $('#student-info-div');
+  const $searchInput = $('#search-input');
   const $userIdForm = $('#userIdForm'); // 填入報名序號
   const $userId = $('#id'); // 報名序號
   const $overseasStudentId = $('#overseas-student-id'); // 僑生編號
@@ -33,6 +34,12 @@ const app = (function () {
   const $originalImgTitle = $('#original-img-title');
   const $originalDeleteBtn = $('#original-delete-btn');
 
+  // Scanner
+  const $scannerBtnGroup = $('#scanner-btn-group');
+  const $scannerBtn = $('#scanner-btn');
+  const $scannerBody = $('#scanner-body');
+  const $scannerModal = $('#scanner-modal');
+
   /**
    * init
    */
@@ -43,6 +50,27 @@ const app = (function () {
   _init();
 
   /**
+   * Event Listener
+   */
+
+  // 掃瞄器被關掉就停止掃描器
+  $scannerModal.on('hidden.bs.modal', e => {
+    Quagga.stop();
+  });
+
+  // 掃瞄器偵測到 code 時
+  Quagga.onDetected(result => {
+    // 拿到 code
+    const code = result.codeResult.code;
+
+    // 隱藏 Scanner
+    $scannerModal.modal('hide');
+
+    // 搜尋學生資料
+    searchUserId(code);
+  });
+
+  /**
    * functions
    */
 
@@ -51,12 +79,23 @@ const app = (function () {
     // 設定上傳按鈕
     _renderUploadFileBtn();
 
+    // 驗證能否使用 scanner
+    if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+      console.log('safely access navigator.mediaDevices.getUserMedia');
+    } else {
+      // 不給掃描就幹掉掃描器
+      console.log('can not use scanner');
+      $scannerBtnGroup.remove();
+      $scannerModal.remove();
+    }
+
     // 驗證登入狀態
     API.isLogin().then(response => {
       if (response.ok) {
         // 確認有登入，init 頁面
         _resetStudentInfo();
       } else if (response.statusCode == 401) {
+        console.log(response);
         alert('請先登入');
         // 若沒有登入，跳轉登入頁面
         window.location.href = './login.html';
@@ -66,6 +105,38 @@ const app = (function () {
       }
     }).catch((error) => {
       console.log(error);
+    });
+  }
+
+  // 開啟 scanner modal
+  function openScanner() {
+    // init scanner
+    Quagga.init({
+      inputStream : {
+        name : "Scanner",
+        type : "LiveStream",
+        target: document.querySelector('#scanner-body'),
+      },
+      decoder: {
+        readers : ["i2of5_reader"]
+      },
+      debug: false
+    }, error => {
+      if (error) {
+        // 錯到彈出來
+        console.log(error);
+        alert(error);
+
+        // 不能掃描就幹掉掃瞄器
+        $scannerBtnGroup.remove();
+        $scannerModal.remove();
+
+        return;
+      }
+      // 可以掃描就開啟 modal 開始掃描
+      console.log("Initialization finished. Ready to start");
+      $scannerModal.modal();
+      Quagga.start();
     });
   }
 
@@ -367,7 +438,7 @@ const app = (function () {
         // 若沒有登入，跳轉登入頁面
         window.location.href = './login.html';
       } else {
-        $originalImgModal.modal();
+        $originalImgModal.modal('hide');
         // 彈出錯誤訊息
         alert(response.singleErrorMessage);
       }
@@ -411,6 +482,7 @@ const app = (function () {
   }
 
   return {
+    openScanner,
     searchUserId,
     uploadEducationFile,
     verifyStudentInfo,

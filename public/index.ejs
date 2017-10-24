@@ -3,15 +3,17 @@
 <div class="container" style="max-width: 57rem;">
   <div class="my-3">
     <div>
-      <form onsubmit="event.preventDefault(); app.searchUserId(this.elements.namedItem('userId').value);">
-        <div class="form-group row">
-          <label class="col-2 col-form-label">報名序號</label>
-          <div class="col-8">
-            <input type="text" class="form-control" name="userId" placeholder="請輸入報名序號" id="userIdForm">
-          </div>
-          <div class="col-2">
-            <button type="submit" class="btn-success form-control" onmousedown="event.preventDefault()"><span class="oi oi-magnifying-glass"></span> 查詢</button>
-          </div>
+      <form class="form-group" onsubmit="event.preventDefault(); app.searchUserId(this.elements.namedItem('userId').value);">
+        <div class="input-group col-12 col-md-7 col-lg-5 mx-auto">
+          <span class="input-group-btn" id="scanner-btn-group">
+            <button class="btn btn-secondary" type="button" id="scanner-btn" onclick="app.openScanner()" onmousedown="event.preventDefault()"><i class="fa fa-barcode" aria-hidden="true"></i></button>
+          </span>
+          <input type="tel" name="keyword" class="form-control" id="userId" placeholder="請輸入報名序號" required>
+          <span class="input-group-btn">
+            <button class="btn btn-success" type="submit" onmousedown="event.preventDefault()">
+              <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+          </span>
         </div>
       </form>
     </div>
@@ -127,6 +129,22 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" id="original-delete-btn" onclick="app.deleteEducationFile(document.getElementById('original-img').dataset.filename, document.getElementById('original-img').dataset.filetype, )" onmousedown="event.preventDefault()"><i class="fa fa-trash-o" aria-hidden="true"></i> 刪除</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal" onmousedown="event.preventDefault()"><i class="fa fa-sign-out" aria-hidden="true"></i> 離開</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scanner Modal -->
+<div class="modal fade" tabindex="-1" id="scanner-modal" role="dialog" aria-labelledby="scannerModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="scanner-title">條碼掃瞄器</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center" id="scanner-body">
       </div>
     </div>
   </div>
