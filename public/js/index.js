@@ -7,6 +7,7 @@ const app = (function () {
   const $studentInfoDiv = $('#student-info-div');
   const $searchInput = $('#search-input');
   const $userId = $('#user-id'); // 報名序號
+  const $userIdInput = $('#user-id-input'); // 報名序號
   const $overseasStudentId = $('#overseas-student-id'); // 僑生編號
   const $name = $('#name'); // 姓名
   const $engName = $('#eng-name'); // 英文姓名
@@ -199,7 +200,7 @@ const app = (function () {
     // 取得學生資料
     API.getStudentData(inputUserId).then((response) => {
       // 重置輸入框
-      $userId.prop('value', '');
+      $userIdInput.prop('value', '');
 
       if (response.statusCode == 200) {
         const userData = response.data;
