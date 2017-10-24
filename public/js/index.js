@@ -76,7 +76,7 @@ const app = (function () {
     // 所有 type="file" 的通通 filestyle 成要求的樣子
     $(":file").filestyle({
       input: false, // 只留按鈕，不要 input 欄位
-      htmlIcon: '<span class="oi oi-cloud-upload"></span>',
+      htmlIcon: '<i class="fa fa-upload" aria-hidden="true"></i>',
       text: ' 重傳檔案',
       btnClass: 'btn-success',
     });
