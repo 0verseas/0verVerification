@@ -8,9 +8,27 @@
   &-highlight {
     border-width: 5px;
   }
+
+  &-title {
+    font-size: 1.2rem;
+  }
+
+  &-hint {
+
+  }
 }
 
 @include media-breakpoint-up(sm) {}
-@include media-breakpoint-up(md) {}
+@include media-breakpoint-up(md) {
+  .doc {
+    &-title {
+      font-size: 1.5rem;
+    }
+
+    &-hint {
+      font-size: 0.8rem;
+    }
+  }
+}
 @include media-breakpoint-up(lg) {}
 @include media-breakpoint-up(xl) {}
