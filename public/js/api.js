@@ -89,8 +89,8 @@ const API = (function () {
   }
 
   // 審核學生
-  function verifyStudent(userId, verificationInfo) {
-    const data = {verified_memo: verificationInfo, verified_confirmation: true};
+  function verifyStudent(userId, verificationInfo, applyWaySelect) {
+    const data = {verified_memo: verificationInfo, verified_confirmation: true, apply_way_confirmation: applyWaySelect};
     console.log(data);
     const request = fetch(`${baseUrl}/office/students/${userId}/verified`, {
       headers: {
