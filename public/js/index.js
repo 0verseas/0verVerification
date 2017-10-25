@@ -229,21 +229,46 @@ const app = (function () {
 
   // render 學生資料 含 成績單、學歷證明
   function _renderStudentInfo(studentInfo) {
+    let hasPersonalData = false;
+    const noData = '未填寫';
+    if (studentInfo.student_personal_data != null) {
+      hasPersonalData = true;
+    }
     // 學生資料
     $userId.html(studentInfo.id.toString().padStart(6, '0'));
-    $overseasStudentId.html(studentInfo.student_misc_data.overseas_student_id);
-    $name.html(studentInfo.name);
-    $engName.html(studentInfo.eng_name);
-    $birthday.html(studentInfo.student_personal_data.birthday);
-    $birthLocation.html(studentInfo.student_personal_data.birth_location_data.country);
-    $residentLocation.html(studentInfo.student_personal_data.resident_location_data.country);
 
-    // 性別判斷
-    let genderString = '未提供';
-    if (studentInfo.student_personal_data.gender != null) {
-      genderString = studentInfo.student_personal_data.gender.toLowerCase() === 'm' ? '男' : '女';
+    // 若尚未審核，僑生編號為'未產生'
+    let overseasStudentId = '未產生';
+    if (studentInfo.student_misc_data.overseas_student_id != null) {
+      overseasStudentId = studentInfo.student_misc_data.overseas_student_id;
     }
-    $gender.html(genderString);
+    $overseasStudentId.html(overseasStudentId);
+
+    if (hasPersonalData) {
+      $name.html(studentInfo.name);
+      $engName.html(studentInfo.eng_name);
+      $birthday.html(studentInfo.student_personal_data.birthday);
+      $birthLocation.html(studentInfo.student_personal_data.birth_location_data.country);
+      $residentLocation.html(studentInfo.student_personal_data.resident_location_data.country);
+
+      // 性別判斷
+      let genderString = '未提供';
+      if (studentInfo.student_personal_data.gender != null) {
+        genderString = studentInfo.student_personal_data.gender.toLowerCase() === 'm' ? '男' : '女';
+      }
+      $gender.html(genderString);
+      $schoolCountry.html(studentInfo.student_personal_data.school_country_data.country);
+      $schoolName.html(studentInfo.student_personal_data.school_name);
+    } else {
+      $name.html(noData);
+      $engName.html(noData);
+      $birthday.html(noData);
+      $birthLocation.html(noData);
+      $residentLocation.html(noData);
+      $gender.html(noData);
+      $schoolCountry.html(noData);
+      $schoolName.html(noData);
+    }
 
     //  判斷申請身份別
     let identity = '未提供';
