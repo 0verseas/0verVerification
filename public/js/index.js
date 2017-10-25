@@ -172,6 +172,8 @@ const app = (function () {
     $schoolCountry.html('');
     $schoolName.html('');
     $confirmedStatus.html('');
+    $applyWayTitle.show();
+    $applyWay.show();
     $applyWay.html('');
     $diplomaDiv.html('');
     $transcriptDiv.html('');
@@ -273,24 +275,32 @@ const app = (function () {
     $schoolCountry.html(studentInfo.student_personal_data.school_country_data.country);
     $schoolName.html(studentInfo.student_personal_data.school_name);
 
-    // 學士班 才有「成績採計方式」
-    if (studentInfo.student_qualification_verify.system_id == 1) {
-      // 置放「成績採計方式」
-      $applyWay.html(studentInfo.student_misc_data.admission_placement_apply_way_data.description);
 
-      /*
-      API.getApplyWays($userId.html()).then(({data, statusCode}) => {
-        if (statusCode == 200) {
-          for (applyWay of data.apply_ways) {
 
+        // 置放「成績採計方式」
+        let applyWayHtml = '';
+
+        API.getApplyWays($userId.html()).then(({data, statusCode}) => {
+          if (statusCode == 200) {
+            console.log(data);
+            applyWayHtml += '<select class="custom-select" id="applyWaySelect">';
+            for (let applyWay of data) {
+              if (applyWay.id === studentInfo.student_misc_data.admission_placement_apply_way_data.id) {
+                applyWayHtml += '<option selected>';
+              } else {
+                applyWayHtml += '<option>';
+              }
+              applyWayHtml += applyWay.description + '</option>';
+            }
+            applyWayHtml += '</select>';
+            $applyWay.html(applyWayHtml);
+          } else {
+            console.log(data.message);
           }
-        } else {
-          console.log(message);
-        }
-      }).catch((error) => {
-        console.log(error);
-      });
-      */
+        }).catch((error) => {
+          console.log(error);
+        });
+      }
     } else {
       // 把「成績採計方式」藏起來
       $applyWayTitle.hide();
