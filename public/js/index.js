@@ -296,9 +296,11 @@ const app = (function () {
     }
     $identity.html(identity);
 
-    $ruleCodeOfOverseasStudentId.html(studentInfo.student_misc_data.rule_code_of_overseas_student_id);
-    $schoolCountry.html(studentInfo.student_personal_data.school_country_data.country);
-    $schoolName.html(studentInfo.student_personal_data.school_name);
+    let ruleOfOverseasStudentId = '未產生';
+    if (studentInfo.student_misc_data.overseas_student_id != null) {
+      ruleOfOverseasStudentId = studentInfo.student_misc_data.overseas_student_id;
+    }
+    $ruleCodeOfOverseasStudentId.html(ruleOfOverseasStudentId);
 
 
 
