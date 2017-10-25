@@ -496,8 +496,11 @@ const app = (function () {
   }
 
   function verifyStudentInfo(verificationDesc) {
-
-    API.verifyStudent($userId.html(), verificationDesc).then(response => {
+    let applyWaySelect = $('#applyWaySelect').val();
+    if (applyWaySelect == undefined) {
+      applyWaySelect = null;
+    }
+    API.verifyStudent($userId.html(), verificationDesc, applyWaySelect).then(response => {
       if (response.ok) {
         alert('審核成功');
 
