@@ -277,6 +277,11 @@ const app = (function () {
 
 
 
+    // 學士班 才有「成績採計方式」
+    if (studentInfo.student_qualification_verify.system_id == 1 ) {
+      if (studentInfo.student_misc_data.admission_placement_apply_way_data == null) {
+        $applyWay.html('不參加聯合分發');
+      } else {
         // 置放「成績採計方式」
         let applyWayHtml = '';
 
