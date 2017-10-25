@@ -104,6 +104,19 @@ const API = (function () {
     return _requestHandle(request);
   }
 
+    // 拿到該學生的成績採計方式
+    function getApplyWays (userId) {
+      const request = fetch(`${baseUrl}/office/students/${userId}/admission-placement-apply-way`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'GET',
+        credentials: 'include'
+      });
+
+      return _requestHandle(request);
+    }
+
   // http request 的中介處理
   function _requestHandle(request) {
     return request.then(fetchResponse => {
