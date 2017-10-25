@@ -211,6 +211,10 @@ const app = (function () {
 
         // 顯示資料
         $studentInfoDiv.prop('hidden', false);
+      } else if (response.statusCode == 401) {
+        alert('請先登入');
+        // 若沒有登入，跳轉登入頁面
+        window.location.href = './login.html';
       } else if (response.statusCode == 404) {
         alert('無此報名序號');
       }
