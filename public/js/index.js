@@ -319,7 +319,7 @@ const app = (function () {
             // 準備下拉選單（預設選項為學生選的）
             applyWayHtml += '<select class="custom-select" id="apply-way-select">';
             for (let {id, description} of response.data) {
-              applyWayHtml += `<option value="${id}" ${id === selectedId ? 'selected' : ''}>${description}</option>`;
+              applyWayHtml += `<option value="${id}" ${id === selectedId ? 'selected' : ''}>${id === selectedId ? '[學生選擇]' : ''} ${description}</option>`;
             }
             applyWayHtml += '</select>';
 
