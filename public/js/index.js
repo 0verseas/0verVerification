@@ -296,13 +296,12 @@ const app = (function () {
     }
     $identity.html(identity);
 
+    // 置放身份別代碼（有才放）
     let ruleOfOverseasStudentId = '未產生';
     if (studentInfo.student_misc_data.overseas_student_id != null) {
       ruleOfOverseasStudentId = studentInfo.student_misc_data.overseas_student_id;
     }
     $ruleCodeOfOverseasStudentId.html(ruleOfOverseasStudentId);
-
-
 
     // 學士班 才有「成績採計方式」
     if (studentInfo.student_qualification_verify.system_id == 1 ) {
@@ -312,22 +311,28 @@ const app = (function () {
         // 置放「成績採計方式」
         let applyWayHtml = '';
 
-        API.getApplyWays($userId.html()).then(({data, statusCode}) => {
-          if (statusCode == 200) {
-            console.log(data);
-            applyWayHtml += '<select class="custom-select" id="applyWaySelect">';
-            for (let applyWay of data) {
-              if (applyWay.id === studentInfo.student_misc_data.admission_placement_apply_way_data.id) {
-                applyWayHtml += '<option selected>';
-              } else {
-                applyWayHtml += '<option>';
-              }
-              applyWayHtml += applyWay.description + '</option>';
+        API.getApplyWays(userId).then(response => {
+          if (response.ok) {
+            // 暫存學生選的成績採計方式
+            const selectedId= studentInfo.student_misc_data.admission_placement_apply_way_data.id;
+
+            // 準備下拉選單（預設選項為學生選的）
+            applyWayHtml += '<select class="custom-select" id="apply-way-select">';
+            for (let {id, description} of response.data) {
+              applyWayHtml += `<option value="${id}" ${id === selectedId ? 'selected' : ''}>${description}</option>`;
             }
             applyWayHtml += '</select>';
+
+            // 放置下拉選單
             $applyWay.html(applyWayHtml);
+          } else if (response.statusCode == 401) {
+            alert('請先登入');
+            // 若沒有登入，跳轉登入頁面
+            window.location.href = './login.html';
           } else {
-            console.log(data.message);
+            $originalImgModal.modal('hide');
+            // 彈出錯誤訊息
+            alert(response.singleErrorMessage);
           }
         }).catch((error) => {
           console.log(error);
@@ -496,11 +501,24 @@ const app = (function () {
   }
 
   function verifyStudentInfo(verificationDesc) {
-    let applyWaySelect = $('#applyWaySelect').val();
-    if (applyWaySelect == undefined) {
+    // 彈出確認框
+    const isConfirmedDelete = confirm('確定要送出審核結果嗎？');
+
+    // 其實不想送，那算了
+    if (!isConfirmedDelete) {
+      return;
+    }
+
+    // 取得審核單位選的成績採計方式 id
+    let applyWaySelect = $('#apply-way-select').val();
+    console.log(applyWaySelect);
+
+    if (applyWaySelect === undefined) {
       applyWaySelect = null;
     }
-    API.verifyStudent($userId.html(), verificationDesc, applyWaySelect).then(response => {
+
+    // 送審
+    API.verifyStudent(userId, verificationDesc, applyWaySelect).then(response => {
       if (response.ok) {
         alert('審核成功');
 
