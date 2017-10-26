@@ -250,6 +250,12 @@ const app = (function () {
     }
     $overseasStudentId.html(overseasStudentId);
 
+    // 置放身份別代碼（有才放）
+    let ruleOfOverseasStudentId = '未產生';
+    if (studentInfo.student_misc_data.rule_of_overseas_student_id != null) {
+      ruleOfOverseasStudentId = studentInfo.student_misc_data.rule_of_overseas_student_id;
+    }
+    $ruleCodeOfOverseasStudentId.html(ruleOfOverseasStudentId);
 
     // 如果填寫了個人資料才產生
     if (hasPersonalData) {
