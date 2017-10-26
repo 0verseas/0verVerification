@@ -252,8 +252,8 @@ const app = (function () {
 
     // 置放身份別代碼（有才放）
     let ruleOfOverseasStudentId = '未產生';
-    if (studentInfo.student_misc_data.rule_of_overseas_student_id != null) {
-      ruleOfOverseasStudentId = studentInfo.student_misc_data.rule_of_overseas_student_id;
+    if (studentInfo.student_misc_data.rule_code_of_overseas_student_id != null) {
+      ruleOfOverseasStudentId = studentInfo.student_misc_data.rule_code_of_overseas_student_id;
     }
     $ruleCodeOfOverseasStudentId.html(ruleOfOverseasStudentId);
 
