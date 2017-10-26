@@ -48,8 +48,8 @@ const app = (function () {
     API.getVerifiedStudents().then(response => {
       if (response.ok) {
         // 分包 render
-        _render($bachelorSelectionStudentsBody, response.data.bachelor_placement_students);
-        _render($bachelorPlacementStudentsBody, response.data.bachelor_selection_students);
+        _render($bachelorSelectionStudentsBody, response.data.bachelor_selection_students);
+        _render($bachelorPlacementStudentsBody, response.data.bachelor_placement_students);
         _render($divisionOfPreparatoryProgramsStudentsBody, response.data.division_of_preparatory_programs_students);
         _render($twoYearTechStudentsBody, response.data.two_year_tech_students);
         _render($masterStudentsBody, response.data.master_students);
