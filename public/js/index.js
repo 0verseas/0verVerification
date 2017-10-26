@@ -418,22 +418,6 @@ const app = (function () {
       // 不能編輯審核備註
       $verificationDesc.prop('readonly', true);
     }
-
-    // 確認是否已審核
-    if (studentInfo.student_misc_data.verified_at != null) {
-      // 封印審核按鈕
-      $submitBtn.prop('disabled', true);
-      // 封印審核備註編輯
-      $verificationDesc.prop('readonly', true);
-      // 擺上審核備註
-      $verificationDesc.html(studentInfo.student_misc_data.verification_desc);
-      // 擺上審核狀態
-      $verifiedStatus.html('已審核');
-    } else {
-      // 擺上審核狀態
-      $verifiedStatus.html('未審核');
-    }
-
   }
 
   // 將圖片依照 type append 到 DOM 上
