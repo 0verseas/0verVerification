@@ -49,7 +49,7 @@ const app = (function () {
       if (response.ok) {
         // 分包 render
         _render($bachelorSelectionStudentsBody, response.data.bachelor_selection_students);
-        _render($bachelorPlacementStudentsBody, response.data.bachelor_placement_students);
+        _render($bachelorPlacementStudentsBody, response.data.bachelor_placement_students, true);
         _render($divisionOfPreparatoryProgramsStudentsBody, response.data.division_of_preparatory_programs_students);
         _render($twoYearTechStudentsBody, response.data.two_year_tech_students);
         _render($masterStudentsBody, response.data.master_students);
@@ -69,7 +69,7 @@ const app = (function () {
   }
 
   // render 資料
-  function _render($body, students = []) {
+  function _render($body, students = [], hasApplyWay = false) {
     // 重置系所表格
     $body.html('');
 
@@ -83,7 +83,7 @@ const app = (function () {
           <td>${student.name}</td>
           <td>${student.student_personal_data.gender}</td>
           <td>${student.student_personal_data.birthday}</td>
-          ${student.student_misc_data.admission_placement_apply_way_data == null ? '' : '<td>' + student.student_misc_data.admission_placement_apply_way_data.description + '</td>'}
+          ${hasApplyWay ? '<td>' + student.student_misc_data.admission_placement_apply_way_data.description + '</td>' : ''}
           <td>${student.student_misc_data.rule_code_of_overseas_student_id}</td>
           <td>${student.student_misc_data.overseas_student_id}</td>
           <td>${student.student_misc_data.verified_memo}</td>
