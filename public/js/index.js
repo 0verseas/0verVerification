@@ -232,6 +232,7 @@ const app = (function () {
     let hasPersonalData = false;
     let hasQualificationVerify = false;
     const noData = '未填寫';
+    // 如果沒有填寫個人資料
     if (studentInfo.student_personal_data != null) {
       hasPersonalData = true;
     }
@@ -249,6 +250,8 @@ const app = (function () {
     }
     $overseasStudentId.html(overseasStudentId);
 
+
+    // 如果填寫了個人資料才產生
     if (hasPersonalData) {
       $name.html(studentInfo.name);
       $engName.html(studentInfo.eng_name);
@@ -264,7 +267,9 @@ const app = (function () {
       $gender.html(genderString);
       $schoolCountry.html(studentInfo.student_personal_data.school_country_data.country);
       $schoolName.html(studentInfo.student_personal_data.school_name);
-    } else {
+    }
+    // 沒有就吃鱉，放未填寫
+    else {
       $name.html(noData);
       $engName.html(noData);
       $birthday.html(noData);
