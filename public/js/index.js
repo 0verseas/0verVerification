@@ -30,7 +30,7 @@ const app = (function () {
 
   // 圖片原圖 modal
   const $originalImgModal = $('#original-img-modal');
-  const $originalImg = $('#original-img');
+  const $originalImgCanvas = $('#original-img-canvas');
   const $originalImgTitle = $('#original-img-title');
   const $originalDeleteBtn = $('#original-delete-btn');
 
@@ -46,6 +46,12 @@ const app = (function () {
 
   const baseUrl = env.baseUrl;
   let userId = '';
+
+  // 學歷文件 modal 所需變數
+  let canvas; // 畫布
+  let ctx; // 畫布內容
+  let originalImage; // 圖片本人
+  let originalImageAngleInDegrees = 0; // 目前角度
 
   _init();
 
@@ -552,13 +558,48 @@ const app = (function () {
 
   // 開啟原圖
   function loadOriginalImgModal(src = '', alt = '', filename = '', filetype = '') {
-    // 設定圖片
-    $originalImg.attr('data-filename', filename);
-    $originalImg.attr('data-filetype', filetype);
-    $originalImg.prop({src, alt});
+    // 擷取畫面元素
+    canvas = document.getElementById('original-img-canvas');
+    ctx = canvas.getContext('2d');
+
+    // 建立圖片元素
+    originalImage = new Image();
+
+    // 等圖片元素 load 好，就畫出來
+    originalImage.onload = () => {
+      // 邊長設定為長寬中值較大的那一邊（為了能轉）
+      const length = originalImage.width > originalImage.height ? originalImage.width : originalImage.height;
+
+      // 設定畫布邊長
+      ctx.canvas.width  = length;
+      ctx.canvas.height = length;
+
+      // 畫出來
+      ctx.drawImage(originalImage, canvas.width/2-originalImage.width/2, canvas.height/2-originalImage.width/2);
+    }
+
+    // 置放圖片
+    originalImage.src = src;
+
+    // 設定圖片後設資料
+    $originalImgCanvas.attr('data-filename', filename);
+    $originalImgCanvas.attr('data-filetype', filetype);
     $originalImgTitle.html(alt);
+
     // 顯示 modal
     $originalImgModal.modal();
+  }
+
+  // 圖片轉向
+  function rotated() {
+      originalImageAngleInDegrees += 90;
+
+      ctx.clearRect(0,0,canvas.width, canvas.height);
+      ctx.save();
+      ctx.translate(canvas.width/2, canvas.height/2);
+      ctx.rotate(originalImageAngleInDegrees*Math.PI/180);
+      ctx.drawImage(originalImage, -originalImage.width/2, -originalImage.width/2);
+      ctx.restore();
   }
 
   return {
@@ -568,6 +609,7 @@ const app = (function () {
     verifyStudentInfo,
     loadOriginalImgModal,
     deleteEducationFile,
+    rotated
   }
 
 })();
