@@ -235,146 +235,102 @@ const app = (function () {
 
   // render 學生資料 含 成績單、學歷證明
   function _renderStudentInfo(studentInfo) {
-    let hasPersonalData = false;
-    let hasQualificationVerify = false;
     const noData = '未填寫';
-    // 如果沒有填寫個人資料
-    if (studentInfo.student_personal_data != null) {
-      hasPersonalData = true;
-    }
-    // 如果沒有填寫資格
-    if (studentInfo.student_qualification_verify != null) {
-      hasQualificationVerify = true;
-    }
-    // 學生資料
+    const miscData = studentInfo.student_misc_data;
+    const personalData = studentInfo.student_personal_data;
+    const qualificationVerify = studentInfo.student_qualification_verify;
+
+    // 報名序號
     $userId.html(studentInfo.id.toString().padStart(6, '0'));
 
     // 若尚未審核，僑生編號為'未產生'
-    let overseasStudentId = '未產生';
-    if (studentInfo.student_misc_data.overseas_student_id != null) {
-      overseasStudentId = studentInfo.student_misc_data.overseas_student_id;
-    }
-    $overseasStudentId.html(overseasStudentId);
+    $overseasStudentId.html(miscData && miscData.overseas_student_id ? miscData.overseas_student_id : '未產生');
 
     // 置放身份別代碼（有才放）
-    let ruleOfOverseasStudentId = '未產生';
-    if (studentInfo.student_misc_data.rule_code_of_overseas_student_id != null) {
-      ruleOfOverseasStudentId = studentInfo.student_misc_data.rule_code_of_overseas_student_id;
-    }
-    $ruleCodeOfOverseasStudentId.html(ruleOfOverseasStudentId);
+    $ruleCodeOfOverseasStudentId.html(miscData && miscData.rule_code_of_overseas_student_id ? miscData.rule_code_of_overseas_student_id : '未產生');
 
-    // 如果填寫了個人資料才產生
-    if (hasPersonalData) {
-      $name.html(studentInfo.name);
-      $engName.html(studentInfo.eng_name);
-      $birthday.html(studentInfo.student_personal_data.birthday);
-      $birthLocation.html(studentInfo.student_personal_data.birth_location_data.country);
-      $residentLocation.html(studentInfo.student_personal_data.resident_location_data.country);
+    // 姓名
+    $name.html(studentInfo.name ? studentInfo.name : noData);
+    $engName.html(studentInfo.eng_name ? studentInfo.eng_name : noData);
 
-      // 性別判斷
-      let genderString = '未提供';
-      if (studentInfo.student_personal_data.gender != null) {
-        genderString = studentInfo.student_personal_data.gender.toLowerCase() === 'm' ? '男' : '女';
+    // 生日
+    $birthday.html(personalData && personalData.birthday ? personalData.birthday : noData);
+
+    // 出生地國別
+    $birthLocation.html(personalData && personalData.birth_location_data && personalData.birth_location_data.country ? personalData.birth_location_data.country : noData);
+
+    // 僑居地國別
+    $residentLocation.html(personalData && personalData.resident_location_data && personalData.resident_location_data.country ? personalData.resident_location_data.country : noData);
+
+    // 性別
+    $gender.html(personalData && personalData.gender ? personalData.gender.toLowerCase() === 'm' ? '男' : '女' : '未提供');
+
+    // 畢業學校國別
+    $schoolCountry.html(personalData && personalData.school_country_data && personalData.school_country_data.country ? personalData.school_country_data.country : noData);
+
+    // 畢業學校名稱
+    $schoolName.html(personalData && personalData.school_name ? personalData.school_name : noData);
+
+    //  判斷申請身份別
+    let identity = '未提供';
+    if (qualificationVerify && qualificationVerify.identity) {
+      switch(qualificationVerify.identity) {
+        case 1:
+          identity = '港澳生';
+          break;
+        case 2:
+          identity = '港澳具外國國籍之華裔學生';
+          break;
+        case 3:
+          identity = '海外僑生';
+          break;
+        case 4:
+          identity = '在臺港澳生';
+          break;
+        case 5:
+          identity = '在臺僑生';
+          break;
+        case 6:
+          identity = '僑先部結業生';
+          break;
+        default:
+          break;
       }
-      $gender.html(genderString);
-      $schoolCountry.html(studentInfo.student_personal_data.school_country_data.country);
-      $schoolName.html(studentInfo.student_personal_data.school_name);
     }
-    // 沒有就吃鱉，放未填寫
-    else {
-      $name.html(noData);
-      $engName.html(noData);
-      $birthday.html(noData);
-      $birthLocation.html(noData);
-      $residentLocation.html(noData);
-      $gender.html(noData);
-      $schoolCountry.html(noData);
-      $schoolName.html(noData);
-    }
+    $identity.html(identity);
 
-    // 如果有填寫報名資格才產生
-    if (hasQualificationVerify) {
-      //  判斷申請身份別
-      let identity = '未提供';
-      if (studentInfo.student_qualification_verify.identity != null) {
-        switch(studentInfo.student_qualification_verify.identity) {
-          case 1:
-            identity = '港澳生';
-            break;
-          case 2:
-            identity = '港澳具外國國籍之華裔學生';
-            break;
-          case 3:
-            identity = '海外僑生';
-            break;
-          case 4:
-            identity = '在臺港澳生';
-            break;
-          case 5:
-            identity = '在臺僑生';
-            break;
-          case 6:
-            identity = '僑先部結業生';
-            break;
-          default:
-            break;
-        }
-      }
-      $identity.html(identity);
-
-      // 學士班 才有「成績採計方式」
-      if (studentInfo.student_qualification_verify.system_id == 1 ) {
-        if (studentInfo.student_misc_data.admission_placement_apply_way_data == null) {
-          $applyWay.html('不參加聯合分發');
-        } else {
-          // 若尚未報名 或 已審核，不擺放下拉選單
-          if(!studentInfo.student_misc_data.confirmed_at || studentInfo.student_misc_data.verified_at != null) {
-            $applyWay.html(studentInfo.student_misc_data.admission_placement_apply_way_data.description);
-          } else {
-            // 置放「成績採計方式」
-            let applyWayHtml = '';
-
-            API.getApplyWays(userId).then(response => {
-              if (response.ok) {
-                // 暫存學生選的成績採計方式
-                const selectedId= studentInfo.student_misc_data.admission_placement_apply_way_data.id;
-
-                // 準備下拉選單（預設選項為學生選的）
-                applyWayHtml += '<select class="custom-select" id="apply-way-select">';
-                for (let {id, description} of response.data) {
-                  applyWayHtml += `<option value="${id}" ${id === selectedId ? 'selected' : ''}>${id === selectedId ? '[學生選擇]' : ''} ${description}</option>`;
-                }
-                applyWayHtml += '</select>';
-
-                // 放置下拉選單
-                $applyWay.html(applyWayHtml);
-                if(!studentInfo.student_misc_data.confirmed_at || studentInfo.student_misc_data.verified_at != null) {
-                  console.log('fuck');
-                  $('#apply-way-select').prop('readonly', true);
-                }
-              } else if (response.statusCode == 401) {
-                alert('請先登入');
-                // 若沒有登入，跳轉登入頁面
-                window.location.href = './login.html';
-              } else {
-                $originalImgModal.modal('hide');
-                // 彈出錯誤訊息
-                alert(response.singleErrorMessage);
-              }
-            }).catch((error) => {
-              console.log(error);
-            });
-          }
-        }
+    // 學士班 才有「成績採計方式」
+    if (qualificationVerify && qualificationVerify.system_id && qualificationVerify.system_id === 1 ) {
+      if (miscData && !miscData.admission_placement_apply_way_data) {
+        $applyWay.html('不參加聯合分發');
       } else {
-        // 把「成績採計方式」藏起來
-        $applyWayTitle.hide();
-        $applyWay.hide();
+        // 若尚未報名 或 已審核，不擺放下拉選單
+        if (!miscData.confirmed_at || miscData.verified_at) {
+          $applyWay.html(miscData.admission_placement_apply_way_data.description);
+        } else {
+          let applyWayHtml = '';
+
+          // 拿取可用的學生成績採計方式
+          _getApplyWays(userId).then(response => {
+            // 暫存學生選擇的成績採計方式
+            const selectedId= miscData.admission_placement_apply_way_data.id;
+
+            // 準備下拉選單（預設選項為學生選的）
+            applyWayHtml += '<select class="custom-select" id="apply-way-select">';
+            for (let {id, description} of response.data) {
+              applyWayHtml += `<option value="${id}" ${id === selectedId ? 'selected' : ''}>${id === selectedId ? '[學生選擇]' : ''} ${description}</option>`;
+            }
+            applyWayHtml += '</select>';
+
+            // 放置下拉選單
+            $applyWay.html(applyWayHtml);
+          }).catch((error) => {
+            console.log(error);
+          });
+        }
       }
-    }
-    // 沒有就吃鱉，放入 未填寫 並把成績採計方式隱藏起來
-    else{
-      $identity.html(noData);
+    } else {
+      // 把「成績採計方式」藏起來
       $applyWayTitle.hide();
       $applyWay.hide();
     }
@@ -388,15 +344,15 @@ const app = (function () {
     _appendEducationFile('transcripts', studentInfo.student_transcripts);
 
     // 擺上審核、確認報名狀態
-    $confirmedStatus.html((studentInfo.student_misc_data.confirmed_at !== null ? '已' : '尚未') + '確認上傳及報名資料');
-    $verifiedStatus.html((studentInfo.student_misc_data.verified_at !== null ? '已' : '尚未') + '審核');
+    $confirmedStatus.html((miscData && miscData.confirmed_at ? '已' : '尚未') + '確認上傳及報名資料');
+    $verifiedStatus.html((miscData && miscData.verified_at ? '已' : '尚未') + '審核');
 
     // 審核、報名狀態對應狀況
-    if (studentInfo.student_misc_data.confirmed_at !== null) {
+    if (miscData && miscData.confirmed_at) {
       // 學生已確認報名
 
       // 同時學生已被審核
-      if (studentInfo.student_misc_data.verified_at !== null) {
+      if (miscData.verified_at) {
         // TODO 不能選文憑別、身份別
 
         // 不能重傳文件
@@ -408,7 +364,7 @@ const app = (function () {
         // 不能編輯審核備註
         $verificationDesc.prop('readonly', true);
         // 擺上審核備註
-        $verificationDesc.html(studentInfo.student_misc_data.verification_desc);
+        $verificationDesc.html(miscData.verification_desc);
       }
     } else {
       // 學生尚未確認報名
@@ -600,6 +556,30 @@ const app = (function () {
       ctx.rotate(originalImageAngleInDegrees*Math.PI/180);
       ctx.drawImage(originalImage, -originalImage.width/2, -originalImage.width/2);
       ctx.restore();
+  }
+
+  // 拿學生可用的成績採計方式
+  function _getApplyWays(userId = '') {
+    return API.getApplyWays(userId).then(response => {
+      if (!response.ok) {
+        switch (response.statusCode) {
+          case 401:
+            // 若沒有登入，跳轉登入頁面
+            window.location.href = './login.html';
+            break;
+          default:
+            // 彈出錯誤訊息
+            console.log(response.errorMessages)
+            alert(response.singleErrorMessage);
+            break;
+        }
+
+        throw(new Error(`${response.statusCode} (${response.singleErrorMessage})`));
+      }
+
+      return response;
+
+    });
   }
 
   return {
