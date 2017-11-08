@@ -82,6 +82,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js" integrity="sha256-JDVyLQRqvRSTL/6WaPud93JXpfEdW11zwjqhoNgkGXc="
       crossorigin="anonymous"></script>
   <% } %>
+  <% if (current.source == 'list') { %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"
+    integrity="sha256-zG8v+NWiZxmjNi+CvUYnZwKtHzFtdO8cAKUIdB8+U9I=" crossorigin="anonymous"></script>
+  <% } %>
   <script src="js/env.js"></script>
   <script src="js/api.js"></script>
   <script src="js/<%= current.source %>.js"></script>
