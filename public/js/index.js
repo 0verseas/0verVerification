@@ -178,8 +178,8 @@ const app = (function () {
     $schoolCountry.html('');
     $schoolName.html('');
     $confirmedStatus.html('');
-    $applyWayTitle.show();
-    $applyWay.show();
+    $applyWayTitle.hide();
+    $applyWay.hide();
     $applyWay.html('');
     $diplomaDiv.html('');
     $transcriptDiv.html('');
@@ -227,8 +227,9 @@ const app = (function () {
         window.location.href = './login.html';
       } else if (response.statusCode == 404) {
         alert('無此報名序號');
-        loading.complete();
       }
+
+      loading.complete();
     }).catch((error) => {
       console.log(error);
     });
@@ -304,53 +305,21 @@ const app = (function () {
 
     // 學士班 才有「成績採計方式」
     if (qualificationVerify && qualificationVerify.system_id && qualificationVerify.system_id === 1 ) {
-      if (miscData && !miscData.admission_placement_apply_way_data) {
-        $applyWay.html('不參加聯合分發');
-      } else {
-        // 若尚未報名 或 已審核，不擺放下拉選單
-        if (!miscData.confirmed_at || miscData.verified_at) {
-          $applyWay.html(miscData.admission_placement_apply_way_data.description);
-        } else {
-          let applyWayHtml = '';
-
-          // 拿取可用的學生成績採計方式
-          _getApplyWays(userId).then(response => {
-            // 暫存學生選擇的成績採計方式
-            const selectedId= miscData.admission_placement_apply_way_data.id;
-
-            // 準備下拉選單（預設選項為學生選的）
-            applyWayHtml += '<select class="custom-select" id="apply-way-select">';
-            for (let {id, description} of response.data) {
-              applyWayHtml += `<option value="${id}" ${id === selectedId ? 'selected' : ''}>${id === selectedId ? '[學生選擇]' : ''} ${description}</option>`;
-            }
-            applyWayHtml += '</select>';
-
-            // 放置下拉選單
-            $applyWay.html(applyWayHtml);
-            loading.complete();
-          }).catch((error) => {
-            console.log(error);
-          });
-        }
-      }
-    } else {
-      // 把「成績採計方式」藏起來
-      $applyWayTitle.hide();
-      $applyWay.hide();
-
-      loading.complete();
+      $applyWay.html(miscData && miscData.admission_placement_apply_way_data ? miscData.admission_placement_apply_way_data.description : '未選擇');
+      $applyWayTitle.show();
+      $applyWay.show();
     }
 
-    // 重置並擺上學歷證明文件
-    $diplomaDiv.html('');
+    // 學歷證明文件
     _appendEducationFile('diploma', studentInfo.student_diploma);
 
-    // 重置並擺上成績單
-    $transcriptDiv.html('');
+    // 成績單
     _appendEducationFile('transcripts', studentInfo.student_transcripts);
 
-    // 擺上審核、確認報名狀態
+    // 確認報名狀態
     $confirmedStatus.html((miscData && miscData.confirmed_at ? '已' : '尚未') + '確認上傳及報名資料');
+
+    // 審核、狀態
     $verifiedStatus.html((miscData && miscData.verified_at ? '已' : '尚未') + '審核');
 
     // 審核、報名狀態對應狀況
@@ -359,7 +328,7 @@ const app = (function () {
 
       // 同時學生已被審核
       if (miscData.verified_at) {
-        // TODO 不能選文憑別、身份別
+        // TODO 不能選身份別
 
         // 不能重傳文件
         $(":file").filestyle('disabled', true);
@@ -375,7 +344,7 @@ const app = (function () {
     } else {
       // 學生尚未確認報名
 
-      // TODO 不能選文憑別、身份別
+      // TODO 不能選身份別
 
       // 不能重傳文件
       $(":file").filestyle('disabled', true);
@@ -562,31 +531,6 @@ const app = (function () {
       ctx.rotate(originalImageAngleInDegrees*Math.PI/180);
       ctx.drawImage(originalImage, -originalImage.width/2, -originalImage.width/2);
       ctx.restore();
-  }
-
-  // 拿學生可用的成績採計方式
-  function _getApplyWays(userId = '') {
-    return API.getApplyWays(userId).then(response => {
-      if (!response.ok) {
-        switch (response.statusCode) {
-          case 401:
-            // 若沒有登入，跳轉登入頁面
-            window.location.href = './login.html';
-            break;
-          default:
-            // 彈出錯誤訊息
-            console.log(response.errorMessages)
-            alert(response.singleErrorMessage);
-            break;
-        }
-        loading.complete();
-
-        throw(new Error(`${response.statusCode} (${response.singleErrorMessage})`));
-      }
-
-      return response;
-
-    });
   }
 
   return {
