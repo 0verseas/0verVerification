@@ -393,8 +393,11 @@ const app = (function () {
     // 使用 formData
     let data = new FormData();
 
-    // 將檔案一一放到 formData 中
-    for (let file of files) {
+    // 將檔案一一放到 formData 中（FileList is a node list, it needs to use pure for loop.）
+    for (let i = 0; i < files.length; i++) {
+      // get file item
+      const file = files.item(i);
+      // 放到 formData 中
       data.append('files[]', file);
     }
 
