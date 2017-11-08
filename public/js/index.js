@@ -196,6 +196,8 @@ const app = (function () {
 
   // 用報名序號搜尋學生資料
   function searchUserId(inputUserId = '') {
+    loading.start();
+
     // 清空學生資料的顯示畫面並隱藏
     $studentInfoDiv.prop('hidden', true);
     _resetStudentInfo();
@@ -225,6 +227,7 @@ const app = (function () {
         window.location.href = './login.html';
       } else if (response.statusCode == 404) {
         alert('無此報名序號');
+        loading.complete();
       }
     }).catch((error) => {
       console.log(error);
@@ -324,6 +327,7 @@ const app = (function () {
 
             // 放置下拉選單
             $applyWay.html(applyWayHtml);
+            loading.complete();
           }).catch((error) => {
             console.log(error);
           });
@@ -333,6 +337,8 @@ const app = (function () {
       // 把「成績採計方式」藏起來
       $applyWayTitle.hide();
       $applyWay.hide();
+
+      loading.complete();
     }
 
     // 重置並擺上學歷證明文件
@@ -573,6 +579,7 @@ const app = (function () {
             alert(response.singleErrorMessage);
             break;
         }
+        loading.complete();
 
         throw(new Error(`${response.statusCode} (${response.singleErrorMessage})`));
       }
