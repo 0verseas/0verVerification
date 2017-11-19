@@ -225,8 +225,14 @@ const app = (function () {
         alert('請先登入');
         // 若沒有登入，跳轉登入頁面
         window.location.href = './login.html';
+      } else if (response.statusCode == 403) {
+        // 彈出錯誤訊息
+        alert(response.singleErrorMessage);
       } else if (response.statusCode == 404) {
         alert('無此報名序號');
+      } else {
+        // 彈出錯誤訊息
+        alert(response.singleErrorMessage);
       }
 
       loading.complete();

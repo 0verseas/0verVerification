@@ -58,8 +58,12 @@ const app = (function () {
         alert('請先登入');
         // 若沒有登入，跳轉登入頁面
         window.location.href = './login.html';
+      } else if (response.statusCode === 403) {
+        // 彈出錯誤訊息
+        alert(response.singleErrorMessage);
+        // 跳轉至查詢頁
+        window.location.href = './index.html';
       } else {
-        $originalImgModal.modal('hide');
         // 彈出錯誤訊息
         alert(response.singleErrorMessage);
       }
