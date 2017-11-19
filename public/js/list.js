@@ -85,7 +85,7 @@ const app = (function () {
           ${student.student_personal_data.gender.toLowerCase() === 'm' ? '<td>男</td>' : '<td>女</td>'}
           <td>${student.student_personal_data.birthday}</td>
           ${hasApplyWay ? '<td>' + student.student_misc_data.admission_placement_apply_way_data.description + '</td>' : ''}
-          <td>${student.student_misc_data.rule_code_of_overseas_student_id}</td>
+          <td>${student.student_personal_data.school_country_data.country}</td>
           <td>${student.student_misc_data.overseas_student_id}</td>
           <td>${student.student_misc_data.verified_memo}</td>
         </tr>
