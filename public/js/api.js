@@ -92,8 +92,11 @@ const API = (function () {
   }
 
   // 審核學生
-  function verifyStudent(userId, verificationInfo, applyWaySelect) {
-    const data = {verified_memo: verificationInfo, verified_confirmation: true, apply_way_confirmation: applyWaySelect};
+  function verifyStudent(userId, verificationInfo, ruleCodeOfOverseasStudentId = null) {
+    let data = {verified_memo: verificationInfo, verified_confirmation: true};
+    if (ruleCodeOfOverseasStudentId) {
+      data.rule_code = ruleCodeOfOverseasStudentId;
+    }
     console.log(data);
     const request = fetch(`${baseUrl}/office/students/${userId}/verified`, {
       headers: {
@@ -155,5 +158,6 @@ const API = (function () {
     getVerifiedStudents,
     uploadStudentEducationFile,
     verifyStudent,
+    getAvailableRuleCodeOfOverseasStudentId
   }
 })();
