@@ -108,8 +108,8 @@ const API = (function () {
   }
 
   // 拿到該學生的成績採計方式
-  function getApplyWays (userId) {
-    const request = fetch(`${baseUrl}/office/students/${userId}/admission-placement-apply-way`, {
+  function getAvailableRuleCodeOfOverseasStudentId (userId) {
+    const request = fetch(`${baseUrl}/office/students/${userId}/available-rule-code-of-overseas-student-id`, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -155,6 +155,5 @@ const API = (function () {
     getVerifiedStudents,
     uploadStudentEducationFile,
     verifyStudent,
-    getApplyWays
   }
 })();
