@@ -259,6 +259,19 @@ const app = (function () {
     // 置放身份別代碼（有才放）
     $ruleCodeOfOverseasStudentId.html(miscData && miscData.rule_code_of_overseas_student_id ? miscData.rule_code_of_overseas_student_id : '未產生');
 
+    if (miscData.confirmed_at && !miscData.verified_at && personalData.resident_location == 106) {
+      API.getAvailableRuleCodeOfOverseasStudentId(studentInfo.id).then((response) => {
+        if (response.statusCode == 200) {
+          let html = '<select id="rule-code-of-overseas-student-id">';
+          for (let data of response.data) {
+            html += `<option value="${data.student_rule_code_id}">${data.code_id_description}</option>`;
+          }
+          html += `</select>`;
+          $ruleCodeOfOverseasStudentId.html(html);
+        }
+      });
+    }
+
     // 姓名
     $name.html(studentInfo.name ? studentInfo.name : noData);
     $engName.html(studentInfo.eng_name ? studentInfo.eng_name : noData);
