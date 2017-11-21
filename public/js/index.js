@@ -334,7 +334,6 @@ const app = (function () {
 
       // 同時學生已被審核
       if (miscData.verified_at) {
-        // TODO 不能選身份別
 
         // 不能重傳文件
         $(":file").filestyle('disabled', true);
@@ -349,8 +348,6 @@ const app = (function () {
       }
     } else {
       // 學生尚未確認報名
-
-      // TODO 不能選身份別
 
       // 不能重傳文件
       $(":file").filestyle('disabled', true);
