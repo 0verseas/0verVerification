@@ -478,19 +478,19 @@ const app = (function () {
       return;
     }
 
-    // 取得審核單位選的成績採計方式 id
-    let applyWaySelect = $('#apply-way-select').val();
-    console.log(applyWaySelect);
-
-    if (applyWaySelect === undefined) {
-      applyWaySelect = null;
+    let ruleCodeOfOverseasStudentId = null;
+    // console.log($('#rule-code-of-overseas-student-id').find(":selected").val());
+    if ($('#rule-code-of-overseas-student-id').find(":selected").val()) {
+      ruleCodeOfOverseasStudentId = $('#rule-code-of-overseas-student-id').find(":selected").val();
     }
+    // console.log(ruleCodeOfOverseasStudentId);
 
     // 送審
-    API.verifyStudent(userId, verificationDesc, applyWaySelect).then(response => {
+    API.verifyStudent(userId, verificationDesc, ruleCodeOfOverseasStudentId).then(response => {
       if (response.ok) {
         alert('審核成功');
 
+        _resetStudentInfo();
         // 重新 render 學生資料
         _renderStudentInfo(response.data);
       } else if (response.statusCode == 401) {
