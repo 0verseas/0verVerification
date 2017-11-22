@@ -94,10 +94,12 @@ const API = (function () {
   // 審核學生
   function verifyStudent(userId, verificationInfo, ruleCodeOfOverseasStudentId = null) {
     let data = {verified_memo: verificationInfo, verified_confirmation: true};
+
+    // 有身份別代碼才送
     if (ruleCodeOfOverseasStudentId) {
       data.rule_code = ruleCodeOfOverseasStudentId;
     }
-    console.log(data);
+
     const request = fetch(`${baseUrl}/office/students/${userId}/verified`, {
       headers: {
         'Content-Type': 'application/json'

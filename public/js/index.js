@@ -52,6 +52,7 @@ const app = (function () {
   let ctx; // 畫布內容
   let originalImage; // 圖片本人
   let originalImageAngleInDegrees = 0; // 目前角度
+  let student; // 目前查詢的學生資料
 
   _init();
 
@@ -217,7 +218,7 @@ const app = (function () {
         // 儲存使用者
         userId = userData.id;
         // render 學生資料
-        _renderStudentInfo(userData);
+        _renderStudentInfo(student = userData);
 
         // 顯示資料
         $studentInfoDiv.prop('hidden', false);
@@ -259,14 +260,20 @@ const app = (function () {
     // 置放身份別代碼（有才放）
     $ruleCodeOfOverseasStudentId.html(miscData && miscData.rule_code_of_overseas_student_id ? miscData.rule_code_of_overseas_student_id : '未產生');
 
+    // 若僑居地國別為緬甸，且可被審核，拿可用身份別代碼並置放選單
     if (miscData.confirmed_at && !miscData.verified_at && personalData.resident_location == 106) {
       API.getAvailableRuleCodeOfOverseasStudentId(studentInfo.id).then((response) => {
         if (response.statusCode == 200) {
-          let html = '<select id="rule-code-of-overseas-student-id">';
+          let html = '<select id="rule-code-of-overseas-student-id" style="width: 100%">';
+
+          html += `<option value="" disabled selected>請選擇</option>`;
+
           for (let data of response.data) {
             html += `<option value="${data.student_rule_code_id}">${data.code_id_description}</option>`;
           }
+
           html += `</select>`;
+
           $ruleCodeOfOverseasStudentId.html(html);
         }
       });
@@ -478,12 +485,14 @@ const app = (function () {
       return;
     }
 
-    let ruleCodeOfOverseasStudentId = null;
-    // console.log($('#rule-code-of-overseas-student-id').find(":selected").val());
-    if ($('#rule-code-of-overseas-student-id').find(":selected").val()) {
-      ruleCodeOfOverseasStudentId = $('#rule-code-of-overseas-student-id').find(":selected").val();
+    // 取得所選的身份別代碼
+    const ruleCodeOfOverseasStudentId= $('#rule-code-of-overseas-student-id').find(":selected").val();
+
+    // 僑居地在緬甸就一定要選身份別喔
+    if (student.student_personal_data.resident_location == 106 && !ruleCodeOfOverseasStudentId) {
+      alert('請選擇身份別');
+      return;
     }
-    // console.log(ruleCodeOfOverseasStudentId);
 
     // 送審
     API.verifyStudent(userId, verificationDesc, ruleCodeOfOverseasStudentId).then(response => {
