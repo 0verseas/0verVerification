@@ -429,6 +429,10 @@ const app = (function () {
       // 成功就把剛上傳的檔案們秀出來，不然就彈 alert
       if (response.ok) {
         _appendEducationFile(type, response.data, true);
+      } else if (response.statusCode == 401) {
+        alert('請先登入');
+        // 若沒有登入，跳轉登入頁面
+        window.location.href = './login.html';
       } else {
         alert(response.singleErrorMessage);
       }
