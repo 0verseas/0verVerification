@@ -112,8 +112,12 @@ const app = (function () {
     $body.html(result);
   }
 
-  return {
+  function downloadList(system = '') {
+    window.location.href = `${env.baseUrl}/office/students/file/verified?system=${system}`;
+  }
 
+  return {
+    downloadList,
   }
 
 })();
