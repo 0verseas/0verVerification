@@ -20,13 +20,12 @@
       </li>
     <% } %>
       <li class="nav-item">
-        <a class="nav-link" href="javascript: API.logout().then(function () {
-          alert('登出成功！');
-          window.location.href = './login.html';
-        });">
+        <a class="nav-link" onclick="nav.logout();" href="#">
           登出 <span class="sr-only">(current)</span>
         </a>
       </li>
   </ul>
 
 </nav>
+
+<script src="js/nav.js"></script>
