@@ -7,6 +7,7 @@ const app = (function () {
   const $bachelorSelectionStudentsBody = $('#bachelor-selection-students-body');
   const $bachelorPlacementStudentsBody = $('#bachelor-placement-students-body');
   const $divisionOfPreparatoryProgramsStudentsBody = $('#division-of-preparatory-programs-students-body');
+  const $twoYearTechStudentsTab = $('#two-year-tech-students-tab');
   const $twoYearTechStudentsBody = $('#two-year-tech-students-body');
   const $masterStudentsBody = $('#master-students-body');
   const $phdStudentsBody = $('#phd-students-body');
@@ -15,7 +16,8 @@ const app = (function () {
    * init
    */
 
-  _init();
+  let user;
+   _init();
 
   /**
    * functions
@@ -27,6 +29,7 @@ const app = (function () {
 
     API.isLogin().then(response => {
       if (response.ok) {
+        user = response.data;
         // 確認有登入，init 頁面
         _getVerifiedStudents();
       } else if (response.statusCode == 401) {
@@ -51,9 +54,18 @@ const app = (function () {
         _render($bachelorSelectionStudentsBody, response.data.bachelor_selection_students);
         _render($bachelorPlacementStudentsBody, response.data.bachelor_placement_students, true);
         _render($divisionOfPreparatoryProgramsStudentsBody, response.data.division_of_preparatory_programs_students);
-        _render($twoYearTechStudentsBody, response.data.two_year_tech_students);
         _render($masterStudentsBody, response.data.master_students);
         _render($phdStudentsBody, response.data.phd_students);
+
+        // 審核單位為海聯或香港時才顯示二技分頁
+        if (user.overseas_office.authority == 1 || user.overseas_office.authority == 2) {
+          _render($twoYearTechStudentsBody, response.data.two_year_tech_students);
+        } else {
+          $twoYearTechStudentsTab.remove();
+          $twoYearTechStudentsBody.remove();
+        }
+
+
       } else if (response.statusCode === 401) {
         alert('請先登入');
         // 若沒有登入，跳轉登入頁面
