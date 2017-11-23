@@ -160,7 +160,7 @@ const app = (function () {
     });
 
     // 調整按鈕排版
-    $('.bootstrap-filestyle').addClass('col ml-auto');
+    $('.bootstrap-filestyle').addClass('col-2');
     $('.group-span-filestyle').addClass('ml-auto');
   }
 
@@ -444,6 +444,10 @@ const app = (function () {
     })
   }
 
+  function downloadEducationFile(type = '') {
+    window.open(`${env.baseUrl}/office/students/${userId}/${type}?type=file`,'_blank');
+  }
+
   // 刪除某成績單或學歷證明文件
   function deleteEducationFile(filename = '', filetype = '') {
     // 彈出確認框
@@ -569,6 +573,7 @@ const app = (function () {
     openScanner,
     searchUserId,
     uploadEducationFile,
+    downloadEducationFile,
     verifyStudentInfo,
     loadOriginalImgModal,
     deleteEducationFile,

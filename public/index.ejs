@@ -76,6 +76,11 @@
               <span class="doc-title">學歷證明文件</span>
               <span class="doc-hint text-muted">點圖可放大或刪除</span>
             </div>
+
+            <div class="col-2 mb-2 ml-auto text-right">
+              <button class="btn btn-success" onclick="app.downloadEducationFile('diploma')"><i class="fa fa-download" aria-hidden="true"></i> 下載</button>
+            </div>
+
             <input class="btn btn-success ml-auto mr-3" type="file" multiple value="重傳檔案" onchange="app.uploadEducationFile('diploma', this.files)" onmousedown="event.preventDefault()">
           </div>
         </div>
@@ -90,6 +95,11 @@
               <span class="doc-title">成績單文件</span>
               <span class="doc-hint text-muted">點圖可放大或刪除</span>
             </div>
+
+            <div class="col-2 mb-2 ml-auto text-right">
+              <button class="btn btn-success" onclick="app.downloadEducationFile('transcripts')"><i class="fa fa-download" aria-hidden="true"></i> 下載</button>
+            </div>
+
             <input class="btn btn-success ml-md-auto mr-md-3" type="file" multiple value="重傳檔案" onchange="app.uploadEducationFile('transcripts', this.files)" onmousedown="event.preventDefault()">
           </div>
         </div>
