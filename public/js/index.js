@@ -538,7 +538,7 @@ const app = (function () {
       ctx.canvas.height = length;
 
       // 畫出來
-      ctx.drawImage(originalImage, canvas.width/2-originalImage.width/2, canvas.height/2-originalImage.width/2);
+      ctx.drawImage(originalImage, 0, 0);
     }
 
     // 置放圖片
@@ -561,7 +561,7 @@ const app = (function () {
       ctx.save();
       ctx.translate(canvas.width/2, canvas.height/2);
       ctx.rotate(originalImageAngleInDegrees*Math.PI/180);
-      ctx.drawImage(originalImage, -originalImage.width/2, -originalImage.width/2);
+      ctx.drawImage(originalImage, -ctx.canvas.width/2, -ctx.canvas.width/2);
       ctx.restore();
   }
 
