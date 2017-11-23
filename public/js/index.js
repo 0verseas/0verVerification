@@ -6,6 +6,7 @@ const app = (function () {
 
   const $studentInfoDiv = $('#student-info-div');
   const $searchInput = $('#search-input');
+  const $system = $('#system'); // 報名序號
   const $userId = $('#user-id'); // 報名序號
   const $userIdInput = $('#user-id-input'); // 報名序號
   const $overseasStudentId = $('#overseas-student-id'); // 僑生編號
@@ -250,6 +251,9 @@ const app = (function () {
     const miscData = studentInfo.student_misc_data;
     const personalData = studentInfo.student_personal_data;
     const qualificationVerify = studentInfo.student_qualification_verify;
+
+    // 報名序號
+    $system.html(qualificationVerify && qualificationVerify.system_data && qualificationVerify.system_data.title ? qualificationVerify.system_data.title : noData);
 
     // 報名序號
     $userId.html(studentInfo.id.toString().padStart(6, '0'));
