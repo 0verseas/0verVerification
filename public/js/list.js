@@ -51,11 +51,11 @@ const app = (function () {
     API.getVerifiedStudents().then(response => {
       if (response.ok) {
         // 分包 render
-        _render($bachelorSelectionStudentsBody, response.data.bachelor_selection_students);
-        _render($bachelorPlacementStudentsBody, response.data.bachelor_placement_students, true);
-        _render($divisionOfPreparatoryProgramsStudentsBody, response.data.division_of_preparatory_programs_students);
-        _render($masterStudentsBody, response.data.master_students);
-        _render($phdStudentsBody, response.data.phd_students);
+        _render($bachelorSelectionStudentsBody, _sortList(response.data.bachelor_selection_students));
+        _render($bachelorPlacementStudentsBody, _sortList(response.data.bachelor_placement_students), true);
+        _render($divisionOfPreparatoryProgramsStudentsBody, _sortList(response.data.division_of_preparatory_programs_students));
+        _render($masterStudentsBody, _sortList(response.data.master_students));
+        _render($phdStudentsBody, _sortList(response.data.phd_students));
 
         // 審核單位為海聯或香港時才顯示二技分頁
         if (user.overseas_office.authority == 1 || user.overseas_office.authority == 2) {
@@ -81,6 +81,14 @@ const app = (function () {
       }
 
       loading.complete();
+    });
+  }
+
+  // 排序已審核清單
+  function _sortList(students = []) {
+    return students.sort((a, b) => {
+      // 按照審核時間排序（新的在前）
+      return new Date(b.student_misc_data.verified_at) - new Date(a.student_misc_data.verified_at);
     });
   }
 
