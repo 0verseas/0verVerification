@@ -546,7 +546,7 @@ const app = (function () {
       ctx.canvas.height = length;
 
       // 畫出來
-      ctx.drawImage(originalImage, 0, 0);
+      ctx.drawImage(originalImage, (length-originalImage.width)/2, (length-originalImage.height)/2);
     }
 
     // 置放圖片
@@ -571,6 +571,25 @@ const app = (function () {
       ctx.rotate(originalImageAngleInDegrees*Math.PI/180);
       ctx.drawImage(originalImage, -ctx.canvas.width/2, -ctx.canvas.width/2);
       ctx.restore();
+  function rotated(degress = 90) {
+    // 累加角度
+    originalImageAngleInDegrees += degress;
+
+    // 清空畫布全區
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // 暫存畫布狀態
+    ctx.save();
+    // 移動原點至畫布中心
+    ctx.translate(canvas.width/2, canvas.height/2);
+    // 順轉畫布
+    ctx.rotate(originalImageAngleInDegrees*Math.PI/180);
+    // 移動原點至原圖置中狀態的左上點
+    ctx.translate(-originalImage.width/2, -originalImage.height/2);
+    // 放置圖
+    ctx.drawImage(originalImage, 0,0);
+    // 恢復畫布狀態
+    ctx.restore();
+  }
   }
 
   return {
