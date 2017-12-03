@@ -51,6 +51,10 @@ const app = (function () {
   // 學歷文件 modal 所需變數
   let canvas; // 畫布
   let ctx; // 畫布內容
+  let isMouseDownOnImage = false; // 是否按著圖片本人
+  let startDragOffset = {x: 0, y: 0}; // 開始拖拉圖片的位置設定
+  let translatePos = {x: 0, y: 0}; // 拖拉後畫布原點位置設定
+  let scale = 1.0; // 圖片縮放比例
   let originalImage; // 圖片本人
   let originalImageAngleInDegrees = 0; // 目前角度
   let student; // 目前查詢的學生資料
@@ -534,7 +538,13 @@ const app = (function () {
 
   // 開啟原圖
   function loadOriginalImgModal(src = '', alt = '', filename = '', filetype = '') {
+    // 重置圖片及畫布設定
     originalImageAngleInDegrees = 0;
+    isMouseDownOnImage = false;
+    startDragOffset = {x: 0, y: 0};
+    translatePos = {x: 0, y: 0};
+    scale = 1.0;
+
     // 擷取畫面元素
     canvas = document.getElementById('original-img-canvas');
     ctx = canvas.getContext('2d');
@@ -561,9 +571,20 @@ const app = (function () {
   }
 
   // 圖片轉向
-  function renderImage(degress = 0) {
+  function renderImage(degress = 0, scaleMultiplier = 1.0) {
     // 累加角度
     originalImageAngleInDegrees = (originalImageAngleInDegrees + degress) % 360;
+
+    // 若轉動，恢復比例及位置
+    if (degress > 0) {
+      isMouseDownOnImage = false; // 是否按著圖片本人
+      startDragOffset = {};
+      translatePos = {x: 0, y: 0};
+      scale = 1.0;
+    } else {
+      // 若非轉動，則計算縮放比例
+      scale *= scaleMultiplier;
+    }
 
     // 清空畫布全區
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -584,8 +605,12 @@ const app = (function () {
 
     // 暫存畫布狀態
     ctx.save();
+    // 移動原點以模擬拖拉
+    ctx.translate(translatePos.x, translatePos.y);
     // 移動原點至畫布中心
     ctx.translate(canvas.width/2, canvas.height/2);
+    // 縮放
+    ctx.scale(scale, scale);
     // 順轉畫布
     ctx.rotate(originalImageAngleInDegrees*Math.PI/180);
     // 移動原點至原圖置中狀態的左上點
@@ -595,6 +620,30 @@ const app = (function () {
     // 恢復畫布狀態
     ctx.restore();
   }
+
+  // 於圖上按下游標，開始拖拉
+  function mouseDownOnImage(evt) {
+    isMouseDownOnImage = true;
+    // 計算開始拖拉位置
+    startDragOffset.x = evt.clientX - translatePos.x;
+    startDragOffset.y = evt.clientY - translatePos.y;
+  }
+
+  // 於圖上移動按著的游標，進行拖拉
+  function mouseMoveOnImage(evt) {
+    // 有按下游標才動
+    if (isMouseDownOnImage) {
+        // 計算畫布中心位置
+        translatePos.x = evt.clientX - startDragOffset.x;
+        translatePos.y = evt.clientY - startDragOffset.y;
+        // 繪製
+        renderImage(0);
+    }
+  }
+
+  // 離開拖拉現場
+  function clearDrag() {
+    isMouseDownOnImage = false;
   }
 
   return {
@@ -606,6 +655,9 @@ const app = (function () {
     loadOriginalImgModal,
     deleteEducationFile,
     renderImage,
+    mouseDownOnImage,
+    mouseMoveOnImage,
+    clearDrag,
   }
 
 })();

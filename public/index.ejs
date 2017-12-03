@@ -137,10 +137,21 @@
         </button>
       </div>
       <div class="modal-body text-center">
-        <canvas class="img-fluid" id="original-img-canvas" data-filename="" data-filetype="">
+        <canvas
+          class="img-fluid" id="original-img-canvas"
+          data-filename="" data-filetype=""
+          onmousedown="app.mouseDownOnImage(event);"
+          onmousemove="app.mouseMoveOnImage(event);"
+          onmouseout="app.renderImage(0);"
+          onmouseup="app.clearDrag();"
+          onmouseover="app.clearDrag();"
+          onmouseout="app.clearDrag();"
+        ></canvas>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" onclick="app.renderImage(90)" onmousedown="event.preventDefault()">轉</button>
+        <button type="button" class="btn btn-primary" onclick="app.renderImage(0, 1/0.8)" onmousedown="event.preventDefault()">放大</button>
+        <button type="button" class="btn btn-primary" onclick="app.renderImage(0, 0.8)" onmousedown="event.preventDefault()">縮小</button>
+        <button type="button" class="btn btn-primary mr-auto" onclick="app.renderImage(90)" onmousedown="event.preventDefault()">轉</button>
         <button type="button" class="btn btn-danger" id="original-delete-btn" onclick="app.deleteEducationFile(document.getElementById('original-img-canvas').dataset.filename, document.getElementById('original-img-canvas').dataset.filetype)" onmousedown="event.preventDefault()"><i class="fa fa-trash-o" aria-hidden="true"></i> 刪除</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal" onmousedown="event.preventDefault()"><i class="fa fa-sign-out" aria-hidden="true"></i> 離開</button>
       </div>

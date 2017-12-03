@@ -18,6 +18,10 @@
   }
 }
 
+#original-img-canvas {
+  cursor: move;
+}
+
 @include media-breakpoint-up(sm) {}
 @include media-breakpoint-up(md) {
   .doc {
