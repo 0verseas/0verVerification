@@ -61,6 +61,11 @@ const app = (function () {
    * Event Listener
    */
 
+  // 圖片關掉就清除畫布
+  $originalImgModal.on('hidden.bs.modal', e => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  });
+
   // 掃瞄器被關掉就停止掃描器
   $scannerModal.on('hidden.bs.modal', e => {
     Quagga.stop();
@@ -529,6 +534,7 @@ const app = (function () {
 
   // 開啟原圖
   function loadOriginalImgModal(src = '', alt = '', filename = '', filetype = '') {
+    originalImageAngleInDegrees = 0;
     // 擷取畫面元素
     canvas = document.getElementById('original-img-canvas');
     ctx = canvas.getContext('2d');
@@ -538,15 +544,8 @@ const app = (function () {
 
     // 等圖片元素 load 好，就畫出來
     originalImage.onload = () => {
-      // 邊長設定為長寬中值較大的那一邊（為了能轉）
-      const length = originalImage.width > originalImage.height ? originalImage.width : originalImage.height;
 
-      // 設定畫布邊長
-      ctx.canvas.width  = length;
-      ctx.canvas.height = length;
-
-      // 畫出來
-      ctx.drawImage(originalImage, (length-originalImage.width)/2, (length-originalImage.height)/2);
+      renderImage();
     }
 
     // 置放圖片
@@ -562,21 +561,27 @@ const app = (function () {
   }
 
   // 圖片轉向
-  function rotated() {
-      originalImageAngleInDegrees += 90;
-
-      ctx.clearRect(0,0,canvas.width, canvas.height);
-      ctx.save();
-      ctx.translate(canvas.width/2, canvas.height/2);
-      ctx.rotate(originalImageAngleInDegrees*Math.PI/180);
-      ctx.drawImage(originalImage, -ctx.canvas.width/2, -ctx.canvas.width/2);
-      ctx.restore();
-  function rotated(degress = 90) {
+  function renderImage(degress = 0) {
     // 累加角度
-    originalImageAngleInDegrees += degress;
+    originalImageAngleInDegrees = (originalImageAngleInDegrees + degress) % 360;
 
     // 清空畫布全區
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 依角度設定畫布邊長
+    switch (originalImageAngleInDegrees) {
+      case 0:
+      case 180:
+        ctx.canvas.width = originalImage.width;
+        ctx.canvas.height = originalImage.height;
+        break;
+      case 90:
+      case 270:
+        ctx.canvas.width = originalImage.height;
+        ctx.canvas.height = originalImage.width;
+        break;
+    }
+
     // 暫存畫布狀態
     ctx.save();
     // 移動原點至畫布中心
@@ -600,7 +605,7 @@ const app = (function () {
     verifyStudentInfo,
     loadOriginalImgModal,
     deleteEducationFile,
-    rotated
+    renderImage,
   }
 
 })();
