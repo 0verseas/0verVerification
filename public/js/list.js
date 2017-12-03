@@ -11,13 +11,32 @@ const app = (function () {
   const $twoYearTechStudentsBody = $('#two-year-tech-students-body');
   const $masterStudentsBody = $('#master-students-body');
   const $phdStudentsBody = $('#phd-students-body');
+  const $datepicker = $('#datepicker');
 
   /**
    * init
    */
 
   let user;
-   _init();
+  let students = {
+    bachelor_selection: [],
+    bachelor_placement: [],
+    division_of_preparatory_programs: [],
+    master: [],
+    phd: [],
+    two_year_tech: [],
+  }
+
+  // 設定日期選擇樣式
+  $datepicker.datepicker({
+    format: 'yyyy/mm/dd',
+    weekStart: 0,
+    todayBtn: true,
+    language: 'zh-TW',
+    todayHighlight: true
+  });
+
+  _init();
 
   /**
    * functions
@@ -50,16 +69,25 @@ const app = (function () {
   function _getVerifiedStudents() {
     API.getVerifiedStudents().then(response => {
       if (response.ok) {
+
+        // 暫存已審核清單
+        students.bachelor_selection = response.data.bachelor_selection_students;
+        students.bachelor_placement = response.data.bachelor_placement_students;
+        students.division_of_preparatory_programs = response.data.division_of_preparatory_programs_students;
+        students.master = response.data.master_students;
+        students.phd = response.data.phd;
+        students.two_year_tech = response.data.two_year_tech_students;
+
         // 分包 render
-        _render($bachelorSelectionStudentsBody, _sortList(response.data.bachelor_selection_students));
-        _render($bachelorPlacementStudentsBody, _sortList(response.data.bachelor_placement_students), true);
-        _render($divisionOfPreparatoryProgramsStudentsBody, _sortList(response.data.division_of_preparatory_programs_students));
-        _render($masterStudentsBody, _sortList(response.data.master_students));
-        _render($phdStudentsBody, _sortList(response.data.phd_students));
+        _render($bachelorSelectionStudentsBody, _sortList(students.bachelor_selection));
+        _render($bachelorPlacementStudentsBody, _sortList(students.bachelor_placement), true);
+        _render($divisionOfPreparatoryProgramsStudentsBody, _sortList(students.division_of_preparatory_programs));
+        _render($masterStudentsBody, _sortList(students.master));
+        _render($phdStudentsBody, _sortList(students.phd));
 
         // 審核單位為海聯或香港時才顯示二技分頁
         if (user.overseas_office.authority == 1 || user.overseas_office.authority == 2) {
-          _render($twoYearTechStudentsBody, response.data.two_year_tech_students);
+          _render($twoYearTechStudentsBody, students.two_year_tech);
         } else {
           $twoYearTechStudentsTab.remove();
           $twoYearTechStudentsBody.remove();
@@ -92,6 +120,22 @@ const app = (function () {
     });
   }
 
+  // 過濾出某天的已審核清單
+  function _filterListByDate(students = [], date) {
+    // 容許 all
+    if (date === 'all') {
+      return students;
+    }
+
+    // 用年月日判斷
+    return students.filter(student => {
+      const verifiedDateObject = new Date(student.student_misc_data.verified_at);
+      const verifiedDate = `${verifiedDateObject.getFullYear()}/${verifiedDateObject.getMonth()+1}/${verifiedDateObject.getDate()}`;
+
+      return verifiedDate === date;
+    });
+  }
+
   // render 資料
   function _render($body, students = [], hasApplyWay = false) {
     // 重置系所表格
@@ -120,11 +164,25 @@ const app = (function () {
     $body.html(result);
   }
 
+  // 重新排 list
+  function reloadList(date = 'all') {
+    if (date === 'all') {
+      $datepicker.val('');
+    }
+
+    _render($bachelorSelectionStudentsBody, _sortList(_filterListByDate(students.bachelor_selection, date)));
+    _render($bachelorPlacementStudentsBody, _sortList(_filterListByDate(students.bachelor_placement, date), true));
+    _render($divisionOfPreparatoryProgramsStudentsBody, _sortList(_filterListByDate(students.division_of_preparatory_programs, date)));
+    _render($masterStudentsBody, _sortList(_filterListByDate(students.master, date)));
+    _render($phdStudentsBody, _sortList(_filterListByDate(students.phd, date)));
+  }
+
   function downloadList(system = '') {
     window.location.href = `${env.baseUrl}/office/students/file/verified?system=${system}`;
   }
 
   return {
+    reloadList,
     downloadList,
   }
 

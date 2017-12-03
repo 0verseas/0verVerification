@@ -1,6 +1,17 @@
 <%- partial('partials/_nav', {nav: 'list'})%>
 
 <div class="container" style="max-width: 100rem;">
+
+  <div class="row mx-auto mt-3">
+    <div class="row ml-auto">
+      <label class="col-4 col-form-label text-right">只顯示某日：</label>
+      <div class="col-8">
+        <input type="text" class="form-control" id="datepicker" onchange="app.reloadList(this.value);">
+      </div>
+    </div>
+    <button class="btn btn-secondary ml-5 mr-auto" onmousedown="event.preventDefault()" onclick="app.reloadList('all')">顯示所有日期</button>
+  </div>
+
   <div class="row">
     <nav class="nav nav-tabs justify-content-center my-3 detail-tab col" id="infoTab" role="tablist">
       <a
@@ -83,7 +94,7 @@
       role="tabpanel"
       aria-labelledby="bachelor-selection-students-tab"
     >
-      <div class="p-3 text-right">
+      <div class="mb-3 text-right">
         <button class="btn btn-success" onmousedown="event.preventDefault()" onclick="app.downloadList('bachelor-selection')">下載已審核清單</button>
       </div>
 
@@ -110,7 +121,7 @@
       role="tabpanel"
       aria-labelledby="bachelor-placement-students-tab"
     >
-      <div class="p-3 text-right">
+      <div class="mb-3 text-right">
         <button class="btn btn-success" onmousedown="event.preventDefault()" onclick="app.downloadList('bachelor-placement')">下載已審核清單</button>
       </div>
 
@@ -138,7 +149,7 @@
       role="tabpanel"
       aria-labelledby="division-of-preparatory-programs-students-tab"
     >
-      <div class="p-3 text-right">
+      <div class="mb-3 text-right">
         <button class="btn btn-success" onmousedown="event.preventDefault()" onclick="app.downloadList('division-of-preparatory-programs')">下載已審核清單</button>
       </div>
 
@@ -165,7 +176,7 @@
       role="tabpanel"
       aria-labelledby="two-year-tech-students-tab"
     >
-      <div class="p-3 text-right">
+      <div class="mb-3 text-right">
         <button class="btn btn-success" onmousedown="event.preventDefault()" onclick="app.downloadList('two-year-tech')">下載已審核清單</button>
       </div>
 
@@ -192,7 +203,7 @@
       role="tabpanel"
       aria-labelledby="master-students-tab"
     >
-      <div class="p-3 text-right">
+      <div class="mb-3 text-right">
         <button class="btn btn-success" onmousedown="event.preventDefault()" onclick="app.downloadList('master')">下載已審核清單</button>
       </div>
 
@@ -219,7 +230,7 @@
       role="tabpanel"
       aria-labelledby="phd-students-tab"
     >
-      <div class="p-3 text-right">
+      <div class="mb-3 text-right">
         <button class="btn btn-success" onmousedown="event.preventDefault()" onclick="app.downloadList('phd')">下載已審核清單</button>
       </div>
 
