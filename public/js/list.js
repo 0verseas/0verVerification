@@ -75,7 +75,7 @@ const app = (function () {
         students.bachelor_placement = response.data.bachelor_placement_students;
         students.division_of_preparatory_programs = response.data.division_of_preparatory_programs_students;
         students.master = response.data.master_students;
-        students.phd = response.data.phd;
+        students.phd = response.data.phd_students;
         students.two_year_tech = response.data.two_year_tech_students;
 
         // 分包 render
