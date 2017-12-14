@@ -273,8 +273,8 @@ const app = (function () {
     // 置放身份別代碼（有才放）
     $ruleCodeOfOverseasStudentId.html(miscData && miscData.rule_code_of_overseas_student_id ? miscData.rule_code_of_overseas_student_id : '未產生');
 
-    // 若僑居地國別為緬甸，且可被審核，拿可用身份別代碼並置放選單
-    if (miscData.confirmed_at && !miscData.verified_at && personalData.resident_location == 106) {
+    // 若最後畢業學校國別為緬甸，且可被審核，拿可用身份別代碼並置放選單
+    if (miscData.confirmed_at && !miscData.verified_at && personalData.school_country == 106) {
       API.getAvailableRuleCodeOfOverseasStudentId(studentInfo.id).then((response) => {
         if (response.statusCode == 200) {
           let html = '<select id="rule-code-of-overseas-student-id" style="width: 100%">';
@@ -509,8 +509,8 @@ const app = (function () {
     // 取得所選的身份別代碼
     const ruleCodeOfOverseasStudentId= $('#rule-code-of-overseas-student-id').find(":selected").val();
 
-    // 僑居地在緬甸就一定要選身份別喔
-    if (student.student_personal_data.resident_location == 106 && !ruleCodeOfOverseasStudentId) {
+    // 最後畢業學校國別在緬甸就一定要選身份別喔
+    if (student.student_personal_data.school_country == 106 && !ruleCodeOfOverseasStudentId) {
       alert('請選擇身份別');
       return;
     }
