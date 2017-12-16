@@ -58,6 +58,7 @@ const app = (function () {
   let originalImage; // 圖片本人
   let originalImageAngleInDegrees = 0; // 目前角度
   let student; // 目前查詢的學生資料
+  let verifier; // 目前審核單位的帳號資料
 
   _init();
 
@@ -109,6 +110,9 @@ const app = (function () {
     // 驗證登入狀態
     API.isLogin().then(response => {
       if (response.ok) {
+        // 儲存審核單位帳號資料
+        verifier = response.data;
+
         // 確認有登入，init 頁面
         _resetStudentInfo();
       } else if (response.statusCode == 401) {
@@ -367,11 +371,14 @@ const app = (function () {
 
       // 同時學生已被審核
       if (miscData.verified_at) {
+        // 非海聯窗口，學生被審核後不得增刪文件
+        if (verifier.overseas_office.authority !== 1) {
+          // 不能重傳文件
+          $(":file").filestyle('disabled', true);
+          // 不能刪原圖
+          $originalDeleteBtn.prop('disabled', true);
+        }
 
-        // 不能重傳文件
-        $(":file").filestyle('disabled', true);
-        // 不能刪原圖
-        $originalDeleteBtn.prop('disabled', true);
         // 不能審核
         $submitBtn.prop('disabled', true);
         // 不能編輯審核備註
