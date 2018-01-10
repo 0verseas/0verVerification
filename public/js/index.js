@@ -10,6 +10,7 @@ const app = (function () {
   const $userId = $('#user-id'); // 報名序號
   const $userIdInput = $('#user-id-input'); // 報名序號
   const $overseasStudentId = $('#overseas-student-id'); // 僑生編號
+  const $disability = $('#disability'); // 身障程度
   const $name = $('#name'); // 姓名
   const $engName = $('#eng-name'); // 英文姓名
   const $gender = $('#gender'); // 性別
@@ -295,6 +296,9 @@ const app = (function () {
         }
       });
     }
+  
+    // 身障程度
+    $disability.html(personalData && personalData.disability_category ? personalData.disability_level + personalData.disability_category : '無');
 
     // 姓名
     $name.html(studentInfo.name ? studentInfo.name : noData);
