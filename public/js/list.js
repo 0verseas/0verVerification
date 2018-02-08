@@ -144,7 +144,7 @@ const app = (function () {
     // 準備 data
     let result = ``;
     for (let student of students) {
-      let verified_at = moment(student.student_misc_data.verified_at).format('YYYY/MM/DD hh:mm:ss ');
+      let verified_at = dateFns.format(student.student_misc_data.verified_at, 'YYYY/MM/DD hh:mm:ss ');
       result += `
         <tr>
           <td>${student.id}</td>
