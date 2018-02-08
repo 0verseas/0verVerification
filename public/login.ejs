@@ -11,15 +11,19 @@
 
     <div class="form-group row">
       <div class="input-group">
-        <div class="input-group-addon" id="basic-addon1"><i class="fa fa-user" aria-hidden="true"></i></div>
-        <input class="form-control" id="username" name="username" type="text" autocorrect="off" spellcheck="false" autocapitalize="off" placeholder="帳號" required>
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1"><i class="fa fa-user fa-fw" aria-hidden="true"></i></span>
+        </div>
+        <input type="text" class="form-control" id="username" name="username" placeholder="帳號" aria-label="帳號" aria-describedby="basic-addon1" autocorrect="off" spellcheck="false" autocapitalize="off" required>
       </div>
     </div>
 
     <div class="form-group row">
       <div class="input-group">
-        <div class="input-group-addon" id="basic-addon1"><i class="fa fa-key" aria-hidden="true"></i></div>
-        <input class="form-control" id="password" name="password" type="password" autocorrect="off" spellcheck="false" autocapitalize="off" placeholder="密碼" required>
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1"><i class="fa fa-key fa-fw" aria-hidden="true"></i></span>
+        </div>
+        <input type="password" class="form-control" id="password" name="password" placeholder="密碼" aria-label="密碼" aria-describedby="basic-addon1" autocorrect="off" spellcheck="false" autocapitalize="off" required>
       </div>
     </div>
 
