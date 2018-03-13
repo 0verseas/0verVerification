@@ -126,12 +126,20 @@ const app = (function () {
     if (date === 'all') {
       return students;
     }
-
     // 用年月日判斷
     return students.filter(student => {
       const verifiedDateObject = new Date(student.student_misc_data.verified_at);
-      const verifiedDate = `${verifiedDateObject.getFullYear()}/${verifiedDateObject.getMonth()+1}/${verifiedDateObject.getDate()}`;
-
+      var v_month;
+      if (verifiedDateObject.getMonth()+1 < 10)
+        v_month="0" + (verifiedDateObject.getMonth()+1).toString() ;
+      else
+        v_month=verifiedDateObject.getMonth()+1;
+      var v_date;
+      if (verifiedDateObject.getDate() < 10)
+        v_date="0" + (verifiedDateObject.getDate()).toString() ;
+      else
+        v_date=verifiedDateObject.getDate();
+      const verifiedDate = `${verifiedDateObject.getFullYear()}/${v_month}/${v_date}`;
       return verifiedDate === date;
     });
   }
