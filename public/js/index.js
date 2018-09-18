@@ -40,6 +40,7 @@ const app = (function () {
 
   const baseUrl = env.baseUrl;
   let userId = '';
+  let has_videoinput;
 
   // 學歷文件 modal 所需變數
   let canvas; // 畫布
@@ -81,21 +82,40 @@ const app = (function () {
 
   // init
   function _init() {
-    // 驗證能否使用 scanner
-    if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
-      console.log('safely access navigator.mediaDevices.getUserMedia');
-    } else {
-      // 不給掃描就幹掉掃描器
-      console.log('can not use scanner');
-      $scannerBtnGroup.remove();
-      $scannerModal.remove();
-    }
-
     // 驗證登入狀態
     API.isLogin().then(response => {
       if (response.ok) {
         // 儲存審核單位帳號資料
         verifier = response.data;
+
+        // 驗證能否使用 scanner
+        if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function' && typeof navigator.mediaDevices.enumerateDevices === 'function') {
+          console.log('safely access navigator.mediaDevices.getUserMedia');
+
+          navigator.mediaDevices.enumerateDevices()
+            .then(function(devices) {
+              devices.forEach(function(device) {
+                if (device.kind === 'videoinput') {
+                  has_videoinput = true;
+                }
+              });
+
+              if (has_videoinput !== true) {
+                console.log('No videoinput devices detected');
+                $scannerBtnGroup.remove();
+                $scannerModal.remove();
+              }
+            }).catch(function(err) {
+              console.log(err.name + ": " + err.message);
+              $scannerBtnGroup.remove();
+              $scannerModal.remove();
+            });
+        } else {
+          // 不給掃描就幹掉掃描器
+          console.log('can not use scanner');
+          $scannerBtnGroup.remove();
+          $scannerModal.remove();
+        }
 
         // 確認有登入，init 頁面
         _resetStudentInfo();
