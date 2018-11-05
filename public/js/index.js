@@ -21,20 +21,12 @@ const app = (function () {
   const $ruleCodeOfOverseasStudentId = $('#rule-code-of-overseas-student-id'); // 規則碼（身份別代碼）
   const $schoolCountry = $('#graduate-school-country'); // 畢業學校國家
   const $schoolName = $('#graduate-school-name'); // 畢業學校
-  const $confirmedStatus = $('#confirmed-status') // 確認上傳及報名資料
+  const $confirmedStatus = $('#confirmed-status'); // 確認上傳及報名資料
   const $applyWayTitle = $('#apply-way-title'); // 聯合分發成績採計方式 title
   const $applyWay = $('#apply-way'); // 聯合分發成績採計方式
-  const $diplomaDiv = $('#diploma-div'); // 學歷證明 div
-  const $transcriptDiv = $('#transcript-div'); // 成績單 div
   const $verifiedStatus = $('#verified-status'); // 審核狀態
   const $verificationDesc = $('#verification-desc'); // 審核備註
   const $submitBtn = $('#submit-btn'); // 送出審核按鈕
-
-  // 圖片原圖 modal
-  const $originalImgModal = $('#original-img-modal');
-  const $originalImgCanvas = $('#original-img-canvas');
-  const $originalImgTitle = $('#original-img-title');
-  const $originalDeleteBtn = $('#original-delete-btn');
 
   // Scanner
   const $scannerBtnGroup = $('#scanner-btn-group');
@@ -48,6 +40,7 @@ const app = (function () {
 
   const baseUrl = env.baseUrl;
   let userId = '';
+  let has_videoinput;
 
   // 學歷文件 modal 所需變數
   let canvas; // 畫布
@@ -66,12 +59,6 @@ const app = (function () {
   /**
    * Event Listener
    */
-
-  // 圖片關掉就清除畫布
-  $originalImgModal.on('hidden.bs.modal', e => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  });
-
   // 掃瞄器被關掉就停止掃描器
   $scannerModal.on('hidden.bs.modal', e => {
     Quagga.stop();
@@ -95,24 +82,40 @@ const app = (function () {
 
   // init
   function _init() {
-    // 設定上傳按鈕
-    _renderUploadFileBtn();
-
-    // 驗證能否使用 scanner
-    if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
-      console.log('safely access navigator.mediaDevices.getUserMedia');
-    } else {
-      // 不給掃描就幹掉掃描器
-      console.log('can not use scanner');
-      $scannerBtnGroup.remove();
-      $scannerModal.remove();
-    }
-
     // 驗證登入狀態
     API.isLogin().then(response => {
       if (response.ok) {
         // 儲存審核單位帳號資料
         verifier = response.data;
+
+        // 驗證能否使用 scanner
+        if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function' && typeof navigator.mediaDevices.enumerateDevices === 'function') {
+          console.log('safely access navigator.mediaDevices.getUserMedia');
+
+          navigator.mediaDevices.enumerateDevices()
+            .then(function(devices) {
+              devices.forEach(function(device) {
+                if (device.kind === 'videoinput') {
+                  has_videoinput = true;
+                }
+              });
+
+              if (has_videoinput !== true) {
+                console.log('No videoinput devices detected');
+                $scannerBtnGroup.remove();
+                $scannerModal.remove();
+              }
+            }).catch(function(err) {
+              console.log(err.name + ": " + err.message);
+              $scannerBtnGroup.remove();
+              $scannerModal.remove();
+            });
+        } else {
+          // 不給掃描就幹掉掃描器
+          console.log('can not use scanner');
+          $scannerBtnGroup.remove();
+          $scannerModal.remove();
+        }
 
         // 確認有登入，init 頁面
         _resetStudentInfo();
@@ -162,23 +165,6 @@ const app = (function () {
     });
   }
 
-  // 設定「上傳檔案」按鈕
-  function _renderUploadFileBtn() {
-    // 使用 bootstrap-filestyle（https://github.com/markusslima/bootstrap-filestyle/）處理上傳按鈕
-
-    // 所有 type="file" 的通通 filestyle 成要求的樣子
-    $(":file").filestyle({
-      input: false, // 只留按鈕，不要 input 欄位
-      htmlIcon: '<i class="fa fa-upload" aria-hidden="true"></i>',
-      text: ' 重傳檔案',
-      btnClass: 'btn-success',
-    });
-
-    // 調整按鈕排版
-    $('.bootstrap-filestyle').addClass('col-2');
-    $('.group-span-filestyle').addClass('ml-auto');
-  }
-
   // init student info 把所有欄位清空
   function _resetStudentInfo() {
     $userId.html('');
@@ -197,8 +183,6 @@ const app = (function () {
     $applyWayTitle.hide();
     $applyWay.hide();
     $applyWay.html('');
-    $diplomaDiv.html('');
-    $transcriptDiv.html('');
     $verificationDesc.html('');
     // 重置上傳文件按鈕
     $(":file").filestyle('disabled', false);
@@ -206,8 +190,6 @@ const app = (function () {
     $submitBtn.prop('disabled', false);
     // 重設審核備註編輯
     $verificationDesc.prop('readonly', false);
-    // 重設原圖刪除按鈕
-    $originalDeleteBtn.prop('disabled', false);
   }
 
   // 用報名序號搜尋學生資料
@@ -357,12 +339,6 @@ const app = (function () {
       $applyWay.show();
     }
 
-    // 學歷證明文件
-    _appendEducationFile('diploma', studentInfo.student_diploma);
-
-    // 成績單
-    _appendEducationFile('transcripts', studentInfo.student_transcripts);
-
     // 確認報名狀態
     $confirmedStatus.html((miscData && miscData.confirmed_at ? '已' : '尚未') + '確認上傳及報名資料');
 
@@ -375,14 +351,6 @@ const app = (function () {
 
       // 同時學生已被審核
       if (miscData.verified_at) {
-        // 非海聯窗口，學生被審核後不得增刪文件
-        if (verifier.overseas_office.authority !== 1) {
-          // 不能重傳文件
-          $(":file").filestyle('disabled', true);
-          // 不能刪原圖
-          $originalDeleteBtn.prop('disabled', true);
-        }
-
         // 不能審核
         $submitBtn.prop('disabled', true);
         // 不能編輯審核備註
@@ -393,119 +361,11 @@ const app = (function () {
     } else {
       // 學生尚未確認報名
 
-      // 不能重傳文件
-      $(":file").filestyle('disabled', true);
-      // 不能刪原圖
-      $originalDeleteBtn.prop('disabled', true);
       // 不能審核
       $submitBtn.prop('disabled', true);
       // 不能編輯審核備註
       $verificationDesc.prop('readonly', true);
     }
-  }
-
-  // 將圖片依照 type append 到 DOM 上
-  function _appendEducationFile(type = '', filenames = [], highlight = false) {
-    for (let filename of filenames) {
-      if (type === 'diploma') {
-        $diplomaDiv.prepend(`
-          <img
-            src="${baseUrl}/office/students/${userId}/diploma/${filename}"
-            alt="學歷證明文件"
-            data-filename="${filename}" data-filetype="diploma"
-            class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
-            onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
-          >
-        `)
-      }
-
-      if (type === 'transcripts') {
-        $transcriptDiv.prepend(`
-          <img
-            src="${baseUrl}/office/students/${userId}/transcripts/${filename}"
-            alt="成績單文件"
-            data-filename="${filename}" data-filetype="transcripts"
-            class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
-            onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
-          >
-        `)
-      }
-    }
-  }
-
-  // 上傳成績單或學歷證明文件
-  function uploadEducationFile(type = '', files = []) {
-    loading.start();
-
-    // 使用 formData
-    let data = new FormData();
-
-    // 將檔案一一放到 formData 中（FileList is a node list, it needs to use pure for loop.）
-    for (let i = 0; i < files.length; i++) {
-      // get file item
-      const file = files.item(i);
-      // 放到 formData 中
-      data.append('files[]', file);
-    }
-
-    // 上傳囉
-    API.uploadStudentEducationFile(userId, type, data).then((response) => {
-      // 成功就把剛上傳的檔案們秀出來，不然就彈 alert
-      if (response.ok) {
-        _appendEducationFile(type, response.data, true);
-      } else if (response.statusCode == 401) {
-        alert('請先登入');
-        // 若沒有登入，跳轉登入頁面
-        window.location.href = './login.html';
-      } else {
-        alert(response.singleErrorMessage);
-      }
-
-      // 清除上傳檔案的快取
-      $(":file").filestyle('clear');
-
-      loading.complete();
-    })
-  }
-
-  function downloadEducationFile(type = '') {
-    window.open(`${env.baseUrl}/office/students/${userId}/${type}?type=file`,'_blank');
-  }
-
-  // 刪除某成績單或學歷證明文件
-  function deleteEducationFile(filename = '', filetype = '') {
-    // 彈出確認框
-    const isConfirmedDelete = confirm('確定要刪除嗎？');
-
-    // 其實不想刪，那算了
-    if (!isConfirmedDelete) {
-      return;
-    }
-
-    // 關閉原圖 modal
-    $originalImgModal.modal('hide');
-
-    loading.start();
-
-    // 沒不想刪就刪吧
-    API.deleteStudentEducationFile(userId, filetype, filename).then(response => {
-      if (response.ok) {
-        // 確認刪除，移除該圖
-        $(`.doc-thumbnail[data-filename="${filename}"]`).remove();
-      } else if (response.statusCode == 401) {
-        alert('請先登入');
-        // 若沒有登入，跳轉登入頁面
-        window.location.href = './login.html';
-      } else {
-        $originalImgModal.modal('hide');
-        // 彈出錯誤訊息
-        alert(response.singleErrorMessage);
-      }
-
-      loading.complete();
-    }).catch(error => {
-      console.log(error);
-    });
   }
 
   function verifyStudentInfo(verificationDesc) {
@@ -550,128 +410,10 @@ const app = (function () {
     });
   }
 
-  // 開啟原圖
-  function loadOriginalImgModal(src = '', alt = '', filename = '', filetype = '') {
-    // 重置圖片及畫布設定
-    originalImageAngleInDegrees = 0;
-    isMouseDownOnImage = false;
-    startDragOffset = {x: 0, y: 0};
-    translatePos = {x: 0, y: 0};
-    scale = 1.0;
-
-    // 擷取畫面元素
-    canvas = document.getElementById('original-img-canvas');
-    ctx = canvas.getContext('2d');
-
-    // 建立圖片元素
-    originalImage = new Image();
-
-    // 等圖片元素 load 好，就畫出來
-    originalImage.onload = () => {
-
-      renderImage();
-    }
-
-    // 置放圖片
-    originalImage.src = src;
-
-    // 設定圖片後設資料
-    $originalImgCanvas.attr('data-filename', filename);
-    $originalImgCanvas.attr('data-filetype', filetype);
-    $originalImgTitle.html(alt);
-
-    // 顯示 modal
-    $originalImgModal.modal();
-  }
-
-  // 圖片轉向
-  function renderImage(degress = 0, scaleMultiplier = 1.0) {
-    // 累加角度
-    originalImageAngleInDegrees = (originalImageAngleInDegrees + degress) % 360;
-
-    // 若轉動，恢復比例及位置
-    if (degress > 0) {
-      isMouseDownOnImage = false; // 是否按著圖片本人
-      startDragOffset = {};
-      translatePos = {x: 0, y: 0};
-      scale = 1.0;
-    } else {
-      // 若非轉動，則計算縮放比例
-      scale *= scaleMultiplier;
-    }
-
-    // 清空畫布全區
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // 依角度設定畫布邊長
-    switch (originalImageAngleInDegrees) {
-      case 0:
-      case 180:
-        ctx.canvas.width = originalImage.width;
-        ctx.canvas.height = originalImage.height;
-        break;
-      case 90:
-      case 270:
-        ctx.canvas.width = originalImage.height;
-        ctx.canvas.height = originalImage.width;
-        break;
-    }
-
-    // 暫存畫布狀態
-    ctx.save();
-    // 移動原點以模擬拖拉
-    ctx.translate(translatePos.x, translatePos.y);
-    // 移動原點至畫布中心
-    ctx.translate(canvas.width/2, canvas.height/2);
-    // 縮放
-    ctx.scale(scale, scale);
-    // 順轉畫布
-    ctx.rotate(originalImageAngleInDegrees*Math.PI/180);
-    // 移動原點至原圖置中狀態的左上點
-    ctx.translate(-originalImage.width/2, -originalImage.height/2);
-    // 放置圖
-    ctx.drawImage(originalImage, 0,0);
-    // 恢復畫布狀態
-    ctx.restore();
-  }
-
-  // 於圖上按下游標，開始拖拉
-  function mouseDownOnImage(evt) {
-    isMouseDownOnImage = true;
-    // 計算開始拖拉位置
-    startDragOffset.x = evt.clientX - translatePos.x;
-    startDragOffset.y = evt.clientY - translatePos.y;
-  }
-
-  // 於圖上移動按著的游標，進行拖拉
-  function mouseMoveOnImage(evt) {
-    // 有按下游標才動
-    if (isMouseDownOnImage) {
-        // 計算畫布中心位置
-        translatePos.x = evt.clientX - startDragOffset.x;
-        translatePos.y = evt.clientY - startDragOffset.y;
-        // 繪製
-        renderImage(0);
-    }
-  }
-
-  // 離開拖拉現場
-  function clearDrag() {
-    isMouseDownOnImage = false;
-  }
-
   return {
     openScanner,
     searchUserId,
-    uploadEducationFile,
-    downloadEducationFile,
     verifyStudentInfo,
-    loadOriginalImgModal,
-    deleteEducationFile,
-    renderImage,
-    mouseDownOnImage,
-    mouseMoveOnImage,
-    clearDrag,
   }
 
 })();
