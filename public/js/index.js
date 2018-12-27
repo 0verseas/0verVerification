@@ -261,7 +261,7 @@ const app = (function () {
     $ruleCodeOfOverseasStudentId.html(miscData && miscData.rule_code_of_overseas_student_id ? miscData.rule_code_of_overseas_student_id : '未產生');
 
     // 若最後畢業學校國別為緬甸學士班學生，且可被審核，拿可用身份別代碼並置放選單
-    if (miscData.confirmed_at && !miscData.verified_at && personalData.school_country == 106 && qualificationVerify.system_id && qualificationVerify.system_id === 1 ) {
+    if (miscData.confirmed_at && !miscData.verified_at && personalData.school_country == 105 && qualificationVerify.system_id && qualificationVerify.system_id === 1 ) {
       API.getAvailableRuleCodeOfOverseasStudentId(studentInfo.id).then((response) => {
         if (response.statusCode == 200) {
           let html = '<select id="rule-code-of-overseas-student-id" style="width: 100%">';
