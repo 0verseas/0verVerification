@@ -278,7 +278,7 @@ const app = (function () {
         }
       });
     }
-  
+
     // 身障程度
     $disability.html(personalData && personalData.disability_category ? personalData.disability_level + personalData.disability_category : '無');
 
@@ -384,7 +384,7 @@ const app = (function () {
     const systemId = student.student_qualification_verify.system_id;
 
     // 最後畢業學校國別在緬甸就一定要選身份別喔
-    if (student.student_personal_data.school_country == 106 && !ruleCodeOfOverseasStudentId && systemId && systemId === 1 ) {
+    if (student.student_personal_data.school_country == 105 && !ruleCodeOfOverseasStudentId && systemId && systemId === 1 ) {
       alert('請選擇身份別');
       return;
     }
