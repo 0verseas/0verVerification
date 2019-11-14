@@ -83,7 +83,9 @@
   </div>
   <div class="tab-content" id="tabContent">
     <div class="mb-2 text-right">
-      <button class="btn btn-success" onmousedown="event.preventDefault()" onclick="app.downloadVerifiedList()">下載已審核清單</button>
+      <a id = "download-Verified-List">
+       <button  class="btn btn-success" onmousedown="event.preventDefault()" onclick="app.downloadVerifiedList()">下載已審核清單</button>
+      </a>
       <button class="btn btn-success" onmousedown="event.preventDefault()" onclick="app.downloadList()">下載收件統計表</button>
     </div>
 

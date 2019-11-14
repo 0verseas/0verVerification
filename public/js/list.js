@@ -13,6 +13,8 @@ const app = (function () {
   const $phdStudentsBody = $('#phd-students-body');
   const $datepicker = $('#datepicker');
 
+  const $downVerifiedListButton = $('#download-Verified-List');
+
   /**
    * init
    */
@@ -136,6 +138,13 @@ const app = (function () {
           $twoYearTechStudentsTab.remove();
           $twoYearTechStudentsBody.remove();
         }
+        // 審核單位為僑務委員會時才顯示下載已審核清單按鈕
+        if (user.overseas_office.authority == 4) {
+          $downVerifiedListButton.show();
+        } else {
+          $downVerifiedListButton.remove();
+        }
+      
 
 
       } else if (response.statusCode === 401) {
@@ -236,7 +245,7 @@ const app = (function () {
   
   /* 根據system_Num下載不同已審核清單 */
   function downloadVerifiedList() {
-        window.location.href = `${env.baseUrl}/office/verified-list/${system_Num}`;
+    window.location.href = `${env.baseUrl}/office/verified-list/${system_Num}`;
   }
 
   return {
