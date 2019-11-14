@@ -64,17 +64,17 @@ const app = (function () {
       console.log(error);
     });
   }
-/*
-切換不同的tab時同步切換學制變數
-* system_Type  用來控制 收件統計表按鈕動作
-* system_Num  用來控制 已審核清單按鈕動作
-* 11：學士班 個人申請
-* 10：學士班 聯合分發
-* 6：僑先部
-* 2：港二技
-* 3：碩士班
-* 4：博士班
-*/
+  /*
+  切換不同的tab時同步切換學制變數
+  * system_Type  用來控制 收件統計表按鈕動作
+  * system_Num  用來控制 已審核清單按鈕動作
+  * 11：學士班 個人申請
+  * 10：學士班 聯合分發
+  * 6：僑先部
+  * 2：港二技
+  * 3：碩士班
+  * 4：博士班
+  */
   var system_Type = 'bachelor-selection';
   var system_Num = '11';
   $(document).ready(function () {
@@ -229,19 +229,16 @@ const app = (function () {
     _render($phdStudentsBody, _sortList(_filterListByDate(students.phd, date)));
   }
 
-/* 根據system_Type下載不同收件統計表 */
+  /* 根據system_Type下載不同收件統計表 */
   function downloadList() {
     window.location.href = `${env.baseUrl}/office/students/file/verified?system=${system_Type}`;
   }
   
-/* 根據system_Num下載不同已審核清單 */
+  /* 根據system_Num下載不同已審核清單 */
   function downloadVerifiedList() {
-    return fetch(`${env.baseUrl}/office/verified-list/${system_Num}`, {
-			method: 'GET',
-			credentials: 'include'
-		})
+        window.location.href = `${env.baseUrl}/office/verified-list/${system_Num}`;
   }
-  
+
   return {
     reloadList,
     downloadList,
