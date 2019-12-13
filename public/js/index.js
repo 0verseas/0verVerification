@@ -53,9 +53,11 @@ const app = (function () {
   let originalImageAngleInDegrees = 0; // 目前角度
   let student; // 目前查詢的學生資料
   let verifier; // 目前審核單位的帳號資料
+  let i = 0;
+  let j = 0;
 
   _init();
-
+  ping();
   /**
    * Event Listener
    */
@@ -408,6 +410,63 @@ const app = (function () {
     }).catch((error) => {
       console.log(error);
     });
+  }
+
+  //測試連線狀態
+  function ping() {
+    $.ajax(avar());
+    $.ajax(avar2());
+    //setTimeout(ping,5000);
+  }
+  function avar(){
+    let ajax_vars = {
+        url: 'https://www.google.com/ping/' + Math.random() + '.html',
+        type: 'GET',
+        dataType: 'html',
+        timeout: 5000,
+        beforeSend: function() {
+            requestTime = new Date().getTime();
+        },
+        complete: function() {
+            i = i + 1;
+            responseTime = new Date().getTime();
+            ping = Math.abs(requestTime - responseTime);
+            console.log('------------------------------------'); 
+            if (ping > 4999) {
+                console.log('Ping Google : Connection timed out');
+            } else {
+                console.log('Ping Google : '+i + "-Ping:" + ping + "ms<br/>");
+            }
+            console.log('------------------------------------'); 
+            setTimeout(function() { $.ajax(avar()); }, 5000);  
+        }
+    }
+    return ajax_vars;
+  }
+  function avar2(){
+    let ajax_vars = {
+        url: 'https://office.overseas.ncnu.edu.tw/verification/',
+        type: 'GET',
+        dataType: 'html',
+        timeout: 5000,
+        beforeSend: function() {
+            requestTime = new Date().getTime();
+        },
+        complete: function() {
+            j = j + 1;
+            responseTime = new Date().getTime();
+            ping = Math.abs(requestTime - responseTime);
+            console.log('------------------------------------'); 
+            if (ping > 4999) {
+                console.log('Ping Overseas : Connection timed out');
+            } else {
+                console.log('Ping Overseas : '+j + "-Ping:" + ping + "ms<br/>");
+            }   
+            console.log('------------------------------------'); 
+            setTimeout(function() { $.ajax(avar2()); }, 5000);  
+        }
+    }
+    return ajax_vars;
   }
 
   return {
