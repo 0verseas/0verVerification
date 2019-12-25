@@ -391,6 +391,8 @@ const app = (function () {
       return;
     }
 
+    checkDuplicateStudent(userId);
+
     // 送審
     API.verifyStudent(userId, verificationDesc, ruleCodeOfOverseasStudentId).then(response => {
       if (response.ok) {
@@ -410,6 +412,37 @@ const app = (function () {
     }).catch((error) => {
       console.log(error);
     });
+  }
+
+  // 確認有無相同僑居地身分證字號的同學
+  async function checkDuplicateStudent(userId) {
+    try {
+      const response = await API.checkDuplicateStudent(userId);
+
+      if (!response.ok){
+        throw response;
+      }
+
+      /*
+       * 有發現重複：200
+       * 沒有發現重複：204
+       * 無開放此功能：204
+       */
+      if (response.status === 200){
+        response.json().then(function (data) {
+          // 跳個善逸(X)善意(O)的提醒
+          alert(data.messages[0]);
+        })
+      }
+    } catch (e) {
+      e.json && e.json().then((data) => {
+        console.error(data);
+        alert(`${data.messages[0]}`);
+
+        loading.complete();
+      });
+    }
+
   }
 
   //測試連線狀態  以後有人連線中斷沒收到回應 就能知道是誰的錯了
@@ -436,13 +469,13 @@ const app = (function () {
             responseTime = new Date().getTime();
             ping = Math.abs(requestTime - responseTime);
             //印出時間差 超過時間印time out
-            console.log('------------------------------------'); 
+            console.log('------------------------------------');
             if (ping > 4999) {
                 console.log('Ping Google : Connection timed out');
             } else {
                 console.log('Ping Google : '+i + "-Ping:" + ping + "ms");
             }
-            console.log('------------------------------------'); 
+            console.log('------------------------------------');
             setTimeout(function() { $.ajax(avar()); }, 5000);  //每5秒請求一次
         }
     }
@@ -466,13 +499,13 @@ const app = (function () {
             responseTime = new Date().getTime();
             ping = Math.abs(requestTime - responseTime);
             //印出時間差 超過時間印time out
-            console.log('------------------------------------'); 
+            console.log('------------------------------------');
             if (ping > 4999) {
                 console.log('Ping Overseas : Connection timed out');
             } else {
                 console.log('Ping Overseas : '+j + "-Ping:" + ping + "ms");
-            }   
-            console.log('------------------------------------'); 
+            }
+            console.log('------------------------------------');
             setTimeout(function() { $.ajax(avar2()); }, 5000);  //每5秒請求一次
         }
     }
