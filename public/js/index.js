@@ -421,6 +421,8 @@ const app = (function () {
 
   //要發送給Google.com的請求內容
   function avar(){
+    let requestTime;
+    let responseTime;
     let ajax_vars = {
         url: 'https://www.google.com/ping/' + Math.random() + '.html',
         type: 'GET',
@@ -451,6 +453,8 @@ const app = (function () {
 
   //要發送給海聯收件系統的請求內容
   function avar2(){
+    let requestTime;
+    let responseTime;
     let ajax_vars = {
         url: 'https://office.overseas.ncnu.edu.tw/verification/',
         type: 'GET',
