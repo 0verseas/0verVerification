@@ -57,7 +57,7 @@ const app = (function () {
   let j = 0;
 
   _init();
-  ping();
+  // ping();
   /**
    * Event Listener
    */
@@ -391,7 +391,29 @@ const app = (function () {
       return;
     }
 
-    checkDuplicateStudent(userId);
+    // 確認有無相同僑居地身分證字號的同學
+    API.checkDuplicateStudent(userId).then(response => {
+      if (!response.ok){
+        throw response;
+      }
+
+      /*
+       * 有發現重複：200
+       * 沒有發現重複：204
+       * 無開放此功能：204
+       */
+      if (response.status === 200){
+        response.json().then(function (data) {
+          // 跳個善逸(X)善意(O)的提醒
+          alert(data.messages[0]);
+        })
+      }
+    }).catch(e => {
+      e.json && e.json().then((data) => {
+        console.error(data);
+        alert(`${data.messages[0]}`);
+      });
+    });
 
     // 送審
     API.verifyStudent(userId, verificationDesc, ruleCodeOfOverseasStudentId).then(response => {
@@ -415,35 +437,35 @@ const app = (function () {
   }
 
   // 確認有無相同僑居地身分證字號的同學
-  async function checkDuplicateStudent(userId) {
-    try {
-      const response = await API.checkDuplicateStudent(userId);
-
-      if (!response.ok){
-        throw response;
-      }
-
-      /*
-       * 有發現重複：200
-       * 沒有發現重複：204
-       * 無開放此功能：204
-       */
-      if (response.status === 200){
-        response.json().then(function (data) {
-          // 跳個善逸(X)善意(O)的提醒
-          alert(data.messages[0]);
-        })
-      }
-    } catch (e) {
-      e.json && e.json().then((data) => {
-        console.error(data);
-        alert(`${data.messages[0]}`);
-
-        loading.complete();
-      });
-    }
-
-  }
+  // async function checkDuplicateStudent(userId) {
+  //   try {
+  //     const response = await API.checkDuplicateStudent(userId);
+  //
+  //     if (!response.ok){
+  //       throw response;
+  //     }
+  //
+  //     /*
+  //      * 有發現重複：200
+  //      * 沒有發現重複：204
+  //      * 無開放此功能：204
+  //      */
+  //     if (response.status === 200){
+  //       response.json().then(function (data) {
+  //         // 跳個善逸(X)善意(O)的提醒
+  //         alert(data.messages[0]);
+  //       })
+  //     }
+  //   } catch (e) {
+  //     e.json && e.json().then((data) => {
+  //       console.error(data);
+  //       alert(`${data.messages[0]}`);
+  //
+  //       loading.complete();
+  //     });
+  //   }
+  //
+  // }
 
   //測試連線狀態  以後有人連線中斷沒收到回應 就能知道是誰的錯了
   function ping() {
