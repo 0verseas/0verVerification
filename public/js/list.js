@@ -144,7 +144,7 @@ const app = (function () {
         } else {
           $downVerifiedListButton.remove();
         }
-      
+
 
 
       } else if (response.statusCode === 401) {
@@ -206,17 +206,19 @@ const app = (function () {
     let result = ``;
     for (let student of students) {
       let verified_at = dateFns.format(student.student_misc_data.verified_at, 'YYYY/MM/DD hh:mm:ss ');
+      let name = encodeHtmlCharacters(student.name);  // 學生姓名
+      let verified_memo = student.student_misc_data.verified_memo!==null ? encodeHtmlCharacters(student.student_misc_data.verified_memo) : '';
       result += `
         <tr>
           <td>${student.id}</td>
           <td>${verified_at}</td>
-          <td>${student.name}</td>
+          <td>${name}</td>
           ${student.student_personal_data.gender.toLowerCase() === 'm' ? '<td>男</td>' : '<td>女</td>'}
           <td>${student.student_personal_data.birthday}</td>
           ${hasApplyWay ? '<td>' + student.student_misc_data.admission_placement_apply_way_data.description + '</td>' : ''}
           <td>${student.student_personal_data.school_country_data.country}</td>
           <td>${student.student_misc_data.overseas_student_id}</td>
-          <td>${student.student_misc_data.verified_memo}</td>
+          <td>${verified_memo}</td>
         </tr>
       `;
     }
@@ -242,10 +244,19 @@ const app = (function () {
   function downloadList() {
     window.location.href = `${env.baseUrl}/office/students/file/verified?system=${system_Type}`;
   }
-  
+
   /* 根據system_Num下載不同已審核清單 */
   function downloadVerifiedList() {
     window.location.href = `${env.baseUrl}/office/verified-list/${system_Num}`;
+  }
+
+  // 轉換一些敏感字元避免 XSS
+  function encodeHtmlCharacters(bareString) {
+    return bareString.replace(/&/g, "&amp;")  // 轉換 &
+      .replace(/</g, "&lt;").replace(/>/g, "&gt;")  // 轉換 < 及 >
+      .replace(/'/g, "&apos;").replace(/"/g, "&quot;")  // 轉換英文的單雙引號
+      .replace(/ /g, " &nbsp;")
+      ;
   }
 
   return {
