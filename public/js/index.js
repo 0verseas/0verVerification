@@ -250,17 +250,17 @@ const app = (function () {
     const personalData = studentInfo.student_personal_data;
     const qualificationVerify = studentInfo.student_qualification_verify;
 
-    // 報名序號
-    $system.html(qualificationVerify && qualificationVerify.system_data && qualificationVerify.system_data.title ? qualificationVerify.system_data.title : noData);
+    // 報名層級（學制）
+    $system.text(qualificationVerify && qualificationVerify.system_data && qualificationVerify.system_data.title ? qualificationVerify.system_data.title : noData);
 
     // 報名序號
-    $userId.html(studentInfo.id.toString().padStart(6, '0'));
+    $userId.text(studentInfo.id.toString().padStart(6, '0'));
 
     // 若尚未審核，僑生編號為'未產生'
-    $overseasStudentId.html(miscData && miscData.overseas_student_id ? miscData.overseas_student_id : '未產生');
+    $overseasStudentId.text(miscData && miscData.overseas_student_id ? miscData.overseas_student_id : '未產生');
 
     // 置放身份別代碼（有才放）
-    $ruleCodeOfOverseasStudentId.html(miscData && miscData.rule_code_of_overseas_student_id ? miscData.rule_code_of_overseas_student_id : '未產生');
+    $ruleCodeOfOverseasStudentId.text(miscData && miscData.rule_code_of_overseas_student_id ? miscData.rule_code_of_overseas_student_id : '未產生');
 
     // 若最後畢業學校國別為緬甸學士班學生，且可被審核，拿可用身份別代碼並置放選單
     if (miscData.confirmed_at && !miscData.verified_at && personalData.school_country_data.country === '緬甸' && qualificationVerify.system_id && qualificationVerify.system_id === 1 ) {
@@ -282,29 +282,29 @@ const app = (function () {
     }
 
     // 身障程度
-    $disability.html(personalData && personalData.disability_category ? personalData.disability_level + personalData.disability_category : '無');
+    $disability.text(personalData && personalData.disability_category ? personalData.disability_level + personalData.disability_category : '無');
 
     // 姓名
-    $name.html(studentInfo.name ? studentInfo.name : noData);
-    $engName.html(studentInfo.eng_name ? studentInfo.eng_name : noData);
+    $name.text(studentInfo.name ? studentInfo.name : noData);
+    $engName.text(studentInfo.eng_name ? studentInfo.eng_name : noData);
 
     // 生日
-    $birthday.html(personalData && personalData.birthday ? personalData.birthday : noData);
+    $birthday.text(personalData && personalData.birthday ? personalData.birthday : noData);
 
     // 出生地國別
-    $birthLocation.html(personalData && personalData.birth_location_data && personalData.birth_location_data.country ? personalData.birth_location_data.country : noData);
+    $birthLocation.text(personalData && personalData.birth_location_data && personalData.birth_location_data.country ? personalData.birth_location_data.country : noData);
 
     // 僑居地國別
-    $residentLocation.html(personalData && personalData.resident_location_data && personalData.resident_location_data.country ? personalData.resident_location_data.country : noData);
+    $residentLocation.text(personalData && personalData.resident_location_data && personalData.resident_location_data.country ? personalData.resident_location_data.country : noData);
 
     // 性別
-    $gender.html(personalData && personalData.gender ? personalData.gender.toLowerCase() === 'm' ? '男' : '女' : '未提供');
+    $gender.text(personalData && personalData.gender ? personalData.gender.toLowerCase() === 'm' ? '男' : '女' : '未提供');
 
     // 畢業學校國別
-    $schoolCountry.html(personalData && personalData.school_country_data && personalData.school_country_data.country ? personalData.school_country_data.country : noData);
+    $schoolCountry.text(personalData && personalData.school_country_data && personalData.school_country_data.country ? personalData.school_country_data.country : noData);
 
     // 畢業學校名稱
-    $schoolName.html(personalData && personalData.school_name ? personalData.school_name : noData);
+    $schoolName.text(personalData && personalData.school_name ? personalData.school_name : noData);
 
     //  判斷申請身份別
     let identity = '未提供';
@@ -332,20 +332,20 @@ const app = (function () {
           break;
       }
     }
-    $identity.html(identity);
+    $identity.text(identity);
 
     // 學士班 才有「成績採計方式」
     if (qualificationVerify && qualificationVerify.system_id && qualificationVerify.system_id === 1 ) {
-      $applyWay.html(miscData && miscData.admission_placement_apply_way_data ? miscData.admission_placement_apply_way_data.description : '未選擇');
+      $applyWay.text(miscData && miscData.admission_placement_apply_way_data ? miscData.admission_placement_apply_way_data.description : '未選擇');
       $applyWayTitle.show();
       $applyWay.show();
     }
 
     // 確認報名狀態
-    $confirmedStatus.html((miscData && miscData.confirmed_at ? '已' : '尚未') + '確認上傳及報名資料');
+    $confirmedStatus.text((miscData && miscData.confirmed_at ? '已' : '尚未') + '確認上傳及報名資料');
 
     // 審核、狀態
-    $verifiedStatus.html((miscData && miscData.verified_at ? '已' : '尚未') + '審核');
+    $verifiedStatus.text((miscData && miscData.verified_at ? '已' : '尚未') + '審核');
 
     // 審核、報名狀態對應狀況
     if (miscData && miscData.confirmed_at) {
@@ -358,7 +358,7 @@ const app = (function () {
         // 不能編輯審核備註
         $verificationDesc.prop('readonly', true);
         // 擺上審核備註
-        $verificationDesc.html(miscData.verification_desc);
+        $verificationDesc.text(miscData.verified_memo);
       }
     } else {
       // 學生尚未確認報名
