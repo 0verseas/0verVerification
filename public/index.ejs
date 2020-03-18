@@ -86,15 +86,16 @@
             <div class="col-2 mb-2 ml-auto text-right">
               <button class="btn btn-success" onclick="app.downloadEducationFile('diploma')"><i class="fa fa-download" aria-hidden="true"></i> 下載</button>
             </div>
-
-            <input class="btn btn-success ml-auto mr-3" type="file" multiple value="重傳檔案" onchange="app.uploadEducationFile('diploma', this.files)" onmousedown="event.preventDefault()">
+            <div style="display: none;">
+              <input  class="btn btn-success ml-auto mr-3" type="file" multiple value="重傳檔案" onchange="app.uploadEducationFile('diploma', this.files)" onmousedown="event.preventDefault()">
+            </div>
           </div>
         </div>
         <div class="card-body" id="diploma-div">
         </div>
       </div>
 
-      <div class="card mt-3">
+      <div class="card mt-3" style="display: none;">
         <div class="card-header">
           <div class="row">
             <div class="col-12 col-md-6 mb-2">
