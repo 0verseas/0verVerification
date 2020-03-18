@@ -73,9 +73,7 @@
 
       </dl>
 
-      <hr>
-
-      <div class="card">
+      <div class="card" id="certificate-card">
         <div class="card-header">
           <div class="row">
             <div class="col-12 col-md-6 mb-2">
@@ -107,7 +105,7 @@
               <button class="btn btn-success" onclick="app.downloadEducationFile('transcripts')"><i class="fa fa-download" aria-hidden="true"></i> 下載</button>
             </div>
 
-            <input class="btn btn-success ml-md-auto mr-md-3" type="file" multiple value="重傳檔案" onchange="app.uploadEducationFile('transcripts', this.files)" onmousedown="event.preventDefault()">
+              <input class="btn btn-success ml-md-auto mr-md-3" type="file" multiple value="重傳檔案" onchange="app.uploadEducationFile('transcripts', this.files)" onmousedown="event.preventDefault()">
           </div>
         </div>
         <div class="card-body" id="transcript-div">

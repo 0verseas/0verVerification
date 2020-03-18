@@ -29,6 +29,7 @@ const app = (function () {
   const $verifiedStatus = $('#verified-status'); // 審核狀態
   const $verificationDesc = $('#verification-desc'); // 審核備註
   const $submitBtn = $('#submit-btn'); // 送出審核按鈕
+  const $certificateArea = $('#certificate-card'); //證明文件區域
 
   // 圖片原圖 modal
   const $originalImgModal = $('#original-img-modal');
@@ -288,6 +289,21 @@ const app = (function () {
     const personalData = studentInfo.student_personal_data;
     const qualificationVerify = studentInfo.student_qualification_verify;
 
+    //只有學士班才有聯合分發
+    if(qualificationVerify.system_id === 1){
+      //用國碼跟聯合分發梯次做判斷依據
+      const countryCode = personalData.resident_location;
+      const stageNumber = miscData.admission_placement_apply_way_data.stage;
+      
+      //確認是否顯示證明文件區域 (馬來西亞第二梯次顯示)
+      if(countryCode === '128' && stageNumber === 2){
+        $certificateArea.show();
+      } else {
+        $certificateArea.hide();
+      }
+    }
+
+
     // 報名層級（學制）
     $system.text(qualificationVerify && qualificationVerify.system_data && qualificationVerify.system_data.title ? qualificationVerify.system_data.title : noData);
 
@@ -381,7 +397,7 @@ const app = (function () {
 
      // 學歷證明文件
      _appendEducationFile('diploma', studentInfo.student_diploma);
-console.log(studentInfo.student_diploma)
+// console.log(studentInfo.student_diploma)
      // 成績單
      _appendEducationFile('transcripts', studentInfo.student_transcripts);
 
@@ -442,7 +458,7 @@ console.log(studentInfo.student_diploma)
           >
         `)
       }
-console.log(filename);
+// console.log(filename);
       if (type === 'transcripts') {
         $transcriptDiv.prepend(`
           <img
