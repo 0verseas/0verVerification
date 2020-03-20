@@ -289,6 +289,9 @@ const app = (function () {
     const personalData = studentInfo.student_personal_data;
     const qualificationVerify = studentInfo.student_qualification_verify;
 
+    //先隱藏證明文件區域
+    $certificateArea.hide();
+
     //只有學士班才有聯合分發
     if(qualificationVerify.system_id === 1){
       //用國碼跟聯合分發梯次做判斷依據
@@ -298,9 +301,7 @@ const app = (function () {
       //確認是否顯示證明文件區域 (馬來西亞第二梯次顯示)
       if(countryCode === '128' && stageNumber === 2){
         $certificateArea.show();
-      } else {
-        $certificateArea.hide();
-      }
+      } 
     }
 
 
