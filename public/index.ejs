@@ -73,45 +73,92 @@
 
       </dl>
 
-      <div class="card" id="certificate-card">
-        <div class="card-header">
-          <div class="row">
-            <div class="col-12 col-md-6 mb-2">
-              <span class="doc-title">學歷證明文件</span>
-              <span class="doc-hint text-muted">點圖可放大或刪除</span>
-            </div>
+      <form id="certified-area">
+        <div class="card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-12 col-md-10 mb-2">
+                <span class="doc-title">僑居地居留證件（身份證或護照影本）</span><br/>
+                <span class="doc-hint text-muted">點圖可放大或刪除</span>
+              </div>
 
-            <div class="col-2 mb-2 ml-auto text-right">
-              <button class="btn btn-success" onclick="app.downloadEducationFile('diploma')"><i class="fa fa-download" aria-hidden="true"></i> 下載</button>
-            </div>
-            <div style="display: none;">
-              <input  class="btn btn-success ml-auto mr-3" type="file" multiple value="重傳檔案" onchange="app.uploadEducationFile('diploma', this.files)" onmousedown="event.preventDefault()">
+              <div class="col-2 mb-2 ml-auto text-right">
+                <button class="btn btn-success" onclick="app.downloadEducationFile('resident-certificate')"><i class="fa fa-download" aria-hidden="true"></i> 下載</button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="card-body" id="diploma-div">
-        </div>
-      </div>
-
-      <div class="card mt-3" style="display: none;">
-        <div class="card-header">
-          <div class="row">
-            <div class="col-12 col-md-6 mb-2">
-              <span class="doc-title">成績單文件</span>
-              <span class="doc-hint text-muted">點圖可放大或刪除</span>
-            </div>
-
-            <div class="col-2 mb-2 ml-auto text-right">
-              <button class="btn btn-success" onclick="app.downloadEducationFile('transcripts')"><i class="fa fa-download" aria-hidden="true"></i> 下載</button>
-            </div>
-
-              <input class="btn btn-success ml-md-auto mr-md-3" type="file" multiple value="重傳檔案" onchange="app.uploadEducationFile('transcripts', this.files)" onmousedown="event.preventDefault()">
+          <div class="card-body" id="resident-certificate-div">
           </div>
         </div>
-        <div class="card-body" id="transcript-div">
-        </div>
-      </div>
 
+        <div class="card mt-3">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-12 col-md-10 mb-2">
+                <span class="doc-title">學歷證明文件（在學證明 / 畢業證書 / 修業證明 / 離校證明）</span><br/>
+                <span class="doc-hint text-muted">點圖可放大或刪除</span>
+              </div>
+
+              <div class="col-2 mb-2 ml-auto text-right">
+                <button class="btn btn-success" onclick="app.downloadEducationFile('academic-certificate')"><i class="fa fa-download" aria-hidden="true"></i> 下載</button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body" id="academic-certificate-div">
+          </div>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-12 col-md-10 mb-2">
+                <span class="doc-title">成績單文件</span><br/>
+                <span class="doc-hint text-muted">點圖可放大或刪除</span>
+              </div>
+
+              <div class="col-2 mb-2 ml-auto text-right">
+                <button class="btn btn-success" onclick="app.downloadEducationFile('transcripts')"><i class="fa fa-download" aria-hidden="true"></i> 下載</button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body" id="transcript-div">
+          </div>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-12 col-md-10 mb-2">
+                <span class="doc-title">會考文憑（含成績單，例：STPM / A-LEVEL / SPM / O-LEVEL）</span><br/>
+                <span class="doc-hint text-muted">點圖可放大或刪除</span>
+              </div>
+
+              <div class="col-2 mb-2 ml-auto text-right">
+                <button class="btn btn-success" onclick="app.downloadEducationFile('diploma')"><i class="fa fa-download" aria-hidden="true"></i> 下載</button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body" id="diploma-div">
+          </div>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-12 col-md-10 mb-2">
+                <span class="doc-title">其它（例：系統產生切結書、資料修正表）</span><br/>
+                <span class="doc-hint text-muted">點圖可放大或刪除</span>
+              </div>
+
+              <div class="col-2 mb-2 ml-auto text-right">
+                <button class="btn btn-success" onclick="app.downloadEducationFile('others')"><i class="fa fa-download" aria-hidden="true"></i> 下載</button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body" id="others-div">
+          </div>
+        </div>      
+     </form>
       <hr>
 
       <form onsubmit="event.preventDefault(); app.verifyStudentInfo(this.elements.namedItem('verificationDesc').value);">

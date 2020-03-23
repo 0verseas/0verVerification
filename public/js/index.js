@@ -24,12 +24,15 @@ const app = (function () {
   const $confirmedStatus = $('#confirmed-status'); // 確認上傳及報名資料
   const $applyWayTitle = $('#apply-way-title'); // 聯合分發成績採計方式 title
   const $applyWay = $('#apply-way'); // 聯合分發成績採計方式
-  const $diplomaDiv = $('#diploma-div'); // 學歷證明 div
+  const $residentCertificateDiv = $('#resident-certificate-div'); // 僑居地證件 div
+  const $academicCertificateDiv = $('#academic-certificate-div'); // 學歷證明 div
   const $transcriptDiv = $('#transcript-div'); // 成績單 div
+  const $diplomaDiv = $('#diploma-div'); // 會考文憑 div
+  const $othersDiv = $('#others-div'); // 成績單 div
   const $verifiedStatus = $('#verified-status'); // 審核狀態
   const $verificationDesc = $('#verification-desc'); // 審核備註
   const $submitBtn = $('#submit-btn'); // 送出審核按鈕
-  const $certificateArea = $('#certificate-card'); //證明文件區域
+  const $certifiedArea = $('#certified-area');//馬來西亞第二梯次上傳文件區域
 
   // 圖片原圖 modal
   const $originalImgModal = $('#original-img-modal');
@@ -220,8 +223,11 @@ const app = (function () {
     $applyWayTitle.hide();
     $applyWay.hide();
     $applyWay.html('');
-    $diplomaDiv.html('');
+    $residentCertificateDiv.html('');
+    $academicCertificateDiv.html('');
     $transcriptDiv.html('');
+    $diplomaDiv.html('');
+    $othersDiv.html('');
     $verificationDesc.html('');
     // 重置上傳文件按鈕
     $(":file").filestyle('disabled', false);
@@ -268,6 +274,7 @@ const app = (function () {
         // 彈出錯誤訊息
         alert(response.singleErrorMessage);
       } else if (response.statusCode == 404) {
+        console.log(response);
         alert('無此報名序號');
       } else {
         // 彈出錯誤訊息
@@ -289,21 +296,20 @@ const app = (function () {
     const personalData = studentInfo.student_personal_data;
     const qualificationVerify = studentInfo.student_qualification_verify;
 
-    //先隱藏證明文件區域
-    $certificateArea.hide();
+//先隱藏證明文件區域
+$certifiedArea.hide();
 
-    //只有學士班才有聯合分發
-    if(qualificationVerify.system_id === 1){
-      //用國碼跟聯合分發梯次做判斷依據
-      const countryCode = personalData.resident_location;
-      const stageNumber = miscData.admission_placement_apply_way_data.stage;
-      
-      //確認是否顯示證明文件區域 (馬來西亞第二梯次顯示)
-      if(countryCode === '128' && stageNumber === 2){
-        $certificateArea.show();
-      } 
-    }
-
+//只有學士班才有聯合分發
+if(qualificationVerify.system_id === 1){
+  //用國碼跟聯合分發梯次做判斷依據
+  const countryCode = personalData.resident_location;
+  const stageNumber = miscData.admission_placement_apply_way_data.stage;
+  
+  //確認是否顯示證明文件區域 (馬來西亞第二梯次顯示)
+  if(countryCode === '128' && stageNumber === 2){
+    $certifiedArea.show();
+  } 
+}
 
     // 報名層級（學制）
     $system.text(qualificationVerify && qualificationVerify.system_data && qualificationVerify.system_data.title ? qualificationVerify.system_data.title : noData);
@@ -396,11 +402,20 @@ const app = (function () {
       $applyWay.show();
     }
 
+    // 僑居地居留證件
+    _appendEducationFile('resident-certificate', studentInfo.student_resident_certificate);
+
      // 學歷證明文件
-     _appendEducationFile('diploma', studentInfo.student_diploma);
-// console.log(studentInfo.student_diploma)
+     _appendEducationFile('academic-certificate', studentInfo.student_academic_certificate);
+
      // 成績單
      _appendEducationFile('transcripts', studentInfo.student_transcripts);
+
+     // 會考文憑
+     _appendEducationFile('diploma', studentInfo.student_diploma);
+
+     // 其他文件
+     _appendEducationFile('others', studentInfo.student_others);
 
     // 確認報名狀態
     $confirmedStatus.text((miscData && miscData.confirmed_at ? '已' : '尚未') + '確認上傳及報名資料');
@@ -448,6 +463,43 @@ const app = (function () {
   // 將圖片依照 type append 到 DOM 上
   function _appendEducationFile(type = '', filenames = [], highlight = false) {
     for (let filename of filenames) {
+      //僑居地居留證件
+      if (type === 'resident-certificate') {
+        $residentCertificateDiv.prepend(`
+          <img
+            src="${baseUrl}/office/students/${userId}/resident-certificate/${filename}"
+            alt="學歷證明文件"
+            data-filename="${filename}" data-filetype="resident-certificate"
+            class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
+            onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
+          >
+        `)
+      }
+      //學歷證明文件
+      if (type === 'academic-certificate') {
+        $academicCertificateDiv.prepend(`
+          <img
+            src="${baseUrl}/office/students/${userId}/academic-certificate/${filename}"
+            alt="學歷證明文件"
+            data-filename="${filename}" data-filetype="academic-certificate"
+            class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
+            onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
+          >
+        `)
+      }
+      //成績單文件
+      if (type === 'transcripts') {
+        $transcriptDiv.prepend(`
+          <img
+            src="${baseUrl}/office/students/${userId}/transcripts/${filename}"
+            alt="成績單文件"
+            data-filename="${filename}" data-filetype="transcripts"
+            class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
+            onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
+          >
+        `)
+      }
+      //會考文憑
       if (type === 'diploma') {
         $diplomaDiv.prepend(`
           <img
@@ -459,13 +511,13 @@ const app = (function () {
           >
         `)
       }
-// console.log(filename);
-      if (type === 'transcripts') {
-        $transcriptDiv.prepend(`
+      //其它文件
+      if (type === 'others') {
+        $othersDiv.prepend(`
           <img
-            src="${baseUrl}/office/students/${userId}/transcripts/${filename}"
-            alt="成績單文件"
-            data-filename="${filename}" data-filetype="transcripts"
+            src="${baseUrl}/office/students/${userId}/others/${filename}"
+            alt="學歷證明文件"
+            data-filename="${filename}" data-filetype="others"
             class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
             onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
           >
