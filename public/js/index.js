@@ -468,7 +468,7 @@ if(qualificationVerify.system_id === 1){
         $residentCertificateDiv.prepend(`
           <img
             src="${baseUrl}/office/students/${userId}/resident-certificate/${filename}"
-            alt="學歷證明文件"
+            alt="僑居地居留證件"
             data-filename="${filename}" data-filetype="resident-certificate"
             class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
             onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
@@ -504,7 +504,7 @@ if(qualificationVerify.system_id === 1){
         $diplomaDiv.prepend(`
           <img
             src="${baseUrl}/office/students/${userId}/diploma/${filename}"
-            alt="學歷證明文件"
+            alt="會考文憑"
             data-filename="${filename}" data-filetype="diploma"
             class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
             onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
@@ -516,7 +516,7 @@ if(qualificationVerify.system_id === 1){
         $othersDiv.prepend(`
           <img
             src="${baseUrl}/office/students/${userId}/others/${filename}"
-            alt="學歷證明文件"
+            alt="其它文件"
             data-filename="${filename}" data-filetype="others"
             class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
             onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
