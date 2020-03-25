@@ -112,7 +112,7 @@
           <div class="card-header">
             <div class="row">
               <div class="col-12 col-md-10 mb-2">
-                <span class="doc-title">成績單文件</span><br/>
+                <span class="doc-title">中學成績單</span><br/>
                 <span class="doc-hint text-muted">點圖可放大或刪除</span>
               </div>
 
@@ -197,9 +197,9 @@
         ></canvas>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" onclick="app.renderImage(0, 1/0.8)" onmousedown="event.preventDefault()">放大</button>
-        <button type="button" class="btn btn-primary" onclick="app.renderImage(0, 0.8)" onmousedown="event.preventDefault()">縮小</button>
-        <button type="button" class="btn btn-primary mr-auto" onclick="app.renderImage(90)" onmousedown="event.preventDefault()">轉</button>
+        <button type="button" class="btn btn-primary" onclick="app.renderImage(0, 1/0.8)" onmousedown="event.preventDefault()"><i class="fa fa-search-plus fa-fw" aria-hidden="true"></i> 放大</button>
+        <button type="button" class="btn btn-primary" onclick="app.renderImage(0, 0.8)" onmousedown="event.preventDefault()"><i class="fa fa-search-minus fa-fw" aria-hidden="true"></i> 縮小</button>
+        <button type="button" class="btn btn-primary mr-auto" onclick="app.renderImage(90)" onmousedown="event.preventDefault()"><i class="fa fa-repeat fa-fw" aria-hidden="true"></i> 旋轉</button>
         <button type="button" class="btn btn-danger" id="original-delete-btn" onclick="app.deleteEducationFile(document.getElementById('original-img-canvas').dataset.filename, document.getElementById('original-img-canvas').dataset.filetype)" onmousedown="event.preventDefault()"><i class="fa fa-trash-o" aria-hidden="true"></i> 刪除</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal" onmousedown="event.preventDefault()"><i class="fa fa-sign-out" aria-hidden="true"></i> 離開</button>
       </div>

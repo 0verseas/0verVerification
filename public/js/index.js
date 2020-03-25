@@ -492,7 +492,7 @@ if(qualificationVerify.system_id === 1){
         $transcriptDiv.prepend(`
           <img
             src="${baseUrl}/office/students/${userId}/transcripts/${filename}"
-            alt="成績單文件"
+            alt="中學成績單"
             data-filename="${filename}" data-filetype="transcripts"
             class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
             onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
