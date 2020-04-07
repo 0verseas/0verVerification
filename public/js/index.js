@@ -53,11 +53,9 @@ const app = (function () {
   let originalImageAngleInDegrees = 0; // 目前角度
   let student; // 目前查詢的學生資料
   let verifier; // 目前審核單位的帳號資料
-  let i = 0;
-  let j = 0;
 
   _init();
-  ping();
+
   /**
    * Event Listener
    */
@@ -434,77 +432,6 @@ const app = (function () {
     }).catch((error) => {
       console.log(error);
     });
-  }
-
-  //測試連線狀態  以後有人連線中斷沒收到回應 就能知道是誰的錯了
-  function ping() {
-    $.ajax(avar());//發送請求到Google.com
-    $.ajax(avar2());//發送請求到海聯收件系統
-    //setTimeout(ping,5000);
-  }
-
-  //要發送給Google.com的請求內容
-  function avar(){
-    let requestTime;
-    let responseTime;
-    let ajax_vars = {
-        url: 'https://www.google.com/ping/' + Math.random() + '.html',
-        type: 'GET',
-        dataType: 'html',
-        timeout: 5000,
-        beforeSend: function() {
-            //發送前取得時間
-            requestTime = new Date().getTime();
-        },
-        complete: function() {
-            i = i + 1;
-            //接到回應後取得時間
-            responseTime = new Date().getTime();
-            ping = Math.abs(requestTime - responseTime);
-            //印出時間差 超過時間印time out
-            console.log('------------------------------------');
-            if (ping > 4999) {
-                console.log('Ping Google : Connection timed out');
-            } else {
-                console.log('Ping Google : '+i + "-Ping:" + ping + "ms");
-            }
-            console.log('------------------------------------');
-            setTimeout(function() { $.ajax(avar()); }, 5000);  //每5秒請求一次
-        }
-    }
-    return ajax_vars;
-  }
-
-  //要發送給海聯收件系統的請求內容
-  function avar2(){
-    let requestTime;
-    let responseTime;
-    let ajax_vars = {
-        url: 'https://office.overseas.ncnu.edu.tw/verification/',
-        type: 'GET',
-        dataType: 'html',
-        timeout: 5000,
-        beforeSend: function() {
-            //發送前取得時間
-            requestTime = new Date().getTime();
-        },
-        complete: function() {
-            j = j + 1;
-            //接到回應後取得時間
-            responseTime = new Date().getTime();
-            ping = Math.abs(requestTime - responseTime);
-            //印出時間差 超過時間印time out
-            console.log('------------------------------------');
-            if (ping > 4999) {
-                console.log('Ping Overseas : Connection timed out');
-            } else {
-                console.log('Ping Overseas : '+j + "-Ping:" + ping + "ms");
-            }
-            console.log('------------------------------------');
-            setTimeout(function() { $.ajax(avar2()); }, 5000);  //每5秒請求一次
-        }
-    }
-    return ajax_vars;
   }
 
   return {
