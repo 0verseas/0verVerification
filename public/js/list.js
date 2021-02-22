@@ -252,6 +252,7 @@ const app = (function () {
 
   // 轉換一些敏感字元避免 XSS
   function encodeHtmlCharacters(bareString) {
+    if (bareString === null) return '';
     return bareString.replace(/&/g, "&amp;")  // 轉換 &
       .replace(/</g, "&lt;").replace(/>/g, "&gt;")  // 轉換 < 及 >
       .replace(/'/g, "&apos;").replace(/"/g, "&quot;")  // 轉換英文的單雙引號
