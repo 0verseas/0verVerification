@@ -163,6 +163,18 @@ const API = (function () {
     });
   }
 
+  // 檢查有無重複的僑居地身分證字號存在
+  function checkStudentVerifyTime(userId) {
+    // 因為這個功能只做提醒而已，就算是 2XX 也要判斷，所以不透過 _requestHandle 而是另外處理
+    return fetch(`${baseUrl}/office/students/check-Verify-time/${userId}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'GET',
+      credentials: 'include'
+    });
+  }
+
   return {
     login,
     logout,
@@ -173,6 +185,7 @@ const API = (function () {
     uploadStudentEducationFile,
     verifyStudent,
     getAvailableRuleCodeOfOverseasStudentId,
-    checkDuplicateStudent
+    checkDuplicateStudent,
+    checkStudentVerifyTime
   }
 })();
