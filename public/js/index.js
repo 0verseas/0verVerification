@@ -303,7 +303,7 @@ if(qualificationVerify.system_id === 1){
   const stageNumber = miscData.admission_placement_apply_way_data.stage;
   
   //確認是否顯示證明文件區域 (馬來西亞第二梯次顯示)
-  if(countryCode === '128' && stageNumber === 2){
+  if(countryCode === '128' && (stageNumber === 2 || stageNumber === 5)){
     $certifiedArea.show();
   } 
 }
@@ -663,6 +663,116 @@ if(qualificationVerify.system_id === 1){
     }).catch((error) => {
       console.log(error);
     });
+  }
+
+  // 開啟原圖
+  function loadOriginalImgModal(src = '', alt = '', filename = '', filetype = '') {
+    // 重置圖片及畫布設定
+    originalImageAngleInDegrees = 0;
+    isMouseDownOnImage = false;
+    startDragOffset = {x: 0, y: 0};
+    translatePos = {x: 0, y: 0};
+    scale = 1.0;
+
+    // 擷取畫面元素
+    canvas = document.getElementById('original-img-canvas');
+    ctx = canvas.getContext('2d');
+
+    // 建立圖片元素
+    originalImage = new Image();
+
+    // 等圖片元素 load 好，就畫出來
+    originalImage.onload = () => {
+
+      renderImage();
+    }
+
+    // 置放圖片
+    originalImage.src = src;
+
+    // 設定圖片後設資料
+    $originalImgCanvas.attr('data-filename', filename);
+    $originalImgCanvas.attr('data-filetype', filetype);
+    $originalImgTitle.html(alt);
+
+    // 顯示 modal
+    $originalImgModal.modal();
+  }
+
+  // 圖片轉向
+  function renderImage(degress = 0, scaleMultiplier = 1.0) {
+    // 累加角度
+    originalImageAngleInDegrees = (originalImageAngleInDegrees + degress) % 360;
+
+    // 若轉動，恢復比例及位置
+    if (degress > 0) {
+      isMouseDownOnImage = false; // 是否按著圖片本人
+      startDragOffset = {};
+      translatePos = {x: 0, y: 0};
+      scale = 1.0;
+    } else {
+      // 若非轉動，則計算縮放比例
+      scale *= scaleMultiplier;
+    }
+
+    // 清空畫布全區
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 依角度設定畫布邊長
+    switch (originalImageAngleInDegrees) {
+      case 0:
+      case 180:
+        ctx.canvas.width = originalImage.width;
+        ctx.canvas.height = originalImage.height;
+        break;
+      case 90:
+      case 270:
+        ctx.canvas.width = originalImage.height;
+        ctx.canvas.height = originalImage.width;
+        break;
+    }
+
+    // 暫存畫布狀態
+    ctx.save();
+    // 移動原點以模擬拖拉
+    ctx.translate(translatePos.x, translatePos.y);
+    // 移動原點至畫布中心
+    ctx.translate(canvas.width/2, canvas.height/2);
+    // 縮放
+    ctx.scale(scale, scale);
+    // 順轉畫布
+    ctx.rotate(originalImageAngleInDegrees*Math.PI/180);
+    // 移動原點至原圖置中狀態的左上點
+    ctx.translate(-originalImage.width/2, -originalImage.height/2);
+    // 放置圖
+    ctx.drawImage(originalImage, 0,0);
+    // 恢復畫布狀態
+    ctx.restore();
+  }
+
+  // 於圖上按下游標，開始拖拉
+  function mouseDownOnImage(evt) {
+    isMouseDownOnImage = true;
+    // 計算開始拖拉位置
+    startDragOffset.x = evt.clientX - translatePos.x;
+    startDragOffset.y = evt.clientY - translatePos.y;
+  }
+
+  // 於圖上移動按著的游標，進行拖拉
+  function mouseMoveOnImage(evt) {
+    // 有按下游標才動
+    if (isMouseDownOnImage) {
+        // 計算畫布中心位置
+        translatePos.x = evt.clientX - startDragOffset.x;
+        translatePos.y = evt.clientY - startDragOffset.y;
+        // 繪製
+        renderImage(0);
+    }
+  }
+
+  // 離開拖拉現場
+  function clearDrag() {
+    isMouseDownOnImage = false;
   }
 
   return {
