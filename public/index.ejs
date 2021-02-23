@@ -73,6 +73,19 @@
 
       </dl>
 
+      <hr>
+
+      <form onsubmit="event.preventDefault(); app.verifyStudentInfo(this.elements.namedItem('verificationDesc').value);">
+        <div class="form-group row">
+          <label for="staticEmail" class="col-3 col-form-label">審核備註</label>
+          <textarea class="col-9" id="verification-desc" name="verificationDesc" cols="60" rows="3"></textarea>
+        </div>
+
+        <div class="row">
+          <button type="submit" class="btn btn-success mx-auto" id="submit-btn">確認審核</button>
+        </div>
+      </form>
+
       <form id="certified-area">
         <hr>
         <div class="text-center">
@@ -164,18 +177,6 @@
           </div>
         </div>      
      </form>
-      <hr>
-
-      <form onsubmit="event.preventDefault(); app.verifyStudentInfo(this.elements.namedItem('verificationDesc').value);">
-        <div class="form-group row">
-          <label for="staticEmail" class="col-3 col-form-label">審核備註</label>
-          <textarea class="col-9" id="verification-desc" name="verificationDesc" cols="60" rows="3"></textarea>
-        </div>
-
-        <div class="row">
-          <button type="submit" class="btn btn-success mx-auto" id="submit-btn">確認審核</button>
-        </div>
-    </form>
   </div>
 </div>
 
