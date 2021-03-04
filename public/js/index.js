@@ -293,20 +293,20 @@ const app = (function () {
     const personalData = studentInfo.student_personal_data;
     const qualificationVerify = studentInfo.student_qualification_verify;
 
-//先隱藏證明文件區域
-$certifiedArea.hide();
+    //先隱藏證明文件區域
+    $certifiedArea.hide();
 
-//只有學士班才有聯合分發
-if(qualificationVerify.system_id === 1){
-  //用國碼跟聯合分發梯次做判斷依據
-  const countryCode = personalData.resident_location;
-  const stageNumber = miscData.admission_placement_apply_way_data.stage;
-  
-  //確認是否顯示證明文件區域 (馬來西亞第二梯次顯示)
-  if(countryCode === '128' && (stageNumber === 2 || stageNumber === 5)){
-    $certifiedArea.show();
-  } 
-}
+    //只有學士班才有聯合分發
+    if(qualificationVerify.system_id === 1){
+      //用國碼跟聯合分發梯次做判斷依據
+      const countryCode = personalData.resident_location;
+      const stageNumber = miscData.admission_placement_apply_way_data.stage;
+      
+      //確認是否顯示證明文件區域 (馬來西亞第二梯次顯示)
+      if(countryCode === '128' && (stageNumber === 2 || stageNumber === 5)){
+        $certifiedArea.show();
+      } 
+    }
 
     // 報名層級（學制）
     $system.text(qualificationVerify && qualificationVerify.system_data && qualificationVerify.system_data.title ? qualificationVerify.system_data.title : noData);
@@ -773,6 +773,8 @@ if(qualificationVerify.system_id === 1){
   // 離開拖拉現場
   function clearDrag() {
     isMouseDownOnImage = false;
+  }
+  
   function checkVerifyTime(verificationDesc){
     //只有學士班有參加個人申請且有完成提交備審資料者需要檢查收件時間
     if(student.student_misc_data.join_admission_selection == 1 && student.student_misc_data.admission_selection_document_lock_at != null && student.student_qualification_verify.system_id == 1){
