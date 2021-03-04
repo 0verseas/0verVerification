@@ -75,7 +75,7 @@
 
       <hr>
 
-      <form onsubmit="event.preventDefault(); app.verifyStudentInfo(this.elements.namedItem('verificationDesc').value);">
+      <form onsubmit="event.preventDefault(); app.checkVerifyTime(this.elements.namedItem('verificationDesc').value);">
         <div class="form-group row">
           <label for="staticEmail" class="col-3 col-form-label">審核備註</label>
           <textarea class="col-9" id="verification-desc" name="verificationDesc" cols="60" rows="3"></textarea>

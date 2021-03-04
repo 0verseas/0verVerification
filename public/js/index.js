@@ -773,6 +773,39 @@ if(qualificationVerify.system_id === 1){
   // 離開拖拉現場
   function clearDrag() {
     isMouseDownOnImage = false;
+  function checkVerifyTime(verificationDesc){
+    //只有學士班有參加個人申請且有完成提交備審資料者需要檢查收件時間
+    if(student.student_misc_data.join_admission_selection == 1 && student.student_misc_data.admission_selection_document_lock_at != null && student.student_qualification_verify.system_id == 1){
+      API.checkStudentVerifyTime(userId).then(response => {
+        if (!response.ok){
+          throw response;
+        }
+  
+        /*
+         * 有問題：200
+         * 沒問題：204
+         */
+        if (response.status === 200){
+          response.json().then(function (data) {
+            // 跳個確認框 問一下收件者是否確認要收件
+            if(!confirm(data.messages[0])){
+              return ;
+            } else{
+              verifyStudentInfo(verificationDesc);
+            }
+          })
+        } else{
+          verifyStudentInfo(verificationDesc);
+        }
+      }).catch(e => {
+        e.json && e.json().then((data) => {
+          console.error(data);
+          alert(`${data.messages[0]}`);
+        });
+      });
+    } else {
+      verifyStudentInfo(verificationDesc);
+    }
   }
 
   return {
@@ -787,6 +820,7 @@ if(qualificationVerify.system_id === 1){
     mouseDownOnImage,
     mouseMoveOnImage,
     clearDrag,
+    checkVerifyTime
   }
 
 })();
