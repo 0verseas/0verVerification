@@ -205,7 +205,8 @@ const app = (function () {
     // 準備 data
     let result = ``;
     for (let student of students) {
-      let verified_at = dateFns.format(student.student_misc_data.verified_at, 'YYYY/MM/DD hh:mm:ss ');
+      //https://date-fns.org/v1.29.0/docs/format  我們用得是v1.29.0版本 要記得看文件  大寫H才是 24小時制喔
+      let verified_at = dateFns.format(student.student_misc_data.verified_at, 'YYYY/MM/DD HH:mm:ss ');
       let name = encodeHtmlCharacters(student.name);  // 學生姓名
       let verified_memo = student.student_misc_data.verified_memo!==null ? encodeHtmlCharacters(student.student_misc_data.verified_memo) : '';
       result += `
