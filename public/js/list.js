@@ -205,7 +205,8 @@ const app = (function () {
     // 準備 data
     let result = ``;
     for (let student of students) {
-      let verified_at = dateFns.format(student.student_misc_data.verified_at, 'YYYY/MM/DD hh:mm:ss ');
+      console.log(student.student_misc_data.verified_at);
+      let verified_at = dateFns.format(student.student_misc_data.verified_at, 'YYYY/MM/DD HH:mm:ss ');
       let name = encodeHtmlCharacters(student.name);  // 學生姓名
       let verified_memo = student.student_misc_data.verified_memo!==null ? encodeHtmlCharacters(student.student_misc_data.verified_memo) : '';
       result += `
