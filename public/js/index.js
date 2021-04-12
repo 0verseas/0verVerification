@@ -634,6 +634,7 @@ const app = (function () {
           `)
         }
       }
+      // PDF的圖示點擊事件 要跟 image的不一樣
       const $eduImg = $certifiedArea.find('.img-edu');
 		  $eduImg.on("click", _showDetail);
     }
@@ -949,10 +950,11 @@ const app = (function () {
 	}
 
   function _showDetail() {
-		_modalFileLink = $(this).data('filelink');
+    // 取得檔案URL
+		const _modalFileLink = $(this).data('filelink');
 		// 先清空 modal 內容
 		$imgModalBody.html('');
-
+    // 取得檔案的fontAwesome icon
     const icon = $(this).data('icon');
     $imgModalBody.html(`
       <div>
