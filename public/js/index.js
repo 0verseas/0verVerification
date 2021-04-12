@@ -46,6 +46,8 @@ const app = (function () {
   const $scannerBody = $('#scanner-body');
   const $scannerModal = $('#scanner-modal');
 
+  const $imgModalBody= $('#detail-modal-body'); //Pdf modal 本體
+
   /**
    * init
    */
@@ -460,66 +462,180 @@ const app = (function () {
   // 將圖片依照 type append 到 DOM 上
   function _appendEducationFile(type = '', filenames = [], highlight = false) {
     for (let filename of filenames) {
+      const fileType = _getFileType(filename.split('.')[1]);
       //僑居地居留證件
       if (type === 'resident-certificate') {
-        $residentCertificateDiv.prepend(`
-          <img
-            src="${baseUrl}/office/students/${userId}/resident-certificate/${filename}"
-            alt="僑居地居留證件"
-            data-filename="${filename}" data-filetype="resident-certificate"
-            class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
-            onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
-          >
-        `)
+        if(fileType == 'img'){
+          $residentCertificateDiv.prepend(`
+            <img
+              src="${baseUrl}/office/students/${userId}/resident-certificate/${filename}"
+              alt="僑居地居留證件"
+              data-filename="${filename}" data-filetype="resident-certificate"
+              class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
+              onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
+            >
+          `)
+        } else {
+          $residentCertificateDiv.prepend(`
+            <div
+              class="img-thumbnail non-img-file-thumbnail img-edu"
+              data-toggle="modal"
+              data-target=".img-modal"
+              data-filelink="${baseUrl}/office/students/${userId}/resident-certificate/${filename}"
+              data-filename="${filename}"
+              data-filetype="resident-certificate"
+              data-icon="fa-file-${fileType}-o"
+            >
+              <i 
+                class="fa fa-file-${fileType}-o" aria-hidden="true"
+                data-filename="${filename}"
+                data-filetype="resident-certificate"
+                data-icon="fa-file-${fileType}-o"
+              >
+              </i>
+            </div>
+          `)
+        }
+        
       }
       //學歷證明文件
       if (type === 'academic-certificate') {
-        $academicCertificateDiv.prepend(`
-          <img
-            src="${baseUrl}/office/students/${userId}/academic-certificate/${filename}"
-            alt="學歷證明文件"
-            data-filename="${filename}" data-filetype="academic-certificate"
-            class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
-            onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
-          >
-        `)
+        if(fileType == 'img'){
+          $academicCertificateDiv.prepend(`
+            <img
+              src="${baseUrl}/office/students/${userId}/academic-certificate/${filename}"
+              alt="學歷證明文件"
+              data-filename="${filename}" data-filetype="academic-certificate"
+              class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
+              onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
+            >
+          `)
+        } else {
+          $academicCertificateDiv.prepend(`
+            <div
+              class="img-thumbnail non-img-file-thumbnail img-edu"
+              data-toggle="modal"
+              data-target=".img-modal"
+              data-filelink="${baseUrl}/office/students/${userId}/academic-certificate/${filename}"
+              data-filename="${filename}"
+              data-filetype="academic-certificate"
+              data-icon="fa-file-${fileType}-o"
+            >
+              <i 
+                class="fa fa-file-${fileType}-o" aria-hidden="true"
+                data-filename="${filename}"
+                data-filetype="academic-certificate"
+                data-icon="fa-file-${fileType}-o"
+              >
+              </i>
+            </div>
+          `)
+        }
       }
       //成績單文件
       if (type === 'transcripts') {
-        $transcriptDiv.prepend(`
-          <img
-            src="${baseUrl}/office/students/${userId}/transcripts/${filename}"
-            alt="中學成績單"
-            data-filename="${filename}" data-filetype="transcripts"
-            class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
-            onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
-          >
-        `)
+        if(fileType == 'img'){
+          $transcriptDiv.prepend(`
+            <img
+              src="${baseUrl}/office/students/${userId}/transcripts/${filename}"
+              alt="中學成績單"
+              data-filename="${filename}" data-filetype="transcripts"
+              class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
+              onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
+            >
+          `)
+        } else {
+          $transcriptDiv.prepend(`
+            <div
+              class="img-thumbnail non-img-file-thumbnail img-edu"
+              data-toggle="modal"
+              data-target=".img-modal"
+              data-filelink="${baseUrl}/office/students/${userId}/transcripts/${filename}"
+              data-filename="${filename}"
+              data-filetype="transcripts"
+              data-icon="fa-file-${fileType}-o"
+            >
+              <i 
+                class="fa fa-file-${fileType}-o" aria-hidden="true"
+                data-filename="${filename}"
+                data-filetype="transcripts"
+                data-icon="fa-file-${fileType}-o"
+              >
+              </i>
+            </div>
+          `)
+        }
       }
       //會考文憑
       if (type === 'diploma') {
-        $diplomaDiv.prepend(`
-          <img
-            src="${baseUrl}/office/students/${userId}/diploma/${filename}"
-            alt="會考文憑"
-            data-filename="${filename}" data-filetype="diploma"
-            class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
-            onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
-          >
-        `)
+        if(fileType == 'img'){
+          $diplomaDiv.prepend(`
+            <img
+              src="${baseUrl}/office/students/${userId}/diploma/${filename}"
+              alt="會考文憑"
+              data-filename="${filename}" data-filetype="diploma"
+              class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
+              onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
+            >
+          `)
+        } else {
+          $diplomaDiv.prepend(`
+            <div
+              class="img-thumbnail non-img-file-thumbnail img-edu"
+              data-toggle="modal"
+              data-target=".img-modal"
+              data-filelink="${baseUrl}/office/students/${userId}/diploma/${filename}"
+              data-filename="${filename}"
+              data-filetype="diploma"
+              data-icon="fa-file-${fileType}-o"
+            >
+              <i 
+                class="fa fa-file-${fileType}-o" aria-hidden="true"
+                data-filename="${filename}"
+                data-filetype="diploma"
+                data-icon="fa-file-${fileType}-o"
+              >
+              </i>
+            </div>
+          `)
+        }
       }
       //其它文件
       if (type === 'others') {
-        $othersDiv.prepend(`
-          <img
-            src="${baseUrl}/office/students/${userId}/others/${filename}"
-            alt="其它文件"
-            data-filename="${filename}" data-filetype="others"
-            class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
-            onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
-          >
-        `)
+        if(fileType == 'img'){
+          $othersDiv.prepend(`
+            <img
+              src="${baseUrl}/office/students/${userId}/others/${filename}"
+              alt="其它文件"
+              data-filename="${filename}" data-filetype="others"
+              class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
+              onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
+            >
+          `)
+        } else {
+          $othersDiv.prepend(`
+            <div
+              class="img-thumbnail non-img-file-thumbnail img-edu"
+              data-toggle="modal"
+              data-target=".img-modal"
+              data-filelink="${baseUrl}/office/students/${userId}/others/${filename}"
+              data-filename="${filename}"
+              data-filetype="others"
+              data-icon="fa-file-${fileType}-o"
+            >
+              <i 
+                class="fa fa-file-${fileType}-o" aria-hidden="true"
+                data-filename="${filename}"
+                data-filetype="others"
+                data-icon="fa-file-${fileType}-o"
+              >
+              </i>
+            </div>
+          `)
+        }
       }
+      const $eduImg = $certifiedArea.find('.img-edu');
+		  $eduImg.on("click", _showDetail);
     }
   }
 
@@ -809,6 +925,46 @@ const app = (function () {
       verifyStudentInfo(verificationDesc);
     }
   }
+
+  // 副檔名與檔案型態對應（回傳值須符合 font-awesome 規範）
+	function _getFileType(fileNameExtension = '') {
+		switch (fileNameExtension) {
+			case 'doc':
+			case 'docx':
+				return 'word';
+
+			case 'mp3':
+				return 'audio';
+
+			case 'mp4':
+			case 'avi':
+				return 'video';
+
+			case 'pdf':
+				return 'pdf';
+
+			default:
+				return 'img';
+		}
+	}
+
+  function _showDetail() {
+		_modalFileLink = $(this).data('filelink');
+		// 先清空 modal 內容
+		$imgModalBody.html('');
+
+    const icon = $(this).data('icon');
+    $imgModalBody.html(`
+      <div>
+        <i class="fa ${icon} non-img-file-ori" aria-hidden="true"></i>
+      </div>
+
+      <a class="btn btn-primary non-img-file-download" href="${_modalFileLink}" target="_blank" >
+        <i class="fa fa-download" aria-hidden="true"></i> 下載
+      </a>
+    `);
+		
+	}
 
   return {
     openScanner,

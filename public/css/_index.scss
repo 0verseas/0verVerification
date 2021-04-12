@@ -1,0 +1,37 @@
+.img-thumbnail {
+	max-width: 200px;
+	max-height: 200px;
+	margin: 2px;
+}
+
+.bg-yellow {
+	background-color: #fff47b!important;
+}
+
+.blockquote {
+	border-color: #d9534f;
+}
+
+/* 非圖片檔案用 icon 當縮圖 */
+
+.non-img-file-thumbnail {
+	width: 140px;
+	height: 158px;
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.non-img-file-thumbnail > i {
+	display: block;
+	font-size: 9rem;
+}
+
+.non-img-file-ori {
+	font-size: 10rem;
+}
+
+.non-img-file-download {
+	/* 有點空間，比較好看 */
+	margin-top: 1rem;
+}
