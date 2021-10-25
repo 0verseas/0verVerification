@@ -63,7 +63,9 @@
 <body>
 
   <%- partial("componments/_loading") %>
-  <%- yield %>
+  <div>
+    <%- yield %>
+  </div>
   <%- partial('partials/_footer') %>
 
   <script src="https://cdn.polyfill.io/v2/polyfill.js?features=default,fetch,es6,console,~viewport,String.prototype.padStart"></script>
