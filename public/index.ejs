@@ -85,6 +85,27 @@
           <button type="submit" class="btn btn-success mx-auto" id="submit-btn">確認審核</button>
         </div>
     </form>
+
+    <form id="hk-certified-area">
+      <hr>
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-12 col-md-10 mb-2">
+              <span class="doc-title">核驗單位上傳文件</span><br/>
+              <span class="doc-hint text-muted">點圖可放大、縮小或旋轉</span>
+            </div>
+
+            <div class="col-2 mb-2 ml-auto text-right">
+              <!-- <button class="btn btn-success" onclick="app.downloadEducationFile('resident-certificate'); return false;"><i class="fa fa-download" aria-hidden="true"></i> 下載</button> -->
+              <input class="btn btn-success ml-auto mr-3" type="file" multiple value="上傳檔案" onchange="app.uploadEducationFile('verification-file', this.files)" onmousedown="event.preventDefault()">
+            </div>
+          </div>
+        </div>
+        <div class="card-body" id="hk-office-upload-div">
+        </div>
+      </div>
+   </form>
   </div>
 </div>
 
@@ -99,6 +120,39 @@
         </button>
       </div>
       <div class="modal-body text-center" id="scanner-body">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" id="original-img-modal" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="original-img-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <i aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <canvas
+          class="img-fluid" id="original-img-canvas"
+          data-filename="" data-filetype=""
+          onmousedown="app.mouseDownOnImage(event);"
+          onmousemove="app.mouseMoveOnImage(event);"
+          onmouseout="app.renderImage(0);"
+          onmouseup="app.clearDrag();"
+          onmouseover="app.clearDrag();"
+          onmouseout="app.clearDrag();"
+        ></canvas>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="app.renderImage(0, 1/0.8)" onmousedown="event.preventDefault()">放大</button>
+        <button type="button" class="btn btn-primary" onclick="app.renderImage(0, 0.8)" onmousedown="event.preventDefault()">縮小</button>
+        <button type="button" class="btn btn-primary mr-auto" onclick="app.renderImage(90)" onmousedown="event.preventDefault()">轉</button>
+        <button type="button" class="btn btn-danger" id="original-delete-btn" onclick="app.deleteEducationFile(document.getElementById('original-img-canvas').dataset.filename, document.getElementById('original-img-canvas').dataset.filetype)" onmousedown="event.preventDefault()"><i class="fa fa-trash-o" aria-hidden="true"></i> 刪除</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onmousedown="event.preventDefault()"><i class="fa fa-sign-out" aria-hidden="true"></i> 離開</button>
       </div>
     </div>
   </div>
