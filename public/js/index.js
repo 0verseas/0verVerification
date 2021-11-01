@@ -261,6 +261,13 @@ const app = (function () {
         // render 學生資料
         _renderStudentInfo(student = userData);
 
+        // 香港地區要 show 上傳核驗文件區塊
+        if(userData.student_personal_data.resident_location == '113' && (
+          userData.student_qualification_verify.identity === 1 || userData.student_qualification_verify.identity === 2)
+        ){
+          $('#hk-certified-area').show();
+        }
+
         // 顯示資料
         $studentInfoDiv.prop('hidden', false);
       } else if (response.statusCode == 401) {
@@ -432,6 +439,8 @@ const app = (function () {
   // 將圖片依照 type append 到 DOM 上
   function _appendEducationFile(type = '', filenames = [], highlight = false) {
     for (let filename of filenames) {
+      var filename_for_id = filename;
+      filename_for_id = filename_for_id.replace('.','');
       if (type === 'diploma') {
         $diplomaDiv.prepend(`
           <img
@@ -456,13 +465,15 @@ const app = (function () {
       }
       if (type === 'verification-file') {
         $hkOfficeUploadDiv.prepend(`
-          <embed
-            src="${env.baseUrl}/office/students/${userId}/verification-file/${filename}"
-            width="700px" height="375px"
-            type="application/pdf"
-            frameBorder="0"
-            scrolling="auto"
-            >
+          <div id='${filename_for_id}'>
+            <embed
+              src="${env.baseUrl}/office/students/${userId}/verification-file/${filename}"
+              width="600px" height="375px"
+              type="application/pdf"
+              frameBorder="0"
+              scrolling="auto"
+            ></embed>
+            <a type="button" class="btn btn-info" target="_blank" style="color:white" href="${env.baseUrl}/office/students/${userId}/verification-file/${filename}"><i class="fa fa-search-plus" aria-hidden="true">點此放大</i></a>
             <button
               type="button"
               class="btn btn-danger"
@@ -471,10 +482,15 @@ const app = (function () {
               onmousedown="event.preventDefault()">
               <i class="fa fa-trash-o" aria-hidden="true">刪除</i>
             </button>
+          </div>
         `)
       }
     }
   }
+
+  // <object data="${env.baseUrl}/office/students/${userId}/verification-file/${filename}"" type="application/pdf" width="700" height="375">
+  //           <a href="${env.baseUrl}/office/students/${userId}/verification-file/${filename}"">test.pdf</a>
+  //         </object>
 
   // 上傳成績單或學歷證明文件
   function uploadEducationFile(type = '', files = []) {
@@ -517,9 +533,6 @@ const app = (function () {
 
   // 刪除某成績單或學歷證明文件
   function deleteEducationFile(filename = '', filetype = '') {
-    alert('刪除囉');
-    // console.log('filename',filename);
-    // console.log('filetype',filetype);
     // 彈出確認框
     const isConfirmedDelete = confirm('確定要刪除嗎？');
 
@@ -537,7 +550,10 @@ const app = (function () {
     API.deleteStudentEducationFile(userId, filetype, filename).then(response => {
       if (response.ok) {
         // 確認刪除，移除該圖
-        $(`.doc-thumbnail[data-filename="${filename}"]`).remove();
+        //$(`.doc-thumbnail[data-filename="${filename}"]`).remove();
+        var filename_for_id = filename;
+        filename_for_id = filename_for_id.replace('.','');
+        $(`#${filename_for_id}`).hide();
       } else if (response.statusCode == 401) {
         alert('請先登入');
         // 若沒有登入，跳轉登入頁面
