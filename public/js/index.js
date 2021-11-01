@@ -390,8 +390,6 @@ const app = (function () {
       $applyWay.show();
     }
 
-    console.log(studentInfo);
-
     // 學歷證明文件
     _appendEducationFile('diploma', studentInfo.student_diploma);
     // 成績單
@@ -465,24 +463,31 @@ const app = (function () {
       }
       if (type === 'verification-file') {
         $hkOfficeUploadDiv.prepend(`
-          <div id='${filename_for_id}'>
-            <embed
-              src="${env.baseUrl}/office/students/${userId}/verification-file/${filename}"
-              width="600px" height="375px"
-              type="application/pdf"
-              frameBorder="0"
-              scrolling="auto"
-            ></embed>
-            <a type="button" class="btn btn-info" target="_blank" style="color:white" href="${env.baseUrl}/office/students/${userId}/verification-file/${filename}"><i class="fa fa-search-plus" aria-hidden="true">點此放大</i></a>
-            <button
-              type="button"
-              class="btn btn-danger"
-              id="original-delete-btn"
-              onclick="app.deleteEducationFile('${filename}', 'verification-file')"
-              onmousedown="event.preventDefault()">
-              <i class="fa fa-trash-o" aria-hidden="true">刪除</i>
-            </button>
+          <div class="card" id='${filename_for_id}'>
+            <div class="card-body">
+              <embed
+                src="${baseUrl}/office/students/${userId}/verification-file/${filename}"
+                width="100%" height="375px"
+                type="application/pdf"
+                frameBorder="0"
+                scrolling="auto"
+              ></embed>
+            </div>
+            <div class="card-footer">
+              <div class="pull-right">
+                <a type="button" class="btn btn-info" target="_blank" style="color:white" href="${baseUrl}/office/students/${userId}/verification-file/${filename}"><i class="fa fa-search-plus" aria-hidden="true">點此放大</i></a>
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  id="original-delete-btn"
+                  onclick="app.deleteEducationFile('${filename}', 'verification-file')"
+                  onmousedown="event.preventDefault()">
+                  <i class="fa fa-trash-o" aria-hidden="true">刪除</i>
+                </button>
+              </div>
+            </div>
           </div>
+          <hr/>
         `)
       }
     }
