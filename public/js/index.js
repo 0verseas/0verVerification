@@ -786,6 +786,10 @@ const app = (function () {
     isMouseDownOnImage = false;
   }
 
+  // 安慰用
+  function _handleFakeConfirmed(){
+    alert('上傳並儲存成功！');
+  }
 
   return {
     openScanner,
@@ -800,6 +804,7 @@ const app = (function () {
     mouseDownOnImage,
     mouseMoveOnImage,
     clearDrag,
+    _handleFakeConfirmed,
   }
 
 })();
