@@ -403,7 +403,7 @@ const app = (function () {
     $verifiedStatus.text((miscData && miscData.verified_at ? '已' : '尚未') + '審核');
 
     // 審核、報名狀態對應狀況
-    if (miscData && miscData.confirmed_at) {
+    if (miscData && miscData.confirmed_at && verifier.overseas_office.can_verify) {
       // 學生已確認報名
 
       // 同時學生已被審核
