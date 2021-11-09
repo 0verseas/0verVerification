@@ -86,30 +86,73 @@
         </div>
     </form>
 
-    <form id="hk-certified-area" style="display: none;">
-      <hr>
-      <div class="card">
-        <div class="card-header">
-
-          <div class="pull-left">
-            <span class="doc-title">核驗單位上傳文件</span>
-          </div>
-
-          <div class="pull-right">
-            <input class="btn btn-success" type="file" multiple value="上傳檔案" onchange="app.uploadEducationFile('verification-file', this.files)" onmousedown="event.preventDefault()">
-          </div>
-
+    <hr class = 'hk-file-area hide'/>
+    <div class="card hk-file-area hide">
+      <div class="card-header">
+        <div class="pull-left">
+          <span class="doc-title">上傳文件區域</span>
         </div>
-        <div class="card-body" id="hk-office-upload-div">
-        </div>
-
-        <div class="card-footer">
-          <div class="text-center">
-            <button type="button" class="btn btn-success" onclick="app._handleFakeConfirmed()" onmousedown="event.preventDefault()">確認上傳</button>
+      </div>
+      <div class="card-body">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="student-uploaded-tab" data-toggle="tab" href="#student-uploaded" role="tab" aria-controls="student-uploaded" aria-selected="true">學生上傳文件</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="hk-certified-tab" data-toggle="tab" href="#hk-certified" role="tab" aria-controls="hk-certified" aria-selected="false">核驗單位上傳文件</a>
+          </li>
+          <li class="nav-item overseas-area" role="presentation">
+            <a class="nav-link" id="overseas-tab" data-toggle="tab" href="#overseas" role="tab" aria-controls="overseas" aria-selected="false">海外聯招會上傳文件</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="student-uploaded" role="tabpanel" aria-labelledby="student-uploaded-tab">
+            <form id="student-uploaded-area">
+              <div class="card">
+                <div class="card-body" id="student-uploaded-div">
+                </div>
+              </div>
+            </form>
+          </div>
+    
+          <div class="tab-pane fade" id="hk-certified" role="tabpanel" aria-labelledby="hk-certified-tab">
+            <form id="hk-certified-area">
+              <div class="card">
+                <div class="card-header">
+        
+                  <div class="pull-left">
+                    <input class="btn btn-success" type="file" multiple value="上傳檔案" onchange="app.uploadEducationFile('verification-file', this.files)" onmousedown="event.preventDefault()">
+                  </div>
+        
+                </div>
+                <div class="card-body" id="hk-office-upload-div">
+                </div>
+        
+                <div class="card-footer">
+                  <div class="text-center">
+                    <button type="button" class="btn btn-success" onclick="app._handleFakeConfirmed()" onmousedown="event.preventDefault()">確認上傳</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+    
+          <div class="tab-pane fade overseas-area" id="overseas" role="tabpanel" aria-labelledby="overseas-tab">
+            <form id="overseas-uploaded-area">
+              <div class="card">
+                <div class="card-header">
+                  <div class="pull-left">
+                    <input class="btn btn-success" type="file" multiple value="上傳檔案" onchange="app.uploadEducationFile('overseas-file', this.files)" onmousedown="event.preventDefault()">
+                  </div>
+                </div>
+                <div class="card-body" id="overseas-upload-div">
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
-    </form>
+    </div>
   </div>
 </div>
 

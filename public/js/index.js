@@ -30,7 +30,9 @@ const app = (function () {
 
   const $diplomaDiv = $('#diploma-div'); // 學歷證明 div
   const $transcriptDiv = $('#transcript-div'); // 成績單 div
+  const $studentUploadedDiv = $('#student-uploaded-div'); // HK學生自行上傳文件
   const $hkOfficeUploadDiv = $('#hk-office-upload-div'); // 核驗單位上傳 div
+  const $overseasUploadDiv = $('#overseas-upload-div'); // 海聯上傳 div
   // 圖片原圖 modal
   const $originalImgModal = $('#original-img-modal');
   const $originalImgCanvas = $('#original-img-canvas');
@@ -57,6 +59,25 @@ const app = (function () {
   const baseUrl = env.baseUrl;
   let userId = '';
   let has_videoinput;
+
+  let uplaodedFileNameMap = {
+    'ID-card' : '香港永久性居民身份證正面',
+    'quit-school' : '自願退學證明',
+    'overseas-stay-years' : '海外居留年限切結書',
+    'Taiwan-stay-dates' : '在台停留日期',
+    'hk-or-mo-guarantee' : '港澳聲聲明書 / 港澳具外國國籍之華裔學生切結書',
+    'head-shot' : '2吋相片',
+    'home-return-permit' : '回鄉證',
+    'change-of-name' : '改名契',
+    'diploma' : '畢業證書/在學證明/學生證',
+    'scholl-transcript' : '高中最後三年成績單（應屆當學期可免附）',
+    'authorize-check-diploma' : '學歷屬實及授權查證切結書',
+    'olympia' : ' 國際數理奧林匹亞競賽或美國國際科展僅像證明',
+    'placement-transcript' : '採計文憑成績證書',
+    'transcript-reference-table' : '成績採計資料參考表',
+    'hk-mo-relations-ordinance' : '符合港澳關係條例切結書',
+    'tech-course-passed-proof' : '就讀全日制副學士或高級文憑課程已通過香港資歷架構第四級之證明文件'
+  };
 
   // 學歷文件 modal 所需變數
   let canvas; // 畫布
@@ -224,7 +245,9 @@ const app = (function () {
     $applyWay.html('');
     $diplomaDiv.html('');
     $transcriptDiv.html('');
+    $studentUploadedDiv.html('');
     $hkOfficeUploadDiv.html('');
+    $overseasUploadDiv.html('');
     $verificationDesc.html('');
     // 重置上傳文件按鈕
     $(":file").filestyle('disabled', false);
@@ -262,10 +285,16 @@ const app = (function () {
         _renderStudentInfo(student = userData);
 
         // 香港地區要 show 上傳核驗文件區塊
+        $('.overseas-area').hide();
         if(userData.student_personal_data.resident_location == '113' && (
           userData.student_qualification_verify.identity === 1 || userData.student_qualification_verify.identity === 2)
         ){
-          $('#hk-certified-area').show();
+          $('.hk-file-area').show();
+          if(verifier.overseas_office.authority === 1){
+            $('.overseas-area').show();
+          }
+        } else {
+          $('.hk-file-area').hide();
         }
 
         // 顯示資料
@@ -394,8 +423,14 @@ const app = (function () {
     _appendEducationFile('diploma', studentInfo.student_diploma);
     // 成績單
     _appendEducationFile('transcripts', studentInfo.student_transcripts);
+    // 學生上傳文件
+    _appendEducationFile('student-uploaded-file', studentInfo.student_uploaded_files);
     // 核驗文件
     _appendEducationFile('verification-file', studentInfo.office_upload_student_files);
+    if(verifier.overseas_office.authority === 1){
+      // 海聯上傳文件
+      _appendEducationFile('overseas-file', studentInfo.overseas_uploaded_student_files);
+    }
     // 確認報名狀態
     $confirmedStatus.text((miscData && miscData.confirmed_at ? '已' : '尚未') + '確認上傳及報名資料');
 
@@ -437,58 +472,114 @@ const app = (function () {
   // 將圖片依照 type append 到 DOM 上
   function _appendEducationFile(type = '', filenames = [], highlight = false) {
     for (let filename of filenames) {
-      var filename_for_id = filename;
+      let filename_for_id = filename;
       filename_for_id = filename_for_id.replace('.','');
-      if (type === 'diploma') {
-        $diplomaDiv.prepend(`
-          <img
-            src="${baseUrl}/office/students/${userId}/diploma/${filename}"
-            alt="學歷證明文件"
-            data-filename="${filename}" data-filetype="diploma"
-            class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
-            onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
-          >
-        `)
-      }
-      if (type === 'transcripts') {
-        $transcriptDiv.prepend(`
-          <img
-            src="${baseUrl}/office/students/${userId}/transcripts/${filename}"
-            alt="成績單文件"
-            data-filename="${filename}" data-filetype="transcripts"
-            class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
-            onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
-          >
-        `)
-      }
-      if (type === 'verification-file') {
-        $hkOfficeUploadDiv.prepend(`
-          <div class="card" id='${filename_for_id}'>
-            <div class="card-body">
-              <embed
-                src="${baseUrl}/office/students/${userId}/verification-file/${filename}"
-                width="100%" height="375px"
-                type="application/pdf"
-                frameBorder="0"
-                scrolling="auto"
-              ></embed>
-            </div>
-            <div class="card-footer">
-              <div class="pull-right">
-                <a type="button" class="btn btn-info" target="_blank" style="color:white" href="${baseUrl}/office/students/${userId}/verification-file/${filename}"><i class="fa fa-search-plus" aria-hidden="true">點此放大</i></a>
-                <button
-                  type="button"
-                  class="btn btn-danger"
-                  id="original-delete-btn"
-                  onclick="app.deleteEducationFile('${filename}', 'verification-file')"
-                  onmousedown="event.preventDefault()">
-                  <i class="fa fa-trash-o" aria-hidden="true">刪除</i>
-                </button>
+      switch(type){
+        case 'diploma':
+          $diplomaDiv.prepend(`
+            <img
+              src="${baseUrl}/office/students/${userId}/diploma/${filename}"
+              alt="學歷證明文件"
+              data-filename="${filename}" data-filetype="diploma"
+              class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
+              onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
+            >
+          `);
+          break;
+        case 'transcripts':
+          $transcriptDiv.prepend(`
+            <img
+              src="${baseUrl}/office/students/${userId}/transcripts/${filename}"
+              alt="成績單文件"
+              data-filename="${filename}" data-filetype="transcripts"
+              class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
+              onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
+            >
+          `);
+          break;
+        case 'student-uploaded-file':
+          filename_for_id = filename.replace(userId+'_','').replace('.pdf','');
+          $studentUploadedDiv.append(`
+            <div class="card">
+              <div class="card-header">
+                <span class="doc-title">${uplaodedFileNameMap[filename_for_id]}</span>
+              </div>
+              <div class="card-body">
+                <embed
+                  src="${baseUrl}/office/students/${userId}/uploaded-file/${filename}"
+                  width="100%" height="375px"
+                  type="application/pdf"
+                  frameBorder="0"
+                  scrolling="auto"
+                ></embed>
+              </div>
+              <div class="card-footer">
+                <div class="pull-right">
+                  <a type="button" class="btn btn-info" target="_blank" style="color:white" href="${baseUrl}/office/students/${userId}/uploaded-file/${filename}"><i class="fa fa-search-plus" aria-hidden="true">點此放大</i></a>
+                </div>
               </div>
             </div>
-          </div>
-          <hr/>
-        `)
+            <hr/>
+          `);
+          break;
+        case 'verification-file':
+          $hkOfficeUploadDiv.prepend(`
+            <div class="card" id='${filename_for_id}'>
+              <div class="card-body">
+                <embed
+                  src="${baseUrl}/office/students/${userId}/verification-file/${filename}"
+                  width="100%" height="375px"
+                  type="application/pdf"
+                  frameBorder="0"
+                  scrolling="auto"
+                ></embed>
+              </div>
+              <div class="card-footer">
+                <div class="pull-right">
+                  <a type="button" class="btn btn-info" target="_blank" style="color:white" href="${baseUrl}/office/students/${userId}/verification-file/${filename}"><i class="fa fa-search-plus" aria-hidden="true">點此放大</i></a>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    id="original-delete-btn"
+                    onclick="app.deleteEducationFile('${filename}', 'verification-file')"
+                    onmousedown="event.preventDefault()">
+                    <i class="fa fa-trash-o" aria-hidden="true">刪除</i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <hr/>
+          `);
+          break;
+          case 'overseas-file':
+          $overseasUploadDiv.prepend(`
+            <div class="card" id='${filename_for_id}'>
+              <div class="card-body">
+                <embed
+                  src="${baseUrl}/office/students/${userId}/overseas-file/${filename}"
+                  width="100%" height="375px"
+                  type="application/pdf"
+                  frameBorder="0"
+                  scrolling="auto"
+                ></embed>
+              </div>
+              <div class="card-footer">
+                <div class="pull-right">
+                  <a type="button" class="btn btn-info" target="_blank" style="color:white" href="${baseUrl}/office/students/${userId}/overseas-file/${filename}"><i class="fa fa-search-plus" aria-hidden="true">點此放大</i></a>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    id="original-delete-btn"
+                    onclick="app.deleteEducationFile('${filename}', 'overseas-file')"
+                    onmousedown="event.preventDefault()">
+                    <i class="fa fa-trash-o" aria-hidden="true">刪除</i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <hr/>
+          `);
+          break;
       }
     }
   }
