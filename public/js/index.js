@@ -79,6 +79,25 @@ const app = (function () {
     'tech-course-passed-proof' : '就讀全日制副學士或高級文憑課程已通過香港資歷架構第四級之證明文件'
   };
 
+  let uplaodedFileCodeMap = {
+    'ID-card' : 01,
+    'quit-school' : 02,
+    'overseas-stay-years' : 03,
+    'Taiwan-stay-dates' : 04,
+    'hk-or-mo-guarantee' : 05,
+    'head-shot' : 06,
+    'home-return-permit' : 07,
+    'change-of-name' : 08,
+    'diploma' : 09,
+    'scholl-transcript' : 10,
+    'authorize-check-diploma' : 11,
+    'olympia' : 12,
+    'placement-transcript' : 13,
+    'transcript-reference-table' : 14,
+    'hk-mo-relations-ordinance' : 15,
+    'tech-course-passed-proof' : 16
+  };
+
   // 學歷文件 modal 所需變數
   let canvas; // 畫布
   let ctx; // 畫布內容
@@ -475,6 +494,7 @@ const app = (function () {
 
   // 將圖片依照 type append 到 DOM 上
   function _appendEducationFile(type = '', filenames = [], highlight = false) {
+    let studentUploadedFileAreaHtml = [];
     for (let filename of filenames) {
       let filename_for_id = filename;
       filename_for_id = filename_for_id.replace('.','');
@@ -503,7 +523,7 @@ const app = (function () {
           break;
         case 'student-uploaded-file':
           filename_for_id = filename.replace(userId+'_','').replace('.pdf','');
-          $studentUploadedDiv.append(`
+          studentUploadedFileAreaHtml[uplaodedFileCodeMap[filename_for_id]] = `
             <div class="card">
               <div class="card-header">
                 <span class="doc-title">${uplaodedFileNameMap[filename_for_id]}</span>
@@ -524,7 +544,7 @@ const app = (function () {
               </div>
             </div>
             <hr/>
-          `);
+          `;
           break;
         case 'verification-file':
           $hkOfficeUploadDiv.prepend(`
@@ -555,7 +575,7 @@ const app = (function () {
             <hr/>
           `);
           break;
-          case 'overseas-file':
+        case 'overseas-file':
           $overseasUploadDiv.prepend(`
             <div class="card" id='${filename_for_id}'>
               <div class="card-body">
@@ -585,6 +605,11 @@ const app = (function () {
           `);
           break;
       }
+    }
+    if(studentUploadedFileAreaHtml.length > 0){
+      studentUploadedFileAreaHtml.forEach(function(value, index) {
+        $studentUploadedDiv.append(value);
+      });
     }
   }
 
