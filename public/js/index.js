@@ -445,15 +445,6 @@ const app = (function () {
 
       // 同時學生已被審核
       if (miscData.verified_at) {
-
-        // 非海聯窗口，學生被審核後不得增刪文件
-        if (verifier.overseas_office.authority !== 1) {
-          // 不能重傳文件
-          $(":file").filestyle('disabled', true);
-          // 不能刪原圖
-          $originalDeleteBtn.prop('disabled', true);
-        }
-
         // 不能審核
         $submitBtn.prop('disabled', true);
         // 不能編輯審核備註
