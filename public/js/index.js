@@ -291,7 +291,7 @@ const app = (function () {
           userData.student_qualification_verify.identity === 1 || userData.student_qualification_verify.identity === 2)
         ){
           $('.hk-file-area').show();
-          if(verifier.overseas_office.authority === 1){
+          if(verifier.overseas_office.authority === 1 || verifier.overseas_office.authority === 6){
             $('.student-area').prop('hidden', false);
             $('.overseas-area').prop('hidden', false);
           }
@@ -429,10 +429,21 @@ const app = (function () {
     _appendEducationFile('student-uploaded-file', studentInfo.student_uploaded_files);
     // 核驗文件
     _appendEducationFile('verification-file', studentInfo.office_upload_student_files);
-    if(verifier.overseas_office.authority === 1){
+    if(verifier.overseas_office.authority === 1 || verifier.overseas_office.authority === 6){
       // 海聯上傳文件
       _appendEducationFile('overseas-file', studentInfo.overseas_uploaded_student_files);
     }
+
+    // 移民署窗口，上傳文件區域只能看不能動
+    if (verifier.overseas_office.authority === 6) {
+      // 不能上傳
+      $(":file").filestyle('disabled', true);
+      // 不能按確認
+      $('.btn-confirmed').hide();
+      // 不能刪除
+      $('.btn-delete').hide();
+    }
+
     // 確認報名狀態
     $confirmedStatus.text((miscData && miscData.confirmed_at ? '已' : '尚未') + '確認上傳及報名資料');
 
@@ -532,7 +543,7 @@ const app = (function () {
                   <a type="button" class="btn btn-info" target="_blank" style="color:white" href="${baseUrl}/office/students/${userId}/verification-file/${filename}"><i class="fa fa-search-plus" aria-hidden="true">點此放大</i></a>
                   <button
                     type="button"
-                    class="btn btn-danger"
+                    class="btn btn-danger btn-delete"
                     id="original-delete-btn"
                     onclick="app.deleteEducationFile('${filename}', 'verification-file')"
                     onmousedown="event.preventDefault()">
@@ -561,7 +572,7 @@ const app = (function () {
                   <a type="button" class="btn btn-info" target="_blank" style="color:white" href="${baseUrl}/office/students/${userId}/overseas-file/${filename}"><i class="fa fa-search-plus" aria-hidden="true">點此放大</i></a>
                   <button
                     type="button"
-                    class="btn btn-danger"
+                    class="btn btn-danger btn-delete"
                     id="original-delete-btn"
                     onclick="app.deleteEducationFile('${filename}', 'overseas-file')"
                     onmousedown="event.preventDefault()">
