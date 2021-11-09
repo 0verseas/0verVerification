@@ -72,7 +72,7 @@ const app = (function () {
     'diploma' : '畢業證書/在學證明/學生證',
     'scholl-transcript' : '高中最後三年成績單（應屆當學期可免附）',
     'authorize-check-diploma' : '學歷屬實及授權查證切結書',
-    'olympia' : ' 國際數理奧林匹亞競賽或美國國際科展僅像證明',
+    'olympia' : '國際數理奧林匹亞競賽或美國國際科展獲獎證明',
     'placement-transcript' : '採計文憑成績證書',
     'transcript-reference-table' : '成績採計資料參考表',
     'hk-mo-relations-ordinance' : '符合港澳關係條例切結書',
