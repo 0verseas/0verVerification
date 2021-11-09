@@ -285,13 +285,15 @@ const app = (function () {
         _renderStudentInfo(student = userData);
 
         // 香港地區要 show 上傳核驗文件區塊
-        $('.overseas-area').hide();
+        $('.student-area').prop('hidden', true);
+        $('.overseas-area').prop('hidden', true);
         if(userData.student_personal_data.resident_location == '113' && (
           userData.student_qualification_verify.identity === 1 || userData.student_qualification_verify.identity === 2)
         ){
           $('.hk-file-area').show();
           if(verifier.overseas_office.authority === 1){
-            $('.overseas-area').show();
+            $('.student-area').prop('hidden', false);
+            $('.overseas-area').prop('hidden', false);
           }
         } else {
           $('.hk-file-area').hide();
