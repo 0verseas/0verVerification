@@ -179,6 +179,10 @@ const app = (function () {
           $scannerModal.remove();
         }
 
+        if(verifier.overseas_office.authority === 6 || verifier.overseas_office.authority === 2){
+          $('.nav-list').hide();
+        }
+
         // 確認有登入，init 頁面
         _resetStudentInfo();
       } else if (response.statusCode == 401) {
@@ -455,8 +459,10 @@ const app = (function () {
 
     // 移民署窗口，上傳文件區域只能看不能動
     if (verifier.overseas_office.authority === 6) {
+      // 不能審核
+      $('#submit-btn').hide();
       // 不能上傳
-      $(":file").filestyle('disabled', true);
+      $('.btn-upload').hide();
       // 不能按確認
       $('.btn-confirmed').hide();
       // 不能刪除

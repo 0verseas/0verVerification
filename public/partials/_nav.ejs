@@ -13,7 +13,7 @@
 
   <ul class="nav nav-pills nav-fill mx-auto mx-lg-0 p-3">
     <% for (item of navs) { %>
-      <li class="nav-item">
+      <li class="nav-item nav-<%= item.nav %>">
         <a class="nav-link <%- nav == item.nav ? 'active' : '' %>" href="<%= item.link %><%= item.link.split(":")[0] == 'http' || item.link.split(":")[0] == 'https' ? '' : '.html' %>">
           <%= item.title %> <span class="sr-only">(current)</span>
         </a>
