@@ -65,7 +65,7 @@ const app = (function () {
     'quit-school' : '自願退學證明',
     'overseas-stay-years' : '海外居留年限切結書',
     'Taiwan-stay-dates' : '在台停留日期',
-    'hk-or-mo-guarantee' : '港澳聲聲明書 / 港澳具外國國籍之華裔學生切結書',
+    'hk-or-mo-guarantee' : '港澳生聲明書 / 港澳具外國國籍之華裔學生切結書',
     'head-shot' : '2吋相片',
     'home-return-permit' : '回鄉證',
     'change-of-name' : '改名契',
