@@ -701,7 +701,7 @@ const app = (function () {
     });
   }
 
-  function verifyStudentInfo(verificationDesc) {
+  async function verifyStudentInfo(verificationDesc) {
     // 彈出確認框
     const isConfirmedDelete = confirm('確定要送出審核結果嗎？');
 
@@ -723,31 +723,34 @@ const app = (function () {
     }
 
     // 確認有無相同僑居地身分證字號的同學
-    API.checkDuplicateStudent(userId).then(response => {
-      if (!response.ok){
-        throw response;
-      }
+    /*
+    * 有發現重複：200
+    * 沒有發現重複：204
+    * 無開放此功能：204
+    */
+    const duplicateStudentResponse = await API.checkDuplicateStudent(userId);
 
+    if (duplicateStudentResponse.ok){
       /*
        * 有發現重複：200
        * 沒有發現重複：204
        * 無開放此功能：204
        */
-      if (response.status === 200){
-        response.json().then(function (data) {
-          // 跳個善逸(X)善意(O)的提醒
-          alert(data.messages[0]);
-        })
+      if (duplicateStudentResponse.status === 200){
+        const data = await duplicateStudentResponse.json();
+        // 使用者確認是否收件
+        let check = confirm(data.messages[0]+', 是否要收件？');
+        if(!check){
+          return;
+        }
       }
-    }).catch(e => {
-      e.json && e.json().then((data) => {
-        console.error(data);
-        alert(`${data.messages[0]}`);
-      });
-    });
+    } else {
+      const data = await duplicateStudentResponse.json();
+      alert(`${data.messages[0]}`);
+    }
 
     // 送審
-    API.verifyStudent(userId, verificationDesc, ruleCodeOfOverseasStudentId).then(response => {
+    await API.verifyStudent(userId, verificationDesc, ruleCodeOfOverseasStudentId).then(response => {
       if (response.ok) {
         alert('審核成功');
 
