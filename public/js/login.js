@@ -13,7 +13,6 @@ const app = (function () {
 	const $loginAlert = $('#login-alert');
 	const $username = $('#username');
 	const $password = $('#password');
-	const $loginBtn = $('#login-btn');
 
 	/**
 	 * init
@@ -36,9 +35,8 @@ const app = (function () {
 			}).then(function(){
 				API.login(username, password, google_recaptcha_token).then(response => {
 					if (response.statusCode == 200) {
-					// 登入成功，跳轉至首頁
+					// 登入成功，跳轉至首頁
 					window.location.href = './index.html';
-					console.log(response);
 					alert('登入成功！');
 					} else if (response.statusCode == 401) {
 					// 驗證失敗，清除密碼並顯示提示
