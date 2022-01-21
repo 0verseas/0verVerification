@@ -2,8 +2,8 @@ const API = (function () {
   const baseUrl = env.baseUrl;
 
   // 審核單位登入
-  function login(username, password) {
-    const data = {username, password: sha256(password)};
+  function login(username, password, google_recaptcha_token) {
+    const data = {username, password: sha256(password), google_recaptcha_token};
 
     const request = fetch(`${baseUrl}/office/login`, {
       method: 'POST',
