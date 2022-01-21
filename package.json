@@ -20,6 +20,6 @@
 		"@babel/preset-env": "^7.15.0",
 		"@babel/core": "^7.15.0",
 		"bootstrap": "^5.1.0",
-		"harp": "^0.41.0"
+		"harp": "^0.41.2"
 	}
 }
