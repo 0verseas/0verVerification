@@ -33,6 +33,8 @@ const app = (function () {
   const $studentUploadedDiv = $('#student-uploaded-div'); // HK學生自行上傳文件
   const $hkOfficeUploadDiv = $('#hk-office-upload-div'); // 核驗單位上傳 div
   const $overseasUploadDiv = $('#overseas-upload-div'); // 海聯上傳 div
+  const $uploadedEducationDiv = $('#uploaded-education-div');
+  const $uploadedTranscript = $('#uploaded-transrcipt-div');
   // 圖片原圖 modal
   const $originalImgModal = $('#original-img-modal');
   const $originalImgCanvas = $('#original-img-canvas');
@@ -310,6 +312,8 @@ const app = (function () {
         // 香港地區要 show 上傳核驗文件區塊
         $('.student-area').prop('hidden', true);
         $('.overseas-area').prop('hidden', true);
+        $('.hk-file-area').hide();
+        $('.my-file-area').hide();
         if(userData.student_personal_data.resident_location == '113' && (
           userData.student_qualification_verify.identity === 1 || userData.student_qualification_verify.identity === 2)
         ){
@@ -318,8 +322,10 @@ const app = (function () {
             $('.student-area').prop('hidden', false);
             $('.overseas-area').prop('hidden', false);
           }
-        } else {
-          $('.hk-file-area').hide();
+        } else if(userData.student_personal_data.school_country == '128'
+                  && userData.student_qualification_verify.identity === 3
+                  && verifier.overseas_office.authority === 1){
+            $('.my-file-area').show();
         }
 
         // 顯示資料
@@ -456,6 +462,11 @@ const app = (function () {
       // 海聯上傳文件
       _appendEducationFile('overseas-file', studentInfo.overseas_uploaded_student_files);
     }
+    // 馬來西亞學生上傳文件
+    if(verifier.overseas_office.authority === 1){
+      _appendEducationFile('uploaded-education', studentInfo.uploaded_education_files);
+      _appendEducationFile('uploaded-transcript', studentInfo.uploaded_transcript_files);
+    }
 
     // 移民署窗口，上傳文件區域只能看不能動
     if (verifier.overseas_office.authority === 6) {
@@ -503,6 +514,7 @@ const app = (function () {
     let studentUploadedFileAreaHtml = [];
     for (let filename of filenames) {
       let filename_for_id = filename;
+      let html = '';
       filename_for_id = filename_for_id.replace('.','');
       switch(type){
         case 'diploma':
@@ -609,6 +621,76 @@ const app = (function () {
             </div>
             <hr/>
           `);
+          break;
+        case 'uploaded-education':
+          html = `
+            <div class="card"'>
+              <div class="card-header">
+                <span class="title">${_translateEducationType(filename.split('/')[0])}</span>
+              </div>
+              <div class="card-body">
+          `;
+          if(filename.split('.')[1] == 'pdf'){
+            html += `
+              <embed
+                src="${baseUrl}/office/students/${type}/${userId}/${filename.split('/')[0]}/${filename.split('/')[1]}"
+                width="100%" height="375px"
+                type="application/pdf"
+                frameBorder="0"
+                scrolling="auto"
+              ></embed>
+            `;
+          } else {
+            html += `
+              <img
+                src="${baseUrl}/office/students/${type}/${userId}/${filename.split('/')[0]}/${filename.split('/')[1]}"
+                class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
+                onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
+              >
+            `;
+          }
+          html += `
+              </div>
+            </div>
+            <hr/>
+          `;
+          $uploadedEducationDiv.append(html);
+          break;
+        case 'uploaded-transcript':
+          const file_year = filename.split('/')[0].split('-')[0];
+          const file_code = filename.split('/')[0].split('-')[1];
+          html = `
+            <div class="card"'>
+              <div class="card-header">
+                <span class="title">${file_year}年 ${_translateTranscriptCode(file_code)}</span>
+              </div>
+              <div class="card-body">
+          `;
+          if(filename.split('.')[1] == 'pdf'){
+            html += `
+              <embed
+                src="${baseUrl}/office/students/${type}/${userId}/${filename.split('/')[0]}/${filename.split('/')[1]}"
+                width="100%" height="375px"
+                type="application/pdf"
+                frameBorder="0"
+                scrolling="auto"
+              ></embed>
+            `;
+          } else {
+            html += `
+              <img
+                src="${baseUrl}/office/students/${type}/${userId}/${filename.split('/')[0]}/${filename.split('/')[1]}"
+                class="img-thumbnail doc-thumbnail ${highlight ? 'doc-highlight' : ''}"
+                onclick="app.loadOriginalImgModal(this.src, this.alt, this.dataset.filename, this.dataset.filetype)"
+              >
+            `;
+          }
+          html += `
+              </div>
+            </div>
+            <hr/>
+          `;
+          $uploadedTranscript.append(html);
           break;
       }
     }
@@ -924,6 +1006,40 @@ const app = (function () {
   // 安慰用
   function _handleFakeConfirmed(){
     alert('上傳並儲存成功！');
+  }
+
+  function _translateEducationType(type){
+    switch(type){
+      case 'identity':
+        return '僑居地居留證件（身分證或護照影本）';
+      case 'entrypass':
+        return '准考證';
+      case 'diploma':
+        return '在學證明 / 畢業證書 / 修業證明 / 離校證明';
+      case 'transcript':
+        return '中學成績單';
+      case 'others':
+        return '其它（例：系統產生切結書、資料修正表等，無則免附。）';
+      default:
+        return '';
+    }
+  }
+
+  function _translateTranscriptCode(code){
+    switch(code){
+      case '1':
+        return '獨中統考';
+      case '2':
+        return 'STPM';
+      case '3':
+        return 'A-LEVEL';
+      case '4':
+        return 'SPM';
+      case '5':
+        return 'O-LEVEL';
+      default:
+        return '';
+    }
   }
 
   return {
