@@ -274,6 +274,8 @@ const app = (function () {
     $hkOfficeUploadDiv.html('');
     $overseasUploadDiv.html('');
     $verificationDesc.html('');
+    $uploadedEducationDiv.html('');
+    $uploadedTranscript.html('');
     // 重置上傳文件按鈕
     $(":file").filestyle('disabled', false);
     // 重置審核按鈕
