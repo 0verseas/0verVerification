@@ -1,11 +1,24 @@
-version: '3'
+version: '3.7'
+
+networks:
+  bridge:
+    external:
+      name: ${NETWORKS}
+
 services:
-    nginx:
-        image: nginx:alpine
-        container_name: 0verVerification
-        restart: unless-stopped
-        tty: true
-        environment:
-            - TZ=Asia/Taipei
-        volumes:
-            - ./app/dist/:/usr/share/nginx/html/verification/
+  verification:
+    image: nginx:alpine
+    container_name: 0verVerification
+    restart: unless-stopped
+    tty: true
+    environment:
+      - TZ=Asia/Taipei
+    volumes:
+      - ./app/dist/:/usr/share/nginx/html/verification/
+    networks:
+      - bridge
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.verification.entrypoints=websecure"
+      - "traefik.http.routers.verification.tls.certresolver=lets-encr"
+      - "traefik.http.routers.verification.rule=Host(``)"
