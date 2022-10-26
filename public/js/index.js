@@ -311,15 +311,13 @@ const app = (function () {
         // render 學生資料
         _renderStudentInfo(student = userData);
 
-        // 香港地區要 show 上傳核驗文件區塊
+        // 港澳生要 show 上傳核驗文件區塊
         $('.student-area').prop('hidden', true);
         $('.overseas-area').prop('hidden', true);
-        $('.hk-file-area').hide();
+        $('.hk-mo-file-area').hide();
         $('.my-file-area').hide();
-        if(userData.student_personal_data.resident_location == '113' && (
-          userData.student_qualification_verify.identity === 1 || userData.student_qualification_verify.identity === 2)
-        ){
-          $('.hk-file-area').show();
+        if(userData.student_qualification_verify.identity === 1 || userData.student_qualification_verify.identity === 2){
+          $('.hk-mo-file-area').show();
           if(verifier.overseas_office.authority === 1 || verifier.overseas_office.authority === 6){
             $('.student-area').prop('hidden', false);
             $('.overseas-area').prop('hidden', false);
