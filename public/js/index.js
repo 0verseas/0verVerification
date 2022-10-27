@@ -63,22 +63,23 @@ const app = (function () {
   let has_videoinput;
 
   let uplaodedFileNameMap = {
-    'ID-card' : '香港永久性居民身份證正面',
-    'quit-school' : '自願退學證明',
-    'overseas-stay-years' : '海外居留年限切結書',
-    'Taiwan-stay-dates' : '在台停留日期',
-    'hk-or-mo-guarantee' : '港澳生聲明書 / 港澳具外國國籍之華裔學生切結書',
-    'head-shot' : '2吋相片',
-    'home-return-permit' : '回鄉證',
-    'change-of-name' : '改名契',
-    'diploma' : '畢業證書/在學證明/學生證',
-    'scholl-transcript' : '高中最後三年成績單（應屆當學期可免附）',
-    'authorize-check-diploma' : '學歷屬實及授權查證切結書',
-    'olympia' : '國際數理奧林匹亞競賽或美國國際科展獲獎證明',
-    'placement-transcript' : '採計文憑成績證書',
-    'transcript-reference-table' : '成績採計資料參考表',
-    'hk-mo-relations-ordinance' : '符合港澳關係條例切結書',
-    'tech-course-passed-proof' : '就讀全日制副學士或高級文憑課程已通過香港資歷架構第四級之證明文件'
+    'ID-card' : ['香港永久性居民身份證正面','澳門永久居民身份證正/反面'],
+    'quit-school' : ['自願退學證明'],
+    'overseas-stay-years' : ['境外居留年限切結書','海外居留年限切結書'],
+    'Taiwan-stay-dates' : ['在臺停留日期'],
+    'hk-or-mo-guarantee' : ['港澳生聲明書','港澳具外國國籍之華裔學生切結書'],
+    'head-shot' : ['2吋相片'],
+    'home-return-permit' : ['回鄉證'],
+    'change-of-name' : ['改名契'],
+    'diploma' : ['高中畢業證書/在學證明/學生證','經驗證之全日制副學士或高級文憑(含)以上學位畢業證書/在學證明/學生證','經驗證之學士或碩士畢業證書/在學證明/學生證','學士或碩士畢業證書/在學證明/學生證'],
+    'scholl-transcript' : ['高中最後三年成績單','經驗證之副學士或高級文憑(含)以上學位之歷年成績單','經驗證之學士或碩士成績單','學士或碩士歷年成績單'],
+    'authorize-check-diploma' : ['學歷屬實及授權查證切結書'],
+    'olympia' : ['國際數理奧林匹亞競賽或美國國際科展獲獎證明'],
+    'placement-transcript' : ['採計文憑成績證書'],
+    'transcript-reference-table' : ['成績採計資料參考表'],
+    'hk-mo-relations-ordinance' : ['符合港澳關係條例切結書'],
+    'tech-course-passed-proof' : ['就讀全日制副學士或高級文憑課程已通過香港資歷架構第四級之證明文件'],
+    'foreign-passport' : ['外國護照（香港或澳門以外）']
   };
 
   let uplaodedFileCodeMap = {
@@ -97,7 +98,8 @@ const app = (function () {
     'placement-transcript' : 13,
     'transcript-reference-table' : 14,
     'hk-mo-relations-ordinance' : 15,
-    'tech-course-passed-proof' : 16
+    'tech-course-passed-proof' : 16,
+    'foreign-passport' : 17
   };
 
   // 學歷文件 modal 所需變數
@@ -455,7 +457,7 @@ const app = (function () {
     // 成績單
     _appendEducationFile('transcripts', studentInfo.student_transcripts);
     // 學生上傳文件
-    _appendEducationFile('student-uploaded-file', studentInfo.student_uploaded_files);
+    _appendEducationFile('student-uploaded-file', studentInfo.student_uploaded_files, false, studentInfo);
     // 核驗文件
     _appendEducationFile('verification-file', studentInfo.office_upload_student_files);
     if(verifier.overseas_office.authority === 1 || verifier.overseas_office.authority === 6){
@@ -510,7 +512,7 @@ const app = (function () {
   }
 
   // 將圖片依照 type append 到 DOM 上
-  function _appendEducationFile(type = '', filenames = [], highlight = false) {
+  function _appendEducationFile(type = '', filenames = [], highlight = false, studentdata = []) {
     let studentUploadedFileAreaHtml = [];
     for (let filename of filenames) {
       let filename_for_id = filename;
@@ -541,10 +543,46 @@ const app = (function () {
           break;
         case 'student-uploaded-file':
           filename_for_id = filename.replace(userId+'_','').replace('.pdf','');
+          let title = '';
+          switch (filename_for_id) {
+            case 'ID-card':
+              uplaodedFileNameMap[filename_for_id][0];
+              if (studentdata.student_personal_data.resident_location_data.country == '澳門') {
+                title = uplaodedFileNameMap[filename_for_id][1];
+              } else if (studentdata.student_personal_data.resident_location_data.country == '香港') {
+                title = uplaodedFileNameMap[filename_for_id][0];
+              }
+              break;
+            case 'overseas-stay-years':
+            case 'hk-or-mo-guarantee':
+              if (studentdata.student_qualification_verify.identity == 1) {
+                title = uplaodedFileNameMap[filename_for_id][0];
+              } else if (studentdata.student_qualification_verify.identity == 2) {
+                title = uplaodedFileNameMap[filename_for_id][1];
+              }
+              break;
+            case 'diploma':
+            case 'scholl-transcript':
+              if (studentdata.student_qualification_verify.system_id == 1){ // 學士班
+                title = uplaodedFileNameMap[filename_for_id][0];
+              }else if (studentdata.student_qualification_verify.system_id == 2){ // 港二技
+                title = uplaodedFileNameMap[filename_for_id][1];
+              }else if (studentdata.student_qualification_verify.system_id == 3 || studentdata.student_qualification_verify.system_id == 4){ // 碩博
+                if (studentdata.student_personal_data.resident_location_data.country == '香港') {
+                  title = uplaodedFileNameMap[filename_for_id][2];
+                } else if (studentdata.student_personal_data.resident_location_data.country == '澳門') {
+                  title = uplaodedFileNameMap[filename_for_id][3];
+                }
+              }
+              break;
+            default:
+              title = uplaodedFileNameMap[filename_for_id][0];
+              break;
+          }
           studentUploadedFileAreaHtml[uplaodedFileCodeMap[filename_for_id]] = `
             <div class="card">
               <div class="card-header">
-                <span class="doc-title">${uplaodedFileNameMap[filename_for_id]}</span>
+                <span class="doc-title">${title}</span>
               </div>
               <div class="card-body">
                 <embed
