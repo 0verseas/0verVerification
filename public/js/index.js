@@ -24,6 +24,8 @@ const app = (function () {
   const $confirmedStatus = $('#confirmed-status'); // 確認上傳及報名資料
   const $applyWayTitle = $('#apply-way-title'); // 聯合分發成績採計方式 title
   const $applyWay = $('#apply-way'); // 聯合分發成績採計方式
+  const $placementGroupTitle = $('#placement-group-title'); // 聯合分發志願類組 title
+  const $placementGroup = $('#placement-group'); // 聯合分發志願類組
   const $verifiedStatus = $('#verified-status'); // 審核狀態
   const $verificationDesc = $('#verification-desc'); // 審核備註
   const $submitBtn = $('#submit-btn'); // 送出審核按鈕
@@ -270,6 +272,9 @@ const app = (function () {
     $applyWayTitle.hide();
     $applyWay.hide();
     $applyWay.html('');
+    $placementGroupTitle.hide();
+    $placementGroup.hide();
+    $placementGroup.html('');
     $diplomaDiv.html('');
     $transcriptDiv.html('');
     $studentUploadedDiv.html('');
@@ -450,6 +455,12 @@ const app = (function () {
       $applyWay.text(miscData && miscData.admission_placement_apply_way_data ? miscData.admission_placement_apply_way_data.description : '未選擇');
       $applyWayTitle.show();
       $applyWay.show();
+
+      if(studentInfo.group){
+        $placementGroupTitle.show();
+        $placementGroup.show();
+        $placementGroup.text(studentInfo.group)
+      }
     }
 
     // 學歷證明文件
