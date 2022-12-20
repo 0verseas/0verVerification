@@ -496,6 +496,8 @@ const app = (function () {
     // 審核時是否寄信選項隱藏
     if (verifier.overseas_office.authority !== 1) {
       $('.email-check-div').hide();
+    } else {
+      $('.email-check-div').show();
     }
 
     // 確認報名狀態
