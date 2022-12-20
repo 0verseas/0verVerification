@@ -92,8 +92,8 @@ const API = (function () {
   }
 
   // 審核學生
-  function verifyStudent(userId, verificationInfo, ruleCodeOfOverseasStudentId = null) {
-    let data = {verified_memo: verificationInfo, verified_confirmation: true};
+  function verifyStudent(userId, verificationInfo, ruleCodeOfOverseasStudentId = null, sendEmail = true) {
+    let data = {verified_memo: verificationInfo, verified_confirmation: true, send_email: sendEmail};
 
     // 有身份別代碼才送
     if (ruleCodeOfOverseasStudentId) {

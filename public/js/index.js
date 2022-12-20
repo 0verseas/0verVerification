@@ -493,6 +493,11 @@ const app = (function () {
       $('.btn-delete').hide();
     }
 
+    // 審核時是否寄信選項隱藏
+    if (verifier.overseas_office.authority !== 1) {
+      $('.email-check-div').hide();
+    }
+
     // 確認報名狀態
     $confirmedStatus.text((miscData && miscData.confirmed_at ? '已' : '尚未') + '確認上傳及報名資料');
 
@@ -511,6 +516,8 @@ const app = (function () {
         $verificationDesc.prop('readonly', true);
         // 擺上審核備註
         $verificationDesc.text(miscData.verified_memo);
+        // 審核時是否寄信選項隱藏
+        $('.email-check-div').hide();
       }
     } else {
       // 學生尚未確認報名
@@ -846,6 +853,11 @@ const app = (function () {
 
     // 取得學制 id
     const systemId = student.student_qualification_verify.system_id;
+    // 默認收件都要寄信但海聯可以選
+    let sendEmail = true
+    if (verifier.overseas_office.authority === 1) {
+      sendEmail = $('#email-check').is(":checked");
+    }
 
     // 最後畢業學校國別在緬甸就一定要選身份別喔
     if (student.student_personal_data.school_country == 105 && !ruleCodeOfOverseasStudentId && systemId && systemId === 1 ) {
@@ -855,7 +867,7 @@ const app = (function () {
 
     // 確認有無相同僑居地身分證字號的同學
     let check = true;
-    API.checkDuplicateStudent(userId)
+    API.checkDuplicateStudent(userId, sendEmail)
     .then(response => {
       if (!response.ok){
         throw response;
@@ -870,11 +882,11 @@ const app = (function () {
         response.json().then(function (data) {
           // 發現重複的身份證字號詢問是否收件
           if(confirm(data.messages[0]+' , 是否要收件？')){
-            _handleVerifyStudent(userId, verificationDesc, ruleCodeOfOverseasStudentId);
+            _handleVerifyStudent(userId, verificationDesc, ruleCodeOfOverseasStudentId, sendEmail);
           }
         })
       } else {
-        _handleVerifyStudent(userId, verificationDesc, ruleCodeOfOverseasStudentId);
+        _handleVerifyStudent(userId, verificationDesc, ruleCodeOfOverseasStudentId, sendEmail);
       }
     })
     .catch(e => {
@@ -885,9 +897,9 @@ const app = (function () {
     });
   }
 
-  function _handleVerifyStudent(userId, verificationDesc, ruleCodeOfOverseasStudentId){
+  function _handleVerifyStudent(userId, verificationDesc, ruleCodeOfOverseasStudentId, sendEmail){
     // 送審
-    API.verifyStudent(userId, verificationDesc, ruleCodeOfOverseasStudentId).then(response => {
+    API.verifyStudent(userId, verificationDesc, ruleCodeOfOverseasStudentId, sendEmail).then(response => {
       if (response.ok) {
         alert('審核成功');
 

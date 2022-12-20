@@ -84,8 +84,17 @@
           <textarea class="col-9" id="verification-desc" name="verificationDesc" cols="60" rows="3"></textarea>
         </div>
 
-        <div class="row">
-          <button type="submit" class="btn btn-success mx-auto" id="submit-btn">確認審核</button>
+        <div class="row justify-content-md-center">
+          <div class="col email-check-div"></div>
+          <div class="col-md-auto">
+            <button type="submit" class="btn btn-success" id="submit-btn" style="margin-right: 15px;">確認審核</button>
+          </div>
+          <div class="col form-check email-check-div">
+            <input class="form-check-input" type="checkbox" value="" id="email-check" checked>
+            <label class="form-check-label" for="email-check">
+              確認審核後是否寄送e-mail通知
+            </label>
+          </div>
         </div>
     </form>
 
