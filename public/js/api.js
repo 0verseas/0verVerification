@@ -42,36 +42,8 @@ const API = (function () {
 
   // 取得學生報名資料
   function getStudentData(userId = '') {
-    const request = fetch(`${baseUrl}/office/students/${userId}`, {
+    const request = fetch(`${baseUrl}/office/oyvtp-students/${userId}`, {
       method: 'GET',
-      credentials: 'include'
-    });
-
-    return _requestHandle(request);
-  }
-
-  // 上傳
-  function uploadStudentEducationFile(userId = '', type = '', data) {
-    const request = fetch(`${baseUrl}/office/students/${userId}/${type}`, {
-      method: 'POST',
-      body: data,
-      credentials: 'include'
-    });
-
-    // 不管哪種 type，都直接存到 data 中
-    return _requestHandle(request).then(response => {
-      if (response.data[`student_${type}`]) {
-        response.data = response.data[`student_${type}`];
-      }
-
-      return response;
-    });
-  }
-
-  // 刪除學生文件
-  function deleteStudentEducationFile(userId = '', type = '', fileName = '') {
-    const request = fetch(`${baseUrl}/office/students/${userId}/${type}/${fileName}`, {
-      method: 'DELETE',
       credentials: 'include'
     });
 
@@ -80,7 +52,7 @@ const API = (function () {
 
   // 取得已審核學生清單
   function getVerifiedStudents() {
-    const request = fetch(`${baseUrl}/office/students/all/verified`, {
+    const request = fetch(`${baseUrl}/office/verified-list`, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -100,7 +72,7 @@ const API = (function () {
       data.rule_code = ruleCodeOfOverseasStudentId;
     }
 
-    const request = fetch(`${baseUrl}/office/students/${userId}/verified`, {
+    const request = fetch(`${baseUrl}/office/oyvtp-students/${userId}`, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -154,7 +126,7 @@ const API = (function () {
   // 檢查有無重複的僑居地身分證字號存在
   function checkDuplicateStudent(userId) {
     // 因為這個功能只做提醒而已，就算是 2XX 也要判斷，所以不透過 _requestHandle 而是另外處理
-    return fetch(`${baseUrl}/office/students/check-duplicate/${userId}`, {
+    return fetch(`${baseUrl}/office/oyvtp-students/${userId}/check-duplicate`, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -180,9 +152,7 @@ const API = (function () {
     logout,
     isLogin,
     getStudentData,
-    deleteStudentEducationFile,
     getVerifiedStudents,
-    uploadStudentEducationFile,
     verifyStudent,
     getAvailableRuleCodeOfOverseasStudentId,
     checkDuplicateStudent,

@@ -4,13 +4,7 @@ const app = (function () {
    * cache DOM
    */
 
-  const $bachelorSelectionStudentsBody = $('#bachelor-selection-students-body');
-  const $bachelorPlacementStudentsBody = $('#bachelor-placement-students-body');
-  const $divisionOfPreparatoryProgramsStudentsBody = $('#division-of-preparatory-programs-students-body');
-  const $twoYearTechStudentsTab = $('#two-year-tech-students-tab');
-  const $twoYearTechStudentsBody = $('#two-year-tech-students-body');
-  const $masterStudentsBody = $('#master-students-body');
-  const $phdStudentsBody = $('#phd-students-body');
+  const $oyvtpStudentsBody = $('#oyvtp-students-body');
   const $datepicker = $('#datepicker');
 
   const $downVerifiedListButton = $('#download-Verified-List');
@@ -20,14 +14,7 @@ const app = (function () {
    */
 
   let user;
-  let students = {
-    bachelor_selection: [],
-    bachelor_placement: [],
-    division_of_preparatory_programs: [],
-    master: [],
-    phd: [],
-    two_year_tech: [],
-  }
+  let students = [];
 
   // 設定日期選擇樣式
   $datepicker.datepicker({
@@ -66,87 +53,15 @@ const app = (function () {
       console.log(error);
     });
   }
-  /*
-  切換不同的tab時同步切換學制變數
-  * system_Type  用來控制 收件統計表按鈕動作
-  * system_Num  用來控制 已審核清單按鈕動作
-  * 11：學士班 個人申請
-  * 10：學士班 聯合分發
-  * 6：僑先部
-  * 2：港二技
-  * 3：碩士班
-  * 4：博士班
-  */
-  var system_Type = 'bachelor-selection';
-  var system_Num = '11';
-  $(document).ready(function () {
-    $('a[data-toggle="tab"]').on("click", function() {
-      let tabId = this.id;
-      switch(tabId){
-        case "bachelor-selection-students-tab":
-            system_Type = 'bachelor-selection';
-            system_Num = 11;
-          break;
-        case "bachelor-placement-students-tab":
-            system_Type = 'bachelor-placement';
-            system_Num = 10;
-          break;
-        case "division-of-preparatory-programs-students-tab":
-            system_Type = 'division-of-preparatory-programs';
-            system_Num = 6;
-          break;
-        case "two-year-tech-students-tab":
-            system_Type = 'two-year-tech';
-            system_Num = 2;
-          break;
-        case "master-students-tab":
-            system_Type = 'master';
-            system_Num = 3;
-          break;
-        case "phd-students-tab":
-            system_Type = 'phd';
-            system_Num = 4;
-          break;
-      }
-    });
-});
 
-  // 拿已審核學生清單
+  // 拿已審核學生清單
   function _getVerifiedStudents() {
     API.getVerifiedStudents().then(response => {
       if (response.ok) {
-
-        // 暫存已審核清單
-        students.bachelor_selection = response.data.bachelor_selection_students;
-        students.bachelor_placement = response.data.bachelor_placement_students;
-        students.division_of_preparatory_programs = response.data.division_of_preparatory_programs_students;
-        students.master = response.data.master_students;
-        students.phd = response.data.phd_students;
-        students.two_year_tech = response.data.two_year_tech_students;
+        students = response.data;
 
         // 分包 render
-        _render($bachelorSelectionStudentsBody, _sortList(students.bachelor_selection));
-        _render($bachelorPlacementStudentsBody, _sortList(students.bachelor_placement), true);
-        _render($divisionOfPreparatoryProgramsStudentsBody, _sortList(students.division_of_preparatory_programs));
-        _render($masterStudentsBody, _sortList(students.master));
-        _render($phdStudentsBody, _sortList(students.phd));
-
-        // 審核單位為海聯或香港時才顯示二技分頁
-        if (user.overseas_office.authority == 1 || user.overseas_office.authority == 2) {
-          _render($twoYearTechStudentsBody, students.two_year_tech);
-        } else {
-          $twoYearTechStudentsTab.remove();
-          $twoYearTechStudentsBody.remove();
-        }
-        // 審核單位為僑務委員會時才顯示下載已審核清單按鈕
-        if (user.overseas_office.authority == 4) {
-          $downVerifiedListButton.show();
-        } else {
-          $downVerifiedListButton.remove();
-        }
-
-
-
+        _render($oyvtpStudentsBody, _sortList(students));
       } else if (response.statusCode === 401) {
         alert('請先登入');
         // 若沒有登入，跳轉登入頁面
@@ -169,7 +84,7 @@ const app = (function () {
   function _sortList(students = []) {
     return students.sort((a, b) => {
       // 按照審核時間排序（新的在前）
-      return new Date(b.student_misc_data.verified_at) - new Date(a.student_misc_data.verified_at);
+      return new Date(b.verified_at) - new Date(a.verified_at);
     });
   }
 
@@ -181,7 +96,7 @@ const app = (function () {
     }
     // 用年月日判斷
     return students.filter(student => {
-      const verifiedDateObject = new Date(student.student_misc_data.verified_at);
+      const verifiedDateObject = new Date(student.verified_at);
       var v_month;
       if (verifiedDateObject.getMonth()+1 < 10)
         v_month="0" + (verifiedDateObject.getMonth()+1).toString() ;
@@ -206,19 +121,18 @@ const app = (function () {
     let result = ``;
     for (let student of students) {
       //https://date-fns.org/v1.29.0/docs/format  我們用得是v1.29.0版本 要記得看文件  大寫H才是 24小時制喔
-      let verified_at = dateFns.format(student.student_misc_data.verified_at, 'YYYY/MM/DD HH:mm:ss ');
+      let verified_at = dateFns.format(student.verified_at, 'YYYY/MM/DD HH:mm:ss ');
       let name = encodeHtmlCharacters(student.name);  // 學生姓名
-      let verified_memo = student.student_misc_data.verified_memo!==null ? encodeHtmlCharacters(student.student_misc_data.verified_memo) : '';
+      let verified_memo = student.verified_memo!==null ? encodeHtmlCharacters(student.verified_memo) : '';
       result += `
         <tr>
-          <td>${student.id}</td>
+          <td>${student.user_id}</td>
           <td>${verified_at}</td>
           <td>${name}</td>
-          ${student.student_personal_data.gender.toLowerCase() === 'm' ? '<td>男</td>' : '<td>女</td>'}
-          <td>${student.student_personal_data.birthday}</td>
-          ${hasApplyWay ? '<td>' + student.student_misc_data.admission_placement_apply_way_data.description + '</td>' : ''}
-          <td>${student.student_personal_data.school_country_data.country}</td>
-          <td>${student.student_misc_data.overseas_student_id}</td>
+          ${student.gender.toLowerCase() === 'm' ? '<td>男</td>' : '<td>女</td>'}
+          <td>${student.birthday}</td>
+          <td>${student.school_country_data.country}</td>
+          <td>${student.overseas_student_id}</td>
           <td>${verified_memo}</td>
         </tr>
       `;
@@ -234,21 +148,11 @@ const app = (function () {
       $datepicker.val('');
     }
 
-    _render($bachelorSelectionStudentsBody, _sortList(_filterListByDate(students.bachelor_selection, date)));
-    _render($bachelorPlacementStudentsBody, _sortList(_filterListByDate(students.bachelor_placement, date), true));
-    _render($divisionOfPreparatoryProgramsStudentsBody, _sortList(_filterListByDate(students.division_of_preparatory_programs, date)));
-    _render($masterStudentsBody, _sortList(_filterListByDate(students.master, date)));
-    _render($phdStudentsBody, _sortList(_filterListByDate(students.phd, date)));
+    _render($oyvtpStudentsBody, _sortList(_filterListByDate(students, date)));
   }
 
-  /* 根據system_Type下載不同收件統計表 */
-  function downloadList() {
-    window.location.href = `${env.baseUrl}/office/students/file/verified?system=${system_Type}`;
-  }
-
-  /* 根據system_Num下載不同已審核清單 */
   function downloadVerifiedList() {
-    window.location.href = `${env.baseUrl}/office/verified-list/${system_Num}`;
+    window.location.href = `${env.baseUrl}/office/oyvtp-verified-list-file/`;
   }
 
   // 轉換一些敏感字元避免 XSS
@@ -263,7 +167,6 @@ const app = (function () {
 
   return {
     reloadList,
-    downloadList,
     downloadVerifiedList,
   }
 
