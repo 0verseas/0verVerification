@@ -119,6 +119,12 @@ const app = (function () {
           $('.nav-list').hide();
         }
 
+        if (verifier.overseas_office.authority === 1) {
+          $('.email-check-div').show();
+        } else {
+          $('.email-check-div').hide();
+        }
+
         // 確認有登入，init 頁面
         _resetStudentInfo();
       } else if (response.statusCode == 401) {
