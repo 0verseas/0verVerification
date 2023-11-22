@@ -1,18 +1,14 @@
 {
 	"globals": {
 		"meta": {
-			"siteName": "臺灣海外聯合招生委員會",
-			"title": "臺灣海外聯招會・應繳資料審核系統",
+			"siteName": "中華民國僑務委員會",
+			"title": "中華民國僑務委員會・應繳資料審核系統",
 			"appTitle": "應繳資料審核系統",
 			"description": "",
 			"keywords": [],
-			"author": "臺灣海外聯合招募委員會 University Entrance Committee For Overseas Chinese Students",
-			"copyright": "©2017 University Entrance Committee For Overseas Chinese Students. All rights reserved.",
-			"imageUrl": "https://api.overseas.ncnu.edu.tw:8443/img/0verseas-card.png",
-			"imageAlt": "臺灣海外聯合招募委員會形象圖卡",
-			"url": "https://office.overseas.ncnu.edu.tw/verification/"
+			"url": "https://office.oyvtp.org/verification/"
 		},
-		"title": "應繳資料審核系統｜臺灣海外聯招會",
+		"title": "應繳資料審核系統｜中華民國僑務委員會",
 		"headline": "應繳資料審核系統",
 		"subline": "",
 		"systems": [
