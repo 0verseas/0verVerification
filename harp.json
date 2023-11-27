@@ -2,14 +2,14 @@
 	"globals": {
 		"meta": {
 			"siteName": "中華民國僑務委員會",
-			"title": "中華民國僑務委員會・應繳資料審核系統",
-			"appTitle": "應繳資料審核系統",
+			"title": "中華民國僑務委員會・收件及應繳資料審核系統",
+			"appTitle": "收件及應繳資料審核系統",
 			"description": "",
 			"keywords": [],
 			"url": "https://office.oyvtp.org/verification/"
 		},
-		"title": "應繳資料審核系統｜中華民國僑務委員會",
-		"headline": "應繳資料審核系統",
+		"title": "收件及應繳資料審核系統｜中華民國僑務委員會",
+		"headline": "收件及應繳資料審核系統",
 		"subline": "",
 		"systems": [
 			{
