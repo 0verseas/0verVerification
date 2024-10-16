@@ -81,7 +81,8 @@ const app = (function () {
     'transcript-reference-table' : ['成績採計資料參考表'],
     'hk-mo-relations-ordinance' : ['符合港澳關係條例切結書'],
     'tech-course-passed-proof' : ['就讀全日制副學士或高級文憑課程已通過香港資歷架構第四級之證明文件'],
-    'foreign-passport' : ['外國護照（香港或澳門以外）']
+    'foreign-passport' : ['外國護照（香港或澳門以外）'],
+    'language-proficiency' : ['語文能力說明或相關證明文件']
   };
 
   let uplaodedFileCodeMap = {
@@ -101,7 +102,8 @@ const app = (function () {
     'transcript-reference-table' : 14,
     'hk-mo-relations-ordinance' : 15,
     'tech-course-passed-proof' : 16,
-    'foreign-passport' : 17
+    'foreign-passport' : 17,
+    'language-proficiency' : 18 // 語文能力說明或相關證明文件
   };
 
   // 學歷文件 modal 所需變數
@@ -928,7 +930,7 @@ const app = (function () {
         if (!response.ok){
           throw response;
         }
-  
+
         /*
          * 有問題：200
          * 沒問題：204
