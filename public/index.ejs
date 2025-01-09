@@ -66,7 +66,10 @@
         <dd class="col-12 col-md-3 text-danger" id="confirmed-status"></dd>
 
         <dt class="col-5 col-md-3">審核狀態</dt>
-        <dd class="col-12 col-md-3 text-danger" id="verified-status"></dd>
+        <dd class="col-12 col-md-3" id="verified-status"></dd>
+
+        <dt class="col-5 col-md-3 hide" id="language-proficiency-title">中文語言能力證明</dt>
+        <dd class="col-12 col-md-9 hide" id="language-proficiency"></dd>
 
         <dt class="col-5 col-md-3" id="apply-way-title">成績採計方式</dt>
         <dd class="col-12 col-md-9" id="apply-way"></dd>
@@ -126,20 +129,20 @@
               </div>
             </form>
           </div>
-    
+
           <div class="tab-pane fade show active" id="hk-certified" role="tabpanel" aria-labelledby="hk-certified-tab">
             <form id="hk-certified-area">
               <div class="card">
                 <div class="card-header">
-        
+
                   <div class="pull-left btn-upload">
                     <input class="btn btn-success" type="file" multiple value="上傳檔案" onchange="app.uploadEducationFile('verification-file', this.files)" onmousedown="event.preventDefault()">
                   </div>
-        
+
                 </div>
                 <div class="card-body" id="hk-office-upload-div">
                 </div>
-        
+
                 <div class="card-footer">
                   <div class="text-center">
                     <button type="button" class="btn btn-success btn-confirmed" onclick="app._handleFakeConfirmed()" onmousedown="event.preventDefault()">確認上傳</button>
@@ -148,7 +151,7 @@
               </div>
             </form>
           </div>
-    
+
           <div class="tab-pane fade overseas-area" id="overseas" role="tabpanel" aria-labelledby="overseas-tab">
             <form id="overseas-uploaded-area">
               <div class="card">
@@ -191,7 +194,7 @@
               </div>
             </form>
           </div>
-    
+
           <div class="tab-pane fade" id="uploaded-transrcipt" role="tabpanel" aria-labelledby="uploaded-transrcipt-tab">
             <form id="uploaded-transrcipt-area">
               <div class="card">
@@ -200,7 +203,7 @@
               </div>
             </form>
           </div>
-    
+
           <div class="tab-pane fade overseas-area" id="overseas" role="tabpanel" aria-labelledby="overseas-tab">
             <form id="overseas-uploaded-area">
               <div class="card">

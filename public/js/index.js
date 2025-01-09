@@ -22,6 +22,8 @@ const app = (function () {
   const $schoolCountry = $('#graduate-school-country'); // 畢業學校國家
   const $schoolName = $('#graduate-school-name'); // 畢業學校
   const $confirmedStatus = $('#confirmed-status'); // 確認上傳及報名資料
+  const $languageProficiencyTitle = $('#language-proficiency-title'); // 中文語言能力證明
+  const $languageProficiency = $('#language-proficiency'); // 中文語言能力證明
   const $applyWayTitle = $('#apply-way-title'); // 聯合分發成績採計方式 title
   const $applyWay = $('#apply-way'); // 聯合分發成績採計方式
   const $placementGroupTitle = $('#placement-group-title'); // 聯合分發志願類組 title
@@ -271,6 +273,8 @@ const app = (function () {
     $schoolCountry.html('');
     $schoolName.html('');
     $confirmedStatus.html('');
+    $languageProficiencyTitle.hide();
+    $languageProficiency.hide();
     $applyWayTitle.hide();
     $applyWay.hide();
     $applyWay.html('');
@@ -397,6 +401,32 @@ const app = (function () {
           $ruleCodeOfOverseasStudentId.html(html);
         }
       });
+    }
+
+    // 若學生有選擇重點產業系所則顯示中文語言能力證明欄位
+    if (studentInfo.had_MI) {
+        const certification_of_chinese_option_array = [
+          '',
+          'TOCFL華語文能力測驗成績單（成績；等級）',
+          '高中/大學/研究所之歷年成績單（包含中文科目成績）',
+          '各類會考之中文成績或證明',
+          '就讀學校（高中/大學/研究所）以中文授課之證明',
+          '其他可茲證明文件'
+        ];
+        $languageProficiencyTitle.show();
+        $languageProficiency.show();
+        switch(miscData.certification_of_chinese_option){
+          case 1:
+            $languageProficiency.text('TOCFL華語文能力測驗成績單（成績：'+ miscData.certification_of_chinese_option_description.split(';')[0] + '；等級：' + miscData.certification_of_chinese_option_description.split(';')[1] + '）');
+            break;
+          case 3:
+          case 5:
+            $languageProficiency.text(certification_of_chinese_option_array[miscData.certification_of_chinese_option] + '：' + miscData.certification_of_chinese_option_description);
+            break;
+          case 2:
+          case 4:
+            $languageProficiency.text(certification_of_chinese_option_array[miscData.certification_of_chinese_option]);
+        }
     }
 
     // 身障程度
