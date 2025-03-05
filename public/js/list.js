@@ -38,8 +38,14 @@ const app = (function () {
     API.isLogin().then(response => {
       if (response.ok) {
         user = response.data;
-        // 確認有登入，init 頁面
-        _getVerifiedStudents();
+        // 確認有登入，判斷是否有收件權限再來 init 頁面
+        if (!response.data.overseas_office.can_verify) {
+          alert('權限不足');
+	        // 若帳號沒有收件權限，跳轉登入首頁
+	        window.location.href = './index.html';
+        } else {
+          _getVerifiedStudents();
+	      }
       } else if (response.statusCode == 401) {
         alert('請先登入');
         // 若沒有登入，跳轉登入頁面
@@ -152,7 +158,12 @@ const app = (function () {
   }
 
   function downloadVerifiedList() {
-    window.location.href = `${env.baseUrl}/office/oyvtp-verified-list-file/`;
+    // 下載前判斷是否有收件權限
+    if (!user.overseas_office.can_verify) {
+      alert('權限不足');
+    } else {
+      window.location.href = `${env.baseUrl}/office/oyvtp-verified-list-file/`;
+    }
   }
 
   // 轉換一些敏感字元避免 XSS
