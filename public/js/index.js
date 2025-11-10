@@ -222,7 +222,7 @@ const app = (function () {
     });
 
     // 調整按鈕排版
-    $('.bootstrap-filestyle').addClass('col-2');
+    $('.bootstrap-filestyle').addClass('col-12');
     $('.group-span-filestyle').addClass('ml-auto');
   }
 
